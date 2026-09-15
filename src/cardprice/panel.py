@@ -76,6 +76,7 @@ def monthly_panel(
         else:  # pitcher
             for c in PITCHING_COLS:
                 row[c] = s[c]
+            row["games"] = s["games"]  # appearances (gamesPlayed), same lag rule as hitters
             row["form_era_delta"] = _form_delta_pitching(
                 game_logs, int(card.mlb_id), season, form_start, lag_date, s["era"]
             )
@@ -187,6 +188,7 @@ def weekly_panel(
         else:
             for c in PITCHING_COLS:
                 row[c] = s[c]
+            row["games"] = s["games"]  # appearances (gamesPlayed), same lag rule as hitters
             row["form_era_delta"] = _form_delta_pitching(
                 game_logs, int(r.mlb_id), stats_season, form_start, lag_date, s["era"]
             )
