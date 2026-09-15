@@ -30,7 +30,7 @@ def contamination_audit(sales: pd.DataFrame) -> pd.DataFrame:
     mask = sales["title"].str.contains(CONTAMINATION_RE, na=False)
     out = sales[mask].copy()
     out["flag_reason"] = out["title"].str.extract(
-        "(" + CONTAMINATION_RE.pattern + ")", expand=False
+        "(?i)(" + CONTAMINATION_RE.pattern + ")", expand=False
     )
     return out
 

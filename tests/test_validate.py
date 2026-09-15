@@ -36,6 +36,9 @@ def test_contamination_audit():
     out = contamination_audit(df)
     assert len(out) == 2
     assert "lot" in out.iloc[0]["flag_reason"]
+    # uppercase-only match: extract must honor IGNORECASE, not yield NaN
+    reprint = out.loc[out["title"].str.contains("REPRINT"), "flag_reason"].iloc[0]
+    assert pd.notna(reprint) and "REPRINT" in reprint
 
 
 def test_stale_series():
