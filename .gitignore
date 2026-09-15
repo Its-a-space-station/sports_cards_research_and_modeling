@@ -1,5 +1,6 @@
 .worktrees/
 .venv/
+.pw-browsers/
 __pycache__/
 *.egg-info/
 data/raw/*
