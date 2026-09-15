@@ -17,11 +17,11 @@
 - Card page URL: `https://www.sportscardspro.com/game/<set-slug>/<player>-<card-number>` e.g. `baseball-cards-2023-topps-chrome/gunnar-henderson-2`.
 - Card page HTML (~650 KB) contains:
   - `table#price_data` — per-grade current-value summary; header cells like `Ungraded, Grade 7, Grade 8, Grade 9, Grade 9.5, PSA 10, ...`; prices as `$34.50`.
-  - Multiple sold-listing tables, each inside `div` whose class starts with `completed-auctions-` (e.g. `completed-auctions-used`, `-graded`, `-grade-seventeen`); table header cells: `Sale Date`, `TW`, `Title`, `Price`, empty; ≤30 most recent rows per grade bucket; date format `2026-09-14`; price cell text either `$7.50` or dual `$35.00$40.00` (list price + accepted Best Offer — semantics to be pinned by the Task 1 spike doc).
+  - Multiple sold-listing tables, each inside `div` whose class starts with `completed-auctions-` (e.g. `completed-auctions-used`, `-graded`, `-grade-seventeen`); table header cells: `Sale Date`, `TW`, `Title`, `Price`, empty; ≤30 most recent rows per grade bucket; date format `2026-09-14`; price cell text either `$7.50` or dual-price. **Dual-price semantics (spike-verified): accepted Best Offer price FIRST (span `title="best offer accepted price"`), list price SECOND** — the opposite of the initial assumption.
   - `table#attribute` — rows like `Is Rookie Card: Yes`.
   - Pop-by-grade current-value table (last table; rows `PSA 10 | $34.50`, `BGS 10 | $45.00`, …).
-  - Inline JS: `VGPC.chart_data = {"<key>":[[<ms-epoch>,<price-cents>],...], ...}` — monthly price history per grade-bucket key, back to ~tracking start (2019+). Key→grade mapping is NOT self-describing; resolve dynamically (Task 3).
-- Grade per sale row comes from **parsing the listing title** (`PSA 10`, `BGS 9.5`, …), not from which table it sits in — the div-class buckets are PriceCharting-internal and not grade-labeled.
+  - Inline JS: `VGPC.chart_data = {"<key>":[[<ms-epoch>,<price-cents>],...], ...}` — monthly price history per grade-bucket key, back to ~tracking start (2019+). Key→grade mapping is NOT self-describing; resolve dynamically (Task 3). A `#completed-auctions-condition` `<select>` labels bucket→grade and can cross-check.
+  - Category listing pages live at `https://www.sportscardspro.com/console/<set-slug>` (NOT `/category/`); use `?rookies-only=true&exclude-variants=true` for the complete rookie-base listing (default console view is volume-capped). SCP search is `/search-products` and is Cloudflare-blocked headless — do not rely on it.
 
 ## Global Constraints
 
@@ -153,26 +153,28 @@ Run: `python -m pytest tests/test_web.py -v -m live` (network: 1 pass)
 player_name,role,rookie_year,set_slug,mlb_id,scp_url
 Bobby Witt Jr,hitter,2022,baseball-cards-2022-topps-chrome,,
 Julio Rodriguez,hitter,2022,baseball-cards-2022-topps-chrome,,
-Adley Rutschman,hitter,2022,baseball-cards-2022-topps-chrome,,
-Spencer Strider,pitcher,2022,baseball-cards-2022-topps-chrome,,
+Adley Rutschman,hitter,2022,baseball-cards-2022-topps-chrome-update,,
+Spencer Strider,pitcher,2022,baseball-cards-2022-topps-chrome-update,,
 Gunnar Henderson,hitter,2023,baseball-cards-2023-topps-chrome,,
 Corbin Carroll,hitter,2023,baseball-cards-2023-topps-chrome,,
 Jordan Walker,hitter,2023,baseball-cards-2023-topps-chrome,,
 Anthony Volpe,hitter,2023,baseball-cards-2023-topps-chrome,,
 Jackson Chourio,hitter,2024,baseball-cards-2024-topps-chrome,,
-Paul Skenes,pitcher,2024,baseball-cards-2024-topps-chrome,,
+Paul Skenes,pitcher,2024,baseball-cards-2024-topps-chrome-update,,
 Wyatt Langford,hitter,2024,baseball-cards-2024-topps-chrome,,
 Jackson Merrill,hitter,2024,baseball-cards-2024-topps-chrome,,
-Nick Kurtz,hitter,2025,baseball-cards-2025-topps-chrome,,
+Nick Kurtz,hitter,2025,baseball-cards-2025-topps-chrome-update,,
 Jacob Wilson,hitter,2025,baseball-cards-2025-topps-chrome,,
 Roki Sasaki,pitcher,2025,baseball-cards-2025-topps-chrome,,
-Roman Anthony,hitter,2025,baseball-cards-2025-topps-chrome,,
+Roman Anthony,hitter,2025,baseball-cards-2025-topps-chrome-update,,
 ```
 
+NOTE: Rutschman/Strider/Skenes/Kurtz/Anthony have their flagship chrome rookies in the **Topps Chrome Update** sets (verified against SCP's sitemap during the Task 1 spike — they are absent from the base set's complete rookie listings), so their `set_slug` points at the `-update` set.
+
 `scripts/resolve_seed_cards.py` — for each row:
-1. **mlb_id:** GET `https://statsapi.mlb.com/api/v1/sports/1/players?season={rookie_year}` (one call per unique season, cache in-process), exact case-insensitive match on `fullName`; then validate `fetch_game_log(mlb_id, ROLE_GROUP[role], rookie_year)` returns non-empty (reuse `cardprice.stats_api`). Sleep 0.3s between API calls.
-2. **scp_url:** fetch the SCP category listing page `https://www.sportscardspro.com/category/{set_slug}` via `fetch_page`, find the `<a>` whose text contains the player's last name + first name and whose href starts with `/game/{set_slug}/`, prefer the href whose anchor text does NOT contain parallel keywords (`Refractor`, `Autograph`, `Gold`, `Orange`, `Purple`, `Blue`, `Green`, `Red`, `Superfractor`, `Variation`); build absolute URL. If the category page 404s or no match, try SCP search `https://www.sportscardspro.com/search?q={player}+{year}+Topps+Chrome` with the same anchor rules. Sleep ≥5s between SCP fetches. If still unresolved, leave `scp_url` empty and print a warning — do not guess.
-3. Rewrite `data/reference/cards_seed.csv` with filled columns; print a summary table.
+1. **mlb_id:** GET `https://statsapi.mlb.com/api/v1/sports/1/players?season={rookie_year}` (one call per unique season, cache in-process), exact case-insensitive match on `fullName` (normalize diacritics/periods); then validate `fetch_game_log(mlb_id, ROLE_GROUP[role], rookie_year)` returns non-empty (reuse `cardprice.stats_api`). Sleep 0.3s between API calls.
+2. **scp_url:** fetch the SCP console listing page `https://www.sportscardspro.com/console/{set_slug}?rookies-only=true&exclude-variants=true` via `fetch_page`, find the `<a>` whose text contains the player's last name + first name and whose href starts with `/game/{set_slug}/`, prefer the href whose anchor text does NOT contain parallel keywords (word-boundary match on `Refractor`, `Autograph`, `Gold`, `Orange`, `Purple`, `Blue`, `Green`, `Red`, `Superfractor`, `Variation`); build absolute URL. **If no base anchor matches, return empty — NEVER fall back to a parallel anchor** (a silently-wrong parallel URL is worse than a missing row). Sleep ≥5s before every uncached SCP fetch (sleep-before, not after); cache listing pages per set in-process. If unresolved, leave `scp_url` empty and print a warning — do not guess.
+3. Rewrite `data/reference/cards_seed.csv` with filled columns (read with `dtype=str`); print a summary table.
 
 Run it (network): `python scripts/resolve_seed_cards.py` — expect ≥14 of 16 rows resolved; investigate any unresolved.
 
@@ -302,13 +304,14 @@ def parse_grade_from_title(title: str) -> str | None:
 
 def _parse_price_cell(text: str) -> tuple[float, float | None, bool]:
     """Return (price_paid, list_price, best_offer). Single amount => (amount, None, False).
-    Dual amount => per spike doc: first is list (struck through), second is accepted."""
+    Dual amount => spike-verified order: FIRST is the accepted Best Offer price
+    (span title="best offer accepted price"), SECOND is the struck-through list price."""
     amounts = [float(a.replace(",", "")) for a in PRICE_RE.findall(text)]
     if not amounts:
         raise ValueError(f"no price in cell: {text!r}")
     if len(amounts) == 1:
         return amounts[0], None, False
-    return amounts[-1], amounts[0], True
+    return amounts[0], amounts[1], True
 
 
 def parse_sales_tables(html: str) -> pd.DataFrame:
@@ -892,7 +895,7 @@ def contamination_audit(sales: pd.DataFrame) -> pd.DataFrame:
     mask = sales["title"].str.contains(CONTAMINATION_RE, na=False)
     out = sales[mask].copy()
     out["flag_reason"] = out["title"].str.extract(
-        "(" + CONTAMINATION_RE.pattern + ")", expand=False
+        "(?i)(" + CONTAMINATION_RE.pattern + ")", expand=False
     )
     return out
 
@@ -906,7 +909,7 @@ def stale_series(
     return sorted(latest[gap > max_gap_weeks].index.tolist())
 ```
 
-NOTE: `flag_reason` uses `str.extract("(" + CONTAMINATION_RE.pattern + ")")` — the regex body uses a non-capturing group so exactly one capture group exists; pandas fills NaN for non-matches (there are none in the filtered subset).
+NOTE: `flag_reason` uses `str.extract("(?i)(" + CONTAMINATION_RE.pattern + ")")` — the regex body is non-capturing so exactly one capture group exists, and the inline `(?i)` is REQUIRED (str.extract receives the pattern as a plain string, which drops the compiled regex's IGNORECASE flag; without it, uppercase-only matches like "REPRINT" are filtered IN but get NaN reason).
 
 - [ ] **Step 4: Run tests**
 
@@ -1102,7 +1105,7 @@ git commit -m "feat: liquidity report and universe recommendation"
 
 - `python -m pytest -v` all offline tests PASS; `ruff check src tests scripts` clean.
 - `python -m pytest -m live -v` PASS (network).
-- `data/processed/scp_sales.parquet`, `scp_chart_monthly.parquet`, `scp_weekly.parquet`, `liquidity_report.csv` exist, built from ≥14 seed cards.
+- `data/processed/scp_sales.parquet`, `scp_chart_monthly.parquet`, `scp_weekly.parquet`, `liquidity_report.csv` exist, built from the resolved seed cards (13 of 16 — Rutschman/Strider/Anthony have no SCP rookie-flagged chrome base card; documented controller ruling, universe expansion is Plan 3's job).
 - Spike doc `docs/superpowers/spikes/2026-09-14-scp-structure.md` records dual-price semantics, chart keys, category URL scheme.
 - Liquidity report recommends a concrete universe (or honestly reports the seed set is too illiquid and why).
 - Next: Plan 3 (panel assembly: Savant metrics, GemRate pops, card×week/month panel, market index, lagged predictors).
