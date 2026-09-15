@@ -37,10 +37,11 @@ predictive edge, extend the same pipeline into a buy-early signal for real money
   (90-day cap, login-walled, hides Best Offer prices).
 
 ### Player stats
-- **Primary: MLB Stats API** (`statsapi.mlb.com`, no key) via the maintained
-  `python-mlb-statsapi` wrapper. `stats=gameLog` per player-season (hitting +
-  pitching), 2018–present, updated overnight. Season-to-date stats at any date are
-  reconstructed from game logs.
+- **Primary: MLB Stats API** (`statsapi.mlb.com`, no key) via a thin direct
+  `requests` client (`src/cardprice/stats_api.py`) — decision made during Plan 1
+  implementation (one less dependency, no wrapper maintenance risk).
+  `stats=gameLog` per player-season (hitting + pitching), 2018–present, updated
+  overnight. Season-to-date stats at any date are reconstructed from game logs.
 - **Supplement: Baseball Savant** CSV exports (`csv=true`) for xwOBA, barrel%,
   sprint speed; 2015–present. Retro-revised, so raw pulls are versioned.
 - **Avoid:** FanGraphs automation (hard-blocked, 403s; pybaseball's FanGraphs
