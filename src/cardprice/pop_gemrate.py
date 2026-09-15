@@ -71,6 +71,30 @@ def _num_digits(want: str, cand: str | None) -> bool:
     return want_d != "" and want_d == re.sub(r"\D", "", str(cand or ""))
 
 
+# Extra set-descriptor tokens that mark a DIFFERENT product line rather than
+# set-name drift. A loose (token-subset) set match is rejected when the
+# candidate's set name adds any of these — otherwise an entry like
+# 'Topps Chrome Update Refractors' or 'Topps Chrome Logofractor Edition'
+# (parallel: null) silently passes as the base card.
+BLOCKED_SET_TOKENS = frozenset(
+    {
+        "refractor",
+        "refractors",
+        "fractor",
+        "logofractor",
+        "xfractor",
+        "edition",
+        "stars",
+        "cosmic",
+        "silver",
+        "pack",
+        "sapphire",
+        "platinum",
+        "anniversary",
+    }
+)
+
+
 def pick_search_result(
     results: list[dict],
     *,
@@ -85,7 +109,9 @@ def pick_search_result(
     as short prints in GemRate's taxonomy (e.g. 2022 Topps Chrome #221 Witt and
     #222 Rodriguez have no Base entry; PSA numbers the SP as the base card).
     Set-name match is exact first, then a token-subset fallback (GemRate set
-    naming can drift from SCP's). Card-number match is exact first, then
+    naming can drift from SCP's); the loose pass rejects candidates whose set
+    name adds product-line tokens (BLOCKED_SET_TOKENS, e.g. 'refractors',
+    'logofractor', 'edition'). Card-number match is exact first, then
     digits-only ('USC178' vs '178'). Prefers universal matches, then highest pop.
     """
 
@@ -99,11 +125,14 @@ def pick_search_result(
             return False
         if _norm(pd_.get("parallel") or "Base") not in parallels:
             return False
-        cand_set = _norm(pd_.get("set_name"))
-        if strict_set:
-            return cand_set == _norm(set_name)
+        cand_tokens = _norm(pd_.get("set_name")).split()
         want_tokens = _norm(set_name).split()
-        return all(tok in cand_set.split() for tok in want_tokens)
+        if strict_set:
+            return cand_tokens == want_tokens
+        if not all(tok in cand_tokens for tok in want_tokens):
+            return False
+        extra = set(cand_tokens) - set(want_tokens)
+        return not (extra & BLOCKED_SET_TOKENS)
 
     for parallels in ({"base"}, {"sp"}):
         for strict in (True, False):
@@ -127,8 +156,11 @@ def parse_card_details(data: dict) -> dict:
     psa_row = next((r for r in data.get("population_data", []) if r.get("grader") == "psa"), None)
     psa_10_pop = psa_total_pop = None
     if psa_row:
-        psa_10_pop = int((psa_row.get("grades") or {}).get("psa_10") or 0)
-        psa_total_pop = int(psa_row.get("card_total_grades") or 0)
+        # psa_10 absent from grades != 0 graded PSA 10s: keep NULL, don't invent a 0
+        psa_10_val = (psa_row.get("grades") or {}).get("psa_10")
+        psa_10_pop = int(psa_10_val) if psa_10_val is not None else None
+        psa_total_val = psa_row.get("card_total_grades")
+        psa_total_pop = int(psa_total_val) if psa_total_val is not None else None
     return {
         "psa_10_pop": psa_10_pop,
         "psa_total_pop": psa_total_pop,
@@ -253,6 +285,7 @@ def _fetch_pop_on_page(page, query: str, match: dict | None) -> dict:
         hit = pick_search_result(results, **match)
     if not hit:
         raise PopLookupError(f"no matching card for {query!r}")
+    time.sleep(5)  # politeness: search capture returns fast; hop to card page stays >=5 s
     details = _capture_json(
         page, "/card-details", lambda: _wait_real_page(page, CARD_URL.format(hit["gemrate_id"]))
     )
@@ -302,7 +335,7 @@ def collect_pops(cards: pd.DataFrame, sleep_s: float = 6.0, on: date | None = No
             row = {"date": day, "card_slug": slug}
             try:
                 pop = fetch_pop(query, match=match, page=page)
-            except (PopLookupError, ChallengeError, PlaywrightError) as e:
+            except (PopLookupError, ChallengeError, PlaywrightError, ValueError) as e:
                 print(f"WARN {slug}: {type(e).__name__}: {e}")
                 row.update({"psa_10_pop": None, "total_pop": None, "gem_rate": None})
             else:
@@ -315,8 +348,8 @@ def collect_pops(cards: pd.DataFrame, sleep_s: float = 6.0, on: date | None = No
                     }
                 )
                 print(
-                    f"OK {slug}: psa10={pop['psa_10_pop']} total={pop['total_pop']} "
-                    f"gem_rate={pop['gem_rate']}"
+                    f"OK {slug}: {pop.get('description')} psa10={pop['psa_10_pop']} "
+                    f"total={pop['total_pop']} gem_rate={pop['gem_rate']}"
                 )
             rows.append(row)
             time.sleep(sleep_s)
@@ -341,6 +374,15 @@ def main() -> None:
     out = Path(args.out)
     if out.exists() and len(new):
         old = pd.read_csv(out)
+        # A same-day failed (all-NaN) rerun row must not clobber an existing
+        # good row for that card — drop it instead.
+        fail_mask = new[["psa_10_pop", "total_pop", "gem_rate"]].isna().all(axis=1)
+        old_keys = set(zip(old["date"], old["card_slug"], strict=True))
+        has_old = pd.Series(
+            [k in old_keys for k in zip(new["date"], new["card_slug"], strict=True)],
+            index=new.index,
+        )
+        new = new[~(fail_mask & has_old)]
         # same-day reruns are idempotent per card: drop only replaced (date, card_slug) rows
         old = old.merge(
             new[["date", "card_slug"]], on=["date", "card_slug"], how="left", indicator=True

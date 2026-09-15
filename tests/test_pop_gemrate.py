@@ -307,6 +307,103 @@ def test_collect_pops_records_lookup_failures_as_nan(monkeypatch):
     assert pd.isna(df.iloc[0]["total_pop"])
 
 
+def _gr_result(gemrate_id, set_name, parallel, card_number="USC178"):
+    return {
+        "gemrate_id": gemrate_id,
+        "is_universal_match": True,
+        "total_population": 100,
+        "parsed_description": {
+            "year": "2025",
+            "set_name": set_name,
+            "name": "Nick Kurtz",
+            "card_number": card_number,
+            "parallel": parallel,
+        },
+    }
+
+
+def test_pick_search_result_loose_set_rejects_product_line_tokens():
+    # Only loose (token-subset) set matches are possible here; candidates whose
+    # set adds a product-line token must be rejected, not silently taken as base.
+    refractors = _gr_result("r1", "Topps Chrome Update Refractors", None)
+    logofractor = _gr_result("l1", "Topps Chrome Logofractor Edition", None)
+    cosmic = _gr_result("c1", "Topps Cosmic Chrome", None, card_number="178")
+    for results in ([refractors], [logofractor], [cosmic]):
+        assert (
+            pop_gemrate.pick_search_result(
+                results,
+                name="Nick Kurtz",
+                year="2025",
+                set_name="Topps Chrome Update",
+                card_number="USC178",
+            )
+            is None
+        )
+
+
+def test_pick_search_result_loose_set_accepts_benign_set_drift():
+    # Legit loose match: same product line, set name merely drifts ('... Series').
+    hit = pop_gemrate.pick_search_result(
+        [_gr_result("ok1", "Topps Chrome Update Series", "Base")],
+        name="Nick Kurtz",
+        year="2025",
+        set_name="Topps Chrome Update",
+        card_number="USC178",
+    )
+    assert hit is not None and hit["gemrate_id"] == "ok1"
+
+
+def test_parse_card_details_missing_psa10_key_stays_null():
+    payload = {
+        "total_population": 100,
+        "total_gems_or_greater": 60,
+        "population_data": [{"grader": "psa", "card_total_grades": 100, "grades": {"psa_9": 40}}],
+    }
+    pop = pop_gemrate.parse_card_details(payload)
+    assert pop["psa_10_pop"] is None  # absent key is unknown, not zero
+    assert pop["psa_total_pop"] == 100
+    payload["population_data"][0]["grades"]["psa_10"] = 0
+    assert pop_gemrate.parse_card_details(payload)["psa_10_pop"] == 0  # real zero kept
+
+
+def test_main_failed_rerun_does_not_clobber_good_row(monkeypatch, tmp_path):
+    cards_csv = tmp_path / "cards.csv"
+    cards_csv.write_text("player_name,role,rookie_year,set_slug,mlb_id,scp_url\n")
+    out_csv = tmp_path / "pop.csv"
+    out_csv.write_text(
+        "date,card_slug,psa_10_pop,total_pop,gem_rate\n"
+        "2026-09-15,set/a-1,10,100,0.5\n"
+        "2026-09-15,set/b-2,20,200,0.6\n"
+    )
+    new = pd.DataFrame(
+        [
+            {
+                "date": "2026-09-15",
+                "card_slug": "set/a-1",
+                "psa_10_pop": pd.NA,
+                "total_pop": pd.NA,
+                "gem_rate": pd.NA,
+            },
+            {
+                "date": "2026-09-15",
+                "card_slug": "set/b-2",
+                "psa_10_pop": 21,
+                "total_pop": 201,
+                "gem_rate": 0.61,
+            },
+        ]
+    ).astype({"psa_10_pop": "Int64", "total_pop": "Int64"})
+    monkeypatch.setattr(pop_gemrate, "collect_pops", lambda cards, sleep_s: new)
+    monkeypatch.setattr(
+        "sys.argv", ["pop_gemrate", "--cards", str(cards_csv), "--out", str(out_csv)]
+    )
+    pop_gemrate.main()
+    df = pd.read_csv(out_csv)
+    assert len(df) == 2  # no duplicate (date, card_slug) rows
+    assert df[df["card_slug"] == "set/a-1"].iloc[0]["psa_10_pop"] == 10  # good row kept
+    assert df[df["card_slug"] == "set/b-2"].iloc[0]["psa_10_pop"] == 21  # good rerun replaces
+
+
 @pytest.mark.live
 def test_fetch_pop_henderson_live():
     pop = pop_gemrate.fetch_pop(
