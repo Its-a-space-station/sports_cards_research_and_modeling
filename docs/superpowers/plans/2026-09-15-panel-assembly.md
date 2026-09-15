@@ -341,9 +341,9 @@ def test_stats_at_dates_midseason():
     out = stats_at_dates(log, [pd.Timestamp("2022-04-30"), pd.Timestamp("2022-10-31")], "hitting")
     assert len(out) == 2
     early, full = out.iloc[0], out.iloc[1]
-    # Judge's 2022 opening month: 21 G, 9 HR through Apr 30 (official April line) — verify partial window
-    assert early["games"] == 21
-    assert early["home_runs"] == 9
+    # Judge's 2022 opening month: 20 G, 6 HR through Apr 30 (corrected during execution; see NOTE below)
+    assert early["games"] == 20
+    assert early["home_runs"] == 6
     # full season equals golden totals
     assert full["games"] == 157
     assert full["home_runs"] == 62
@@ -360,7 +360,7 @@ def test_player_stats_series_slices_correctly():
     assert len(empty) == 0
 ```
 
-NOTE for the implementer: Judge's April 2022 line (21 G, 9 HR) is asserted from official records — his first 2022 game was Apr 8 and April had 22 team games, of which he played 21 with 9 HR. If this assertion fails, investigate whether the discrepancy is real (e.g. a game log date boundary) before reporting; do not edit the numbers without evidence in your report.
+NOTE for the implementer: Judge's through-April-2022 line is **20 G, 6 HR** (corrected during execution — verified against the committed fixture, live gameLog, boxscore 662797 where Judge DNP on Apr 30, and Retrosheet/StatMuse; an earlier draft of this plan said 21 G / 9 HR, which was wrong). The test asserts 20 G / 6 HR.
 
 - [ ] **Step 2: Run test to verify it fails**
 
