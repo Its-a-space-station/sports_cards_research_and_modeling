@@ -910,19 +910,20 @@ def built():
     return monthly_panel(chart, game_logs, info)
 
 
-def test_henderson_july_2023_row(built):
+def test_henderson_august_2023_row(built):
     row = built[
-        (built["player_name"] == "Gunnar Henderson") & (built["month"] == "2023-07-01")
+        (built["player_name"] == "Gunnar Henderson") & (built["month"] == "2023-08-01")
     ]
     assert len(row) == 1
     r = row.iloc[0]
-    # stats through 2023-06-30. Henderson's official line through end of June 2023:
-    # 73 G, .253 AVG, 13 HR (verify against game logs: his June 30 cumulative)
-    assert r["games"] == 73
-    assert r["home_runs"] == 13
-    assert r["avg"] == pytest.approx(0.253, abs=0.002)
+    # stats through 2023-07-31 (corrected during execution — see NOTE below; July 2023
+    # has no price point, his card's chart starts 2023-08-01):
+    # 95 G, 17 HR, .242 AVG, verified via game-logs reconstruction + Stats API byDateRange
+    assert r["games"] == 95
+    assert r["home_runs"] == 17
+    assert r["avg"] == pytest.approx(0.242, abs=0.002)
     assert r["playoff"] == 0
-    assert r["age"] == pytest.approx(22.0, abs=0.1)
+    assert r["age"] == pytest.approx(22.1, abs=0.1)
 
 
 def test_no_lookahead_invariant(built):
@@ -940,7 +941,7 @@ def test_excess_ret_identity(built):
     assert (diff < 1e-9).all()
 ```
 
-NOTE for the implementer: Henderson's through-June-2023 line (73 G, 13 HR, ~.253 AVG) is asserted from official records. If it mismatches, FIRST verify by reconstructing from game_logs.parquet directly and checking against a public source (e.g. the MLB Stats API `stats=byDateRange` for 2023-03-30→2023-06-30). If the plan's golden values prove wrong, report DONE_WITH_CONCERNS with the evidence and the corrected values — do not silently edit.
+NOTE for the implementer: golden values corrected during execution — Henderson's card has NO July-2023 price point (chart starts 2023-08-01), and his official through-June line was 70 G/11 HR/.240 (not 73/13/.253 as an earlier draft said). The golden row is now the 2023-08-01 row: 95 G, 17 HR, .242 AVG through 2023-07-31, verified by game-logs reconstruction (which also matches his official full-2023 line: 150 G/28 HR/.255) and Stats API byDateRange. If these values ever mismatch, follow the same protocol: reconstruct from game_logs.parquet, check byDateRange, report DONE_WITH_CONCERNS with evidence — do not silently edit.
 
 - [ ] **Step 2: Run test to verify it fails (panel not built yet)**
 
@@ -1003,7 +1004,7 @@ git commit -m "feat: panel export, golden verification, data dictionary"
 
 - `python -m pytest -v` all offline tests PASS (including the no-look-ahead invariant and the Henderson golden row); ruff clean.
 - Grade-regex recovery measured: refreshed sales count vs. 1825 baseline recorded in the final report.
-- `data/processed/panel_monthly.parquet` (PSA-10, rookie seasons 2022–2025 + 2026) and `panel_weekly.parquet` (2026 window) exist and pass the golden tests.
+- `data/processed/panel_monthly.parquet` (PSA-10, 2022-10→2026-09, 325 rows / 13 cards) and `panel_weekly.parquet` (2022-12-12→2026-09-07, 184 rows / 13 cards) exist and pass the golden tests.
 - GemRate pop spike documented either way; pop data included if feasible.
 - `docs/data_dictionary.md` complete.
 - Next: Plan 4 (modeling: LASSO stability selection, GBM + SHAP, hierarchical model, walk-forward buy-signal gate).
