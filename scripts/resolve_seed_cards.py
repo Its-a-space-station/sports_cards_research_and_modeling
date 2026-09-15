@@ -8,14 +8,16 @@ between API calls.
 scp_url: SCP console listing per set with ?rookies-only=true&exclude-variants=
 true (complete rookie base-card list; cached in-process), anchor whose text
 contains the player's first + last name and whose href starts with
-/game/<set_slug>/, preferring anchors without parallel keywords. Falls back to
-SCP search (challenge-blocked headless as of 2026-09-15 — expected to warn).
+/game/<set_slug>/, keeping only anchors without parallel keywords (no parallel
+fallback — unresolved stays empty). Falls back to SCP search
+(challenge-blocked headless as of 2026-09-15 — expected to warn).
 Sleeps >=5s between SCP fetches. Unresolved cells stay empty.
 
 Run from repo root with the venv active:
     python scripts/resolve_seed_cards.py
 """
 
+import re
 import time
 import unicodedata
 from pathlib import Path
@@ -32,17 +34,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SEED = ROOT / "data" / "reference" / "cards_seed.csv"
 SCP_BASE = "https://www.sportscardspro.com"
 SCP_SLEEP_S = 5.0
-PARALLEL_KEYWORDS = (
-    "Refractor",
-    "Autograph",
-    "Gold",
-    "Orange",
-    "Purple",
-    "Blue",
-    "Green",
-    "Red",
-    "Superfractor",
-    "Variation",
+PARALLEL_RE = re.compile(
+    r"\b(?:Refractor|Autograph|Gold|Orange|Purple|Blue|Green|Red|Superfractor|Variation)\b",
+    re.IGNORECASE,
 )
 NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv"}
 
@@ -86,6 +80,9 @@ def name_parts(name: str) -> tuple[str, str]:
 
 
 def pick_anchor(html: str, name: str, set_slug: str) -> str | None:
+    """Href of the player's base card, or None. Parallel-only matches return
+    None (no guessing): parallels are filtered by word-boundary keyword match
+    on the anchor text."""
     soup = BeautifulSoup(html, "html.parser")
     first, last = name_parts(name)
     matches = []
@@ -94,16 +91,12 @@ def pick_anchor(html: str, name: str, set_slug: str) -> str | None:
         if not href.startswith(f"/game/{set_slug}/"):
             continue
         text = a.get_text(strip=True).lower()
-        if first.lower() in text and last.lower() in text:
+        if first in text and last in text:
             matches.append((a.get_text(strip=True), href))
-    if not matches:
+    base = [(t, h) for t, h in matches if not PARALLEL_RE.search(t)]
+    if not base:
         return None
-    base = [
-        (t, h)
-        for t, h in matches
-        if not any(k.lower() in t.lower() for k in PARALLEL_KEYWORDS)
-    ]
-    return (base or matches)[0][1]
+    return base[0][1]
 
 
 def fetch_scp(url: str) -> str:
