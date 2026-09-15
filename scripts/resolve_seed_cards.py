@@ -135,7 +135,9 @@ def main() -> None:
         print(f"{card['player_name']}: mlb_id={mlb_id} scp_url={cards.loc[i, 'scp_url']}")
     cards.to_csv(SEED, index=False)
     resolved = int((cards["mlb_id"] != "").sum()), int((cards["scp_url"] != "").sum())
-    print(f"\nresolved {resolved[0]}/{len(cards)} mlb_id, {resolved[1]}/{len(cards)} scp_url -> {SEED}")
+    print(
+        f"\nresolved {resolved[0]}/{len(cards)} mlb_id, {resolved[1]}/{len(cards)} scp_url -> {SEED}"
+    )
 
 
 if __name__ == "__main__":

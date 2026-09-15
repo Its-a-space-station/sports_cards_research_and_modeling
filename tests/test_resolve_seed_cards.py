@@ -31,7 +31,9 @@ def test_pick_anchor_prefers_base_over_parallel():
         (f"/game/{SLUG}/gunnar-henderson-refractor-2", "Gunnar Henderson [Refractor] #2"),
         (f"/game/{SLUG}/gunnar-henderson-2", "Gunnar Henderson #2"),
     )
-    assert resolver.pick_anchor(html, "Gunnar Henderson", SLUG) == f"/game/{SLUG}/gunnar-henderson-2"
+    assert (
+        resolver.pick_anchor(html, "Gunnar Henderson", SLUG) == f"/game/{SLUG}/gunnar-henderson-2"
+    )
 
 
 def test_pick_anchor_name_with_red_substring_not_treated_as_parallel():
