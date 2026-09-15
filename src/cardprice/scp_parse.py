@@ -133,3 +133,18 @@ def parse_chart_data(html: str) -> dict[str, list[tuple[pd.Timestamp, float]]]:
         ]
         out[key] = sorted(series, key=lambda p: p[0])
     return out
+
+
+def calibrate_chart_grades(html: str) -> pd.DataFrame:
+    """Long-form monthly price history with grade labels, resolved by matching
+    each chart key's latest price to the price-summary table."""
+    summary = {v: k for k, v in parse_price_summary(html).items()}  # price -> label
+    rows = []
+    for key, series in parse_chart_data(html).items():
+        if not series:
+            continue
+        label = summary.get(series[-1][1])
+        grade = label.lower().replace(" ", "_") if label else f"key:{key}"
+        for ts, price in series:
+            rows.append({"grade": grade, "date": ts, "price": price})
+    return pd.DataFrame(rows)
