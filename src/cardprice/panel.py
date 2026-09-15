@@ -136,3 +136,73 @@ def _form_delta_pitching(game_logs, mlb_id, season, form_start, lag_date, season
     er = full["earned_runs"] - before["earned_runs"]
     era_14d = 9 * er / (outs / 3)
     return round(era_14d - season_era, 3)
+
+
+def weekly_panel(
+    weekly: pd.DataFrame, cards: pd.DataFrame, game_logs: pd.DataFrame, player_info: pd.DataFrame
+) -> pd.DataFrame:
+    meta = cards[
+        ["card_slug", "player_name", "mlb_id", "rookie_year", "set_slug"]
+    ].drop_duplicates()
+    df = weekly.merge(meta, on="card_slug", how="left", validate="many_to_one")
+    rows = []
+    for r in df.itertuples():
+        stats_season = max(int(r.rookie_year), r.week.year)
+        lag_date = r.week - pd.Timedelta(days=1)  # Sunday before the Monday week start
+        stats = player_stats_series(game_logs, int(r.mlb_id), stats_season, [lag_date])
+        if not len(stats):
+            continue
+        s = stats.iloc[0]
+        first_game = game_logs[
+            (game_logs["mlb_id"] == r.mlb_id) & (game_logs["season"] == stats_season)
+        ]["date"].min()
+        if pd.isna(first_game) or first_game > lag_date:
+            continue  # not yet debuted this season at the lag date
+        form_start = lag_date - pd.Timedelta(days=13)
+        row = {
+            "card_slug": r.card_slug,
+            "grade": r.grade,
+            "mlb_id": int(r.mlb_id),
+            "player_name": r.player_name,
+            "week": r.week,
+            "price": r.median_price,
+            "n_sales": int(r.n_sales),
+            "best_offer_share": float(r.best_offer_share),
+            "rookie_year": int(r.rookie_year),
+            "stats_season": stats_season,
+            "set_slug": r.set_slug,
+            "playoff": int(r.week.month == 10),
+        }
+        earlier = player_stats_series(
+            game_logs, int(r.mlb_id), stats_season, [form_start - pd.Timedelta(days=1)]
+        ).iloc[0]
+        row["form_games"] = int(s["games"] - earlier["games"])
+        if "ops" in s.index:
+            for c in HITTING_COLS:
+                row[c] = s[c]
+            row["form_ops_delta"] = _form_delta_hitting(
+                game_logs, int(r.mlb_id), stats_season, form_start, lag_date, s["ops"]
+            )
+            row["form_era_delta"] = np.nan
+        else:
+            for c in PITCHING_COLS:
+                row[c] = s[c]
+            row["form_era_delta"] = _form_delta_pitching(
+                game_logs, int(r.mlb_id), stats_season, form_start, lag_date, s["era"]
+            )
+            row["form_ops_delta"] = np.nan
+        info = player_info[player_info["mlb_id"] == r.mlb_id]
+        if len(info):
+            birth = info.iloc[0]["birth_date"]
+            row["age"] = round((r.week - birth).days / 365.25, 2)
+            row["position"] = info.iloc[0]["position"]
+        rows.append(row)
+    panel = pd.DataFrame(rows)
+    panel = panel.sort_values(["card_slug", "grade", "week"])
+    panel["log_ret"] = panel.groupby(["card_slug", "grade"])["price"].transform(
+        lambda p: np.log(p / p.shift(1))
+    )
+    market = panel.groupby("week")["log_ret"].median().rename("market_median_ret")
+    panel = panel.merge(market, on="week", how="left")
+    panel["excess_ret"] = panel["log_ret"] - panel["market_median_ret"]
+    return panel.reset_index(drop=True)
