@@ -33,6 +33,23 @@ Sources: `data/processed/scp_chart_monthly.parquet`, `data/processed/scp_weekly.
 - **Current shapes:** panel_monthly 325 rows / 13 cards, 2022-10 → 2026-09;
   panel_weekly 184 rows / 13 cards, 2022-12-12 → 2026-09-07.
 
+## Return horizons
+
+Sales are sparse, so `log_ret` spans the gap between **observed** periods, which is
+often longer than one period. The horizon columns disclose this per row. Measured on
+the 2026-09-15 build:
+
+- **Weekly (`days_since_prev`, n=135 returns):** only 30.4% are true 7-day returns;
+  median horizon 14 days; 65.9% are ≤ 21 days; long tail out to 1281 days (multi-year).
+  Heterogeneous horizons also contaminate `market_median_ret`/`excess_ret`, which pool
+  these returns per week.
+- **Monthly (`months_since_prev`, n=312 returns):** 90.1% (281) are one-month returns;
+  28 are 3-month (mostly the off-season Dec→Mar gap); 3 rows are 4–5-month gaps.
+
+**Downstream rule for Plan 4:** filter or weight by horizon — for the weekly primary
+analysis use rows with `days_since_prev <= 21`; for the monthly panel flag rows with
+`months_since_prev > 2`. Do not treat raw `log_ret` as a fixed-horizon return.
+
 ## panel_monthly.parquet
 
 One row per card per calendar month with a PSA-10 chart price point (the card's
@@ -67,6 +84,7 @@ rookie season onward). Grade is always `psa_10`.
 | k_bb_pct | float64 | (K − BB) / batters faced, season-to-date (pitchers) | lagged; NaN if 0 BF |
 | innings_pitched | float64 | Season-to-date IP, MLB thirds notation converted via outs (pitchers) | lagged |
 | log_ret | float64 | ln(price_t / price_{t-1}) within card, ordered by month | outcome; NaN first month |
+| months_since_prev | float64 | Whole months between this row's month and the previous observed month for the card (Jun→Oct = 4) | NA for each card's first month; >1 on sparse gaps |
 | market_median_ret | float64 | Median of log_ret across all cards that month | outcome |
 | excess_ret | float64 | log_ret − market_median_ret | outcome; NaN first month |
 
@@ -107,5 +125,6 @@ not just PSA 10.
 | k_bb_pct | float64 | (K − BB) / batters faced, season-to-date (pitchers) | lagged; NaN if 0 BF |
 | innings_pitched | float64 | Season-to-date IP via outs conversion (pitchers) | lagged |
 | log_ret | float64 | ln(price_t / price_{t-1}) within card × grade, ordered by week | outcome; NaN first week of series |
+| days_since_prev | float64 | Days between this row's week and the previous observed week for the card × grade | NA for each series' first week; >7 on sparse gaps |
 | market_median_ret | float64 | Median of log_ret across all card × grade rows that week | outcome |
 | excess_ret | float64 | log_ret − market_median_ret | outcome; NaN first week of series |

@@ -70,3 +70,12 @@ def test_weekly_lag_and_sophomore_season():
     assert w2["best_offer_share"] == 0.5
     # both grades +5%/+10% -> market median between them
     assert panel["log_ret"].notna().sum() == 2  # first week per card-grade is NaN
+
+
+def test_days_since_prev():
+    weekly, cards, logs, info = make_inputs()
+    panel = weekly_panel(weekly, cards, logs, info)
+    for grade in ["psa_10", "psa_9"]:
+        g = panel[(panel["card_slug"] == "card/a") & (panel["grade"] == grade)].sort_values("week")
+        assert pd.isna(g.iloc[0]["days_since_prev"])  # first observed week: NA
+        assert g.iloc[1]["days_since_prev"] == 7  # 2026-08-31 -> 2026-09-07

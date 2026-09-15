@@ -93,6 +93,10 @@ def monthly_panel(
     panel["log_ret"] = panel.groupby("card_slug")["price"].transform(
         lambda p: np.log(p / p.shift(1))
     )
+    # horizon between observed months (sparse series: not all returns are 1-month)
+    panel["months_since_prev"] = panel.groupby("card_slug")["month"].transform(
+        lambda m: (m.dt.year * 12 + m.dt.month).diff()
+    )
     market = panel.groupby("month")["log_ret"].median().rename("market_median_ret")
     panel = panel.merge(market, on="month", how="left")
     panel["excess_ret"] = panel["log_ret"] - panel["market_median_ret"]
@@ -203,6 +207,10 @@ def weekly_panel(
     panel = panel.sort_values(["card_slug", "grade", "week"])
     panel["log_ret"] = panel.groupby(["card_slug", "grade"])["price"].transform(
         lambda p: np.log(p / p.shift(1))
+    )
+    # horizon between observed weeks (sparse series: not all returns are 7-day)
+    panel["days_since_prev"] = panel.groupby(["card_slug", "grade"])["week"].transform(
+        lambda w: w.diff().dt.days
     )
     market = panel.groupby("week")["log_ret"].median().rename("market_median_ret")
     panel = panel.merge(market, on="week", how="left")

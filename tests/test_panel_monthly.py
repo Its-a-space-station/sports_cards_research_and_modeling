@@ -99,3 +99,13 @@ def test_debut_and_static():
     assert apr_a["position"] == "OF"
     assert apr_a["age"] == pytest.approx(22.25, abs=0.01)
     assert apr_a["log_ret"] != apr_a["log_ret"]  # first month: NaN
+
+
+def test_months_since_prev():
+    chart, logs, info = make_inputs()
+    panel = monthly_panel(chart, logs, info)
+    a = panel[panel["card_slug"] == "card/a"].set_index("month")
+    assert pd.isna(a.loc["2022-04-01", "months_since_prev"])  # first observed month: NA
+    assert a.loc["2022-05-01", "months_since_prev"] == 1
+    assert a.loc["2022-06-01", "months_since_prev"] == 1
+    assert a.loc["2022-10-01", "months_since_prev"] == 4  # Jun -> Oct gap
