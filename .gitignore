@@ -1,1 +1,8 @@
 .worktrees/
+.venv/
+__pycache__/
+*.egg-info/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
