@@ -7,16 +7,29 @@ import re
 import pandas as pd
 from bs4 import BeautifulSoup, Tag
 
-GRADE_RE = re.compile(r"\b(PSA|BGS|SGC|CGC)\s*(10|9\.5|9|8\.5|8)\b", re.IGNORECASE)
+GRADE_RES = [
+    # grader first: "PSA 10", "SGC-10", "PSA GEM MT 10", "PSA MINT 9", "SGC PERFECT 10"
+    re.compile(
+        r"\b(PSA|BGS|SGC|CGC)\s*-?\s*"
+        r"(?:GEM\s*(?:MT|MINT)\s*|MINT\s+|PERFECT\s+|PRISTINE\s+)?"
+        r"(10|9\.5|9|8\.5|8)\b",
+        re.IGNORECASE,
+    ),
+    # grade first: "Gem Mint 10 PSA"
+    re.compile(r"\bGEM\s*(?:MT|MINT)\s*(10)\s+(PSA|BGS|SGC|CGC)\b", re.IGNORECASE),
+]
 PRICE_RE = re.compile(r"\$([\d,]+(?:\.\d{2})?)")
 CHART_RE = re.compile(r"VGPC\.chart_data\s*=\s*(\{.*?\})\s*;", re.DOTALL)
 
 
 def parse_grade_from_title(title: str) -> str | None:
-    m = GRADE_RE.search(title)
-    if not m:
-        return None
-    return f"{m.group(1).lower()}_{m.group(2)}"
+    m = GRADE_RES[0].search(title)
+    if m:
+        return f"{m.group(1).lower()}_{m.group(2)}"
+    m = GRADE_RES[1].search(title)
+    if m:
+        return f"{m.group(2).lower()}_{m.group(1)}"
+    return None
 
 
 def _amount(text: str) -> float:
@@ -146,5 +159,7 @@ def calibrate_chart_grades(html: str) -> pd.DataFrame:
         label = summary.get(series[-1][1])
         grade = label.lower().replace(" ", "_") if label else f"key:{key}"
         for ts, price in series:
+            if price <= 0:
+                continue
             rows.append({"grade": grade, "date": ts, "price": price})
     return pd.DataFrame(rows)
