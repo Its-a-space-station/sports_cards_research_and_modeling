@@ -1,6 +1,6 @@
 # Modeling Findings — 2026-09-15
 
-Runner: `scripts/run_modeling.py` (full stdout: `/tmp/modeling_output.txt`). All models
+Runner: `scripts/run_modeling.py` (full stdout: `docs/findings/2026-09-15-modeling-run-output.txt`). All models
 validated on synthetic planted-signal data in Tasks 2–5; this is the first real-data pass.
 
 ## 1. Dataset summary
@@ -131,10 +131,20 @@ LassoCV at cv-min refit each month):
 | metric | value |
 |---|---|
 | n_months (test months) | 29 |
-| mean monthly excess over median-card benchmark | **+0.0191** (+1.9%) |
+| mean monthly excess over median-card benchmark[^1] | **+0.0191** (+1.9%) |
 | bootstrap 95% CI | **[−0.0005, +0.0395]** |
 | bootstrap p (share of means ≤ 0) | 0.028 |
 | net of fees (0.14 log round-trip) | **−0.1209** (−12.1%/month) |
+
+The reported p = 0.028 is one-sided (share of bootstrap means ≤ 0), while the 95% CI is
+two-sided — the matching two-sided p is ≈ 0.056, so a CI whose lower bound sits just
+under zero alongside p = 0.028 is consistent, not contradictory.
+
+[^1]: Benchmark universe disclosure: the benchmark is the median realized `excess_ret`
+of all **hitter** cards in the test month — the walk-forward frame is hitters-only, so
+this is not literally the "median realized excess_ret of ALL cards that month" the plan
+text specifies. Rerun with the all-cards benchmark (pitchers included): mean **+0.0185**,
+bootstrap 95% CI **[−0.0037, +0.0427]**, p = 0.061 — gate verdict unchanged (FAIL).
 
 **GATE VERDICT: FAIL.** Both pass conditions fail: `ci_low` = −0.0005 is not > 0, and
 `net_of_fees_mean` = −0.121 is far below 0. The pre-fee point estimate is positive

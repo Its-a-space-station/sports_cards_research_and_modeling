@@ -18,10 +18,8 @@ def walk_forward(
         medians = train[feature_cols].median()
         X_train = train[feature_cols].fillna(medians)
         X_test = test[feature_cols].fillna(medians)
-        # standardize with TRAIN mean/sd only (LASSO penalty is scale-dependent);
-        # zero-variance train columns map to 0 via sd.replace(0, 1) since (X - mean) == 0
-        # (corrected during execution — the initial draft skipped scaling, which lets
-        # raw-scale features dominate)
+        # standardize with TRAIN mean/sd only: LASSO penalty is scale-dependent;
+        # zero-variance train columns map to 0 via sd.replace(0, 1)
         mean, sd = X_train.mean(), X_train.std(ddof=0).replace(0, 1)
         X_train = (X_train - mean) / sd
         X_test = (X_test - mean) / sd
