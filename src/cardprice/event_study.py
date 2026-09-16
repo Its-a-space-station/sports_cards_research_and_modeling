@@ -11,6 +11,9 @@ def _event_period(event_date: pd.Timestamp, grain: str) -> pd.Timestamp:
 
 
 def event_windows(events, panel, grain, pre, post) -> pd.DataFrame:
+    """Build event windows; offsets walk the panel's period index positionally, so
+    adjacent offsets may not be calendar-adjacent across offseason gaps (monthly)
+    or sparse weeks (weekly)."""
     period_col = "month" if grain == "monthly" else "week"
     horizon_col = "months_since_prev" if grain == "monthly" else "days_since_prev"
     horizon_max = 2 if grain == "monthly" else 21

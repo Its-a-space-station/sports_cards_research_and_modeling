@@ -198,7 +198,10 @@ then 0.00/+0.19, then 0.00/−0.13) — no clean fade, but n = 1 event: anecdote
   rumored before announcement) are unmodeled.
 - **Monthly grain.** A spike-and-fade inside one month is invisible; the reversion test
   measures only what survives into the next calendar month. The 2–3-week hobby reversion
-  claim is outside this grain's resolution.
+  claim is outside this grain's resolution. Event-month CARs also include within-month
+  pre-event price movement (an event on the 25th still gets the whole month's return) —
+  this biases toward finding effects, so the all-null outcome is strengthened, not
+  weakened; day-grain resolution would need weekly history that does not yet exist.
 - **Universe.** 13 cards, one card per player, PSA-10 only on the monthly grain; 3 of 16
   registry players unmatched to any card (costing 32 events, 19 of them Strider ten-K games).
   Results do not generalize across grades, parallels, or players. The weekly panel can carry

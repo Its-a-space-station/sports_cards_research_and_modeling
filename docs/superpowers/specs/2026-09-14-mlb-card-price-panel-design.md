@@ -135,7 +135,11 @@ stops at the research stage and this is reported honestly.
 All-Star selections, award announcements, playoff series wins. Cumulative abnormal
 card returns in (−7d, +1d, +7d, +21d) windows vs. panel-model prediction. Validates
 causality and tests the documented 2–3 week mean-reversion of event spikes —
-informing the sell side, not just the buy side.
+informing the sell side, not just the buy side. [Superseded 2026-09-16 by Plan 5
+execution: windows are month/week-grain against the market-median benchmark (not
+day-grain vs panel-model prediction); event set = debuts, 3+HR/4+hit games, 10+K
+games, award wins, playoff appearances (no-hitters/All-Star/playoff-series-wins
+dropped — data availability); see docs/findings/2026-09-16-event-study-report.md.]
 
 ## 7. Data quality & error handling
 
