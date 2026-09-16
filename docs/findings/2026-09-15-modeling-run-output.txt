@@ -1,0 +1,238 @@
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/src/cardprice/model_consistency.py:56: ConvergenceWarning: The MLE may be on the boundary of the parameter space.
+  fit = smf.mixedlm(f"excess_ret ~ {' + '.join(covariates)}", data=df, groups=df["mlb_id"]).fit(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.844719e-06, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.656180e-06, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.455220e-06, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 7.314147e-06, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 7.266501e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.122650e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.111228e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.744752e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.116959e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 9.366663e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.770257e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 7.182319e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.336477e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.496839e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.535986e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.536091e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.518498e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.489938e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.453474e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.411090e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.364312e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.314390e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.262358e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.209071e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.155235e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.101426e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.048111e-04, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 9.956640e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 9.443826e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 8.944964e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 8.461799e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 7.995607e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 7.547275e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 7.117365e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 6.706173e-05, tolerance: 3.595e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.667348e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.407813e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.947661e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.214012e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.365438e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.438465e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.449579e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.410703e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.331664e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.220749e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.084951e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.930164e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.761331e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.582589e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.397377e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.208544e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.018431e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.828949e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.641641e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.457743e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.278223e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.103831e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.935130e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.772525e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.616292e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.466600e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 2.323527e-05, tolerance: 3.880e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.093413e-05, tolerance: 5.369e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.140624e-05, tolerance: 5.369e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.918867e-05, tolerance: 5.369e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:842: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.661987e-05, tolerance: 5.369e-06
+  model = cd_fast.enet_coordinate_descent(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.009813e-06, tolerance: 3.637e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.975078e-06, tolerance: 3.637e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.935161e-06, tolerance: 3.637e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.884186e-06, tolerance: 3.637e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.814606e-06, tolerance: 3.637e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 3.730263e-06, tolerance: 3.637e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.244924e-06, tolerance: 4.958e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/.venv/lib/python3.14/site-packages/sklearn/linear_model/_coordinate_descent.py:827: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 5.076192e-06, tolerance: 4.958e-06
+  model = cd_fast.enet_coordinate_descent_gram(
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/src/cardprice/model_consistency.py:23: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  fit = smf.ols(f"excess_ret ~ {stat} + games + age", data=grp).fit(cov_type="HC1")
+/Users/tomcruise/sports_cards_research_and_modeling/.worktrees/modeling/src/cardprice/model_consistency.py:56: ConvergenceWarning: The MLE may be on the boundary of the parameter space.
+  fit = smf.mixedlm(f"excess_ret ~ {' + '.join(covariates)}", data=df, groups=df["mlb_id"]).fit(
+
+=== monthly: 281 rows after filters (254 hitter rows) ===
+hitters by season: {2022: 4, 2023: 34, 2024: 69, 2025: 85, 2026: 62}
+
+stability selection: {'ops': 0.02, 'form_ops_delta': 0.01, 'years_since_rookie': 0.01, 'slg': 0.0, 'home_runs': 0.0, 'strikeouts': 0.0, 'games': 0.0, 'form_games': 0.0, 'age': 0.0, 'playoff': 0.0}
+
+lasso path:
+ Empty DataFrame
+Columns: [feature, coefficient]
+Index: []
+
+gbm shap:
+               feature  mean_abs_shap
+0                 age       0.029614
+1  years_since_rookie       0.028971
+2      form_ops_delta       0.023774
+3                 ops       0.022187
+4           home_runs       0.020391
+5               games       0.019021
+6          form_games       0.016390
+7          strikeouts       0.016105
+8                 slg       0.015922
+9             playoff       0.007880
+
+season consistency (ops):
+    season      coef        se   p_value   n
+0    2022       NaN       NaN       NaN   4
+1    2023  0.215111  0.488985  0.660000  34
+2    2024  0.150509  0.098717  0.127347  69
+3    2025 -0.006660  0.141555  0.962476  85
+4    2026  0.055182  0.241549  0.819294  62
+position interaction (ops): {'f_stat': 0.05470236354334524, 'p_value': 0.8152669299187201}
+
+season consistency (form_ops_delta):
+    season      coef        se   p_value   n
+0    2022       NaN       NaN       NaN   0
+1    2023  0.152422  0.191146  0.425212  22
+2    2024  0.221841  0.159179  0.163421  48
+3    2025  0.065750  0.062333  0.291507  63
+4    2026 -0.014148  0.065825  0.829819  57
+position interaction (form_ops_delta): {'f_stat': 1.5245040424709584, 'p_value': 0.21851360878816395}
+
+player random effects (ops): {'random_intercept_var': 4.968289475071623e-08, 'resid_var': 0.03405101073492237, 'icc': 1.4590704119370038e-06}
+
+walk-forward gate: {'mean_excess': 0.01911814858541302, 'ci_low': -0.00047749219135571094, 'ci_high': 0.03950712641920892, 'p_value': 0.028, 'net_of_fees_mean': -0.12088185141458699, 'n_months': 29}
+
+=== weekly: 89 rows after filters (61 hitter rows) ===
+hitters by season: {2024: 5, 2025: 3, 2026: 53}
+
+stability selection: {'games': 0.11, 'form_ops_delta': 0.1, 'years_since_rookie': 0.08, 'slg': 0.08, 'strikeouts': 0.06, 'age': 0.06, 'ops': 0.04, 'home_runs': 0.04, 'form_games': 0.02, 'playoff': 0.0}
+
+lasso path:
+ Empty DataFrame
+Columns: [feature, coefficient]
+Index: []
+
+gbm shap:
+               feature  mean_abs_shap
+0          form_games       0.034385
+1                 age       0.034268
+2                 ops       0.033454
+3  years_since_rookie       0.032726
+4               games       0.021397
+5           home_runs       0.014580
+6                 slg       0.000000
+7          strikeouts       0.000000
+8      form_ops_delta       0.000000
+9             playoff       0.000000
+
+season consistency (ops):
+    season      coef        se   p_value   n
+0    2024 -0.693752  3.082785  0.821948   5
+1    2025       NaN       NaN       NaN   3
+2    2026  0.176323  0.298063  0.554143  53
+position interaction (ops): {'f_stat': 0.022327257528473938, 'p_value': 0.8817663757696687}
+
+season consistency (form_ops_delta):
+    season      coef        se   p_value   n
+0    2024       NaN       NaN       NaN   2
+1    2025       NaN       NaN       NaN   3
+2    2026  0.232562  0.140001  0.096685  51
+position interaction (form_ops_delta): {'f_stat': 1.6177120554401958, 'p_value': 0.20929518471288666}
+
+player random effects (ops): {'random_intercept_var': 0.0015243064407790294, 'resid_var': 0.06104843976397311, 'icc': 0.024360548852868865}
