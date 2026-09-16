@@ -1,0 +1,26 @@
+event_type
+award_win              6
+debut                 16
+four_hit_game         67
+playoff_appearance    17
+ten_k_game            27
+three_hr_game          1
+dtype: int64
+
+award_win: n=5, mean CAR(event month)=-0.0278, p=0.695
+  reversion: 1 positive spikes, mean next-month giveback 0.1393 (0% give back some)
+
+debut: n=0 (no panel rows within [-1, +2] months of any event)
+
+four_hit_game: n=50, mean CAR(event month)=-0.0054, p=0.843
+  reversion: 24 positive spikes, mean next-month giveback 0.0359 (46% give back some)
+
+playoff_appearance: n=13, mean CAR(event month)=-0.0662, p=0.196
+  reversion: 5 positive spikes, mean next-month giveback 0.0446 (20% give back some)
+
+ten_k_game: n=6, mean CAR(event month)=-0.0503, p=0.445
+  reversion: 1 positive spikes, mean next-month giveback 0.0464 (0% give back some)
+
+three_hr_game: n=0 (no panel rows within [-1, +2] months of any event)
+
+weekly all-events: n=5, mean CAR=0.0348, p=0.801
