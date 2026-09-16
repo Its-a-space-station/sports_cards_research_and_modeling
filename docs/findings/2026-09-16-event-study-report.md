@@ -67,7 +67,9 @@ ten-K games — never enter the study. The study universe is the 13 paneled play
 
 ## 2. Do events move card prices?
 
-Monthly, event-month CAR (offset 0), permutation p (5,000 draws, seed 42):
+Monthly, event-month CAR (offset 0), permutation p (5,000 draws, seed 42). The
+"~5%-detectable |CAR|" column is 1.96 × (panel `excess_ret` SD 0.1974) / √n — the smallest
+absolute mean CAR a two-sided 5% test could pick up at that n:
 
 | event_type | n (events w/ offset-0 CAR) | mean CAR | p | null SD | ~5%-detectable \|CAR\| |
 |---|---|---|---|---|---|
@@ -96,20 +98,25 @@ ten_k needs ~±16 points and awards ~±17 points to show up at these n's; their 
 **The two highest-stakes event types are structurally unobservable in this panel** (n = 0, not
 a null result — no test could run):
 
-- **debut**: for all 13 paneled players, the first PSA-10 panel month is **3 or more months
-  after the debut month** (e.g. Witt debuts 2022-04, first price 2022-10; Skenes debuts
-  2024-05, first price 2024-11; Kurtz debuts 2025-04, first price 2025-12). Cards must be
+- **debut**: for all 13 paneled players, the first PSA-10 panel month is **4 or more months
+  after the debut month** (minimum gap 4: Merrill, Langford, Chourio, Sasaki; e.g. Witt debuts
+  2022-04, first price 2022-10; Skenes debuts 2024-05, first price 2024-11; Kurtz debuts
+  2025-04, first price 2025-12). Cards must be
   printed, pulled, graded, and traded before a PSA-10 price series exists, so the entire
   debut window `[-1, +2]` always precedes the first observation.
 - **three_hr_game**: the only registry event (Kurtz 2025-07-25) precedes Kurtz's first panel
   month (2025-12) by five months.
 
 **Pooled weekly study (2026-dominated window, descriptive):** n = 5 events landed in covered
-weeks; mean CAR +0.0348, p = 0.801. Composition warning: three of the five weekly CARs are
-placeholder 0.0s (first-observation weeks with NaN `excess_ret`: Volpe 2024-04, Langford
-2025-07, Merrill playoff 2024-10). Only two are informative — Skenes 10-K game week of
-2026-07-25 (+0.152) and Merrill 4-hit game week of 2026-07-19 (+0.022) — mean +0.087 on n = 2.
-Directionally positive but far from inferential.
+weeks; mean CAR +0.0348, p = 0.801. Composition note: exactly one of the five weekly CARs is a
+placeholder 0.0 — Volpe's 4-hit-game week of 2024-04-01 is the first observation of its grade
+series (`log_ret`/`excess_ret` NaN, `days_since_prev` NaN) and sums to 0.0. The other four are
+informative: Skenes 10-K game week of 2026-07-25 (+0.152), Merrill 4-hit game week of
+2026-07-19 (+0.022), and two genuine zeros where the card was the **only panel row that week**
+and therefore equaled the market median exactly (Langford week of 2025-07-07: `log_ret`
+0.073554 = `market_median_ret` → excess 0.0, first weekly row 2024-12-09; Merrill playoff week
+of 2024-09-30: `log_ret` 0.147795 = median → excess 0.0, first weekly row 2024-09-09).
+Informative mean: **+0.0435 on n = 4**. Directionally positive but far from inferential.
 
 **Multiple testing:** five p-values were computed (four monthly event types + one weekly
 pooled). Bonferroni at 5 tests gives α = 0.010; the smallest observed p is 0.196. **Nothing
@@ -138,7 +145,7 @@ noise months, so this is close to a regression-to-the-mean measurement with the 
 Against the hobby claim that event spikes revert within 2–3 weeks: this dataset **cannot
 confirm or refute it**. A spike that fades over 2–3 weeks lives inside one calendar month —
 the event month's CAR nets the rise and the fade against each other, and the next-month cell
-only catches whatever is left. The weekly panel is the right grain but has only 2 informative
+only catches whatever is left. The weekly panel is the right grain but has only 4 informative
 event-week observations. The one with follow-up data (Skenes' 10-K game, event week +0.152)
 shows mixed signs over the next three covered weeks (−0.05/+0.05 across the two grade rows,
 then 0.00/+0.19, then 0.00/−0.13) — no clean fade, but n = 1 event: anecdote, not evidence.
@@ -166,7 +173,7 @@ then 0.00/+0.19, then 0.00/−0.13) — no clean fade, but n = 1 event: anecdote
   is absence of evidence, not evidence of absence.
 - **What would sharpen it:** (1) weekly price history with real depth — the weekly panel is
   131/184 rows in 2026 alone; another 1–2 seasons of accumulation turns the weekly event study
-  from n = 2 informative events into dozens and directly addresses the 2–3-week reversion
+  from n = 4 informative events into dozens and directly addresses the 2–3-week reversion
   claim; (2) a bigger universe — more cards per player (base, parallels, grades) and more
   players would lift event counts per type (ten_k_game is n = 6 of 27 registry events —
   19 are Strider's, lost to the unmatched-card problem; resolving the 3 unmatched seed cards
@@ -178,11 +185,11 @@ then 0.00/+0.19, then 0.00/−0.13) — no clean fade, but n = 1 event: anecdote
 ## 5. Limitations
 
 - **Power / event counts.** After losing 3 unmatched players and pre-panel events: four_hit
-  50, playoff 13, ten_k 6, award 5, debut 0, three_hr 0; weekly pooled has 2 informative
+  50, playoff 13, ten_k 6, award 5, debut 0, three_hr 0; weekly pooled has 4 informative
   events. Only the four_hit null is a tight one (±0.055); everything else detects only very
   large effects. three_hr_game (1 registry event) and debut (unobservable) are reported as
   descriptive/structural, not inferential.
-- **Structural censoring of early-career events.** First PSA-10 observation is ≥3 months
+- **Structural censoring of early-career events.** First PSA-10 observation is ≥4 months
   after debut for all 13 paneled players, so the highest-hypothesized-alpha events are the
   least observable; the study is silent on them, not negative on them.
 - **Announcement-date approximation for awards — not triggered, but noted.** All six award
@@ -202,9 +209,12 @@ then 0.00/+0.19, then 0.00/−0.13) — no clean fade, but n = 1 event: anecdote
   survives (minimum p = 0.196), and no result was marginal enough for the correction to
   change any conclusion.
 - **Placeholder-zero CARs.** Events whose only in-window rows have NaN `excess_ret` (first
-  observed month/week for a card) sum to a 0.0 CAR that is kept by the significance test
-  (one case in award_win, three in the weekly pool). Flagged in Section 2; no conclusion
-  changes when they are excluded, but future runs should treat them as missing, not zero.
+  observed month/week for a card) sum to a 0.0 CAR that is kept by the significance test —
+  one case each in award_win (Skenes 2024-11) and the weekly pool (Volpe 2024-04-01). The
+  other two weekly 0.0 CARs (Langford 2025-07-07, Merrill playoff 2024-09-30) are genuine:
+  the card was the only panel row those weeks, so its return equaled the market median.
+  Flagged in Section 2; no conclusion changes when placeholders are excluded, but future
+  runs should treat them as missing, not zero.
 - **Permutation-pool simplification (carried from Task 3).** The null pool includes actual
   event-window cells; with ≤50 of 312 cells affected this mildly widens the null, biasing
   toward non-rejection — conservative given the all-null outcome.
