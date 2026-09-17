@@ -771,8 +771,9 @@ Then: `python scripts/build_multiyear_panel.py`
 Verification checklist (do all, report each result):
 1. **Golden row:** from `universe_chart_monthly.parquet` directly compute by hand (filter the card, print the two month prices) the 12m annualized log return for Juan Soto's flagship card (`baseball-cards-2018-topps-chrome-update/juan-soto-hmt55`, ungraded) at entry 2021-04; assert the panel's `ret_12m` for that row matches to 1e-9. If that exact card/month is absent from the selected universe, pick any selected ungraded card with a full 2021-04..2022-04 window, say which, and pin that.
 2. **Goldens on predictors (at panel-realistic entry months ≥ 2021-04):** Bryant (592178) `career_home_runs` at entry 2021-04 == **147** (his published 2015–2020 lines: 26+39+29+13+31+9; lag = 2021-03-31, and 2021 games must NOT count) — verify against the panel AND the published totals; a mismatch means the lag discipline is broken, STOP. Henderson (683002) `career_stage` at 2023-04 == "sophomore". Judge (592450) `awards_to_date` at 2023-01 == 2 (2017 AL ROY + 2022 AL MVP) — subject to Task 1's events actually containing them; if an expected award row is missing from events_universe.parquet, STOP and report (don't patch the golden).
-3. **Coverage table:** rows per career_stage × grade; entries per year. Flag if any of prospect/rookie_year/sophomore/established is empty or if 36m rows == 0.
-4. **No look-ahead in the wild:** assert `panel[panel.career_stage == "prospect"]["career_games"].fillna(0).max() == 0` and every row's `entry_price > 0`.
+3. **Pitcher path:** Skenes (694973) rows have `career_era` non-null and `career_ops`/`career_home_runs` null at 2024+ entries (exercises the `pitching_to_date` branch end-to-end, incl. `rate_at_max_level` = ERA at his highest minor level).
+4. **Coverage table:** rows per career_stage × grade; entries per year. Flag if any of prospect/rookie_year/sophomore/established is empty or if 36m rows == 0.
+5. **No look-ahead in the wild:** assert `panel[panel.career_stage == "prospect"]["career_games"].fillna(0).max() == 0` and every row's `entry_price > 0`.
 
 - [ ] **Step 5: Commit**
 
