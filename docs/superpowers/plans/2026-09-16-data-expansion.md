@@ -620,6 +620,8 @@ def select_modeling_cards(report: pd.DataFrame) -> pd.DataFrame:
 if __name__ == "__main__":
     sales = pd.read_parquet("data/processed/universe_sales.parquet")
     chart = pd.read_parquet("data/processed/universe_chart_monthly.parquet")
+    # drop uncalibrated chart keys (e.g. `key:cib`) — same filter reparse_snapshots.py applies
+    chart = chart[~chart["grade"].astype(str).str.startswith("key:")]
     sales["grade"] = sales["grade"].map(normalize_grade)
     report = liquidity_report(sales, chart)
     report.to_csv("data/processed/universe_liquidity.csv", index=False)
