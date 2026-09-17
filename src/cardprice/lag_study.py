@@ -24,10 +24,10 @@ def event_sale_windows(
     sales: pd.DataFrame,
     events: pd.DataFrame,
     grade_class: str = "ungraded",
-    baseline_days: int = 28,
-    window_days: int = 14,
+    baseline_days: int = 56,
+    window_days: int = 21,
     min_baseline: int = 3,
-    min_window: int = 5,
+    min_window: int = 3,
 ) -> tuple[pd.DataFrame, dict]:
     """Align a card's sales around each event; normalize by pre-event baseline.
 

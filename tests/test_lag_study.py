@@ -81,12 +81,13 @@ def test_grade_class_filters():
 
 
 def test_window_bounds():
-    # sales at exactly -14d and +14d are inside; +15d is outside
+    # explicit window_days=14 is intentional: the calibrated default is ±21d,
+    # but the bounds logic is window-agnostic; ±14d are inside, +15d is outside
     rows = _card_sales(n_base=5, n_pre_in_window=0, post=[130.0] * 3)
     rows.append((pd.Timestamp("2024-06-01"), 99.0, None, 1, "a/x"))   # exactly -14d
     rows.append((pd.Timestamp("2024-06-29"), 130.0, None, 1, "a/x"))   # exactly +14d
     rows.append((pd.Timestamp("2024-06-30"), 130.0, None, 1, "a/x"))   # +15d -> outside
-    windows, drop_log = event_sale_windows(_sales(rows), _events())
+    windows, drop_log = event_sale_windows(_sales(rows), _events(), window_days=14)
     assert drop_log["kept"] == 1
     assert windows["t_days"].min() == pytest.approx(-14.0)
     assert windows["t_days"].max() == pytest.approx(14.0)
