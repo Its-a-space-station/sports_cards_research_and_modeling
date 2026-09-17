@@ -2,12 +2,15 @@
 
 Each sale is normalized by its card's EVENT-ANCHORED baseline (median of
 same-grade-class sales strictly before the event) so post-event repricing is
-visible instead of absorbed by a moving baseline. Pooled curves + cluster
-bootstrap live in part 2 (Tasks 3-4).
+visible instead of absorbed by a moving baseline. Market index + adjustment
+live in part 2 (Task 3); pooled curves + cluster bootstrap, the lag/half-life
+estimators, and per-event adjustment classes live in part 3 (Task 4).
 """
 
 import numpy as np
 import pandas as pd
+
+from cardprice.career import career_stage
 
 GRADE_CLASSES = {"ungraded": None, "psa_10": "psa_10"}
 
@@ -117,3 +120,128 @@ def adjust_for_market(windows: pd.DataFrame, mkt: pd.Series) -> tuple[pd.DataFra
     out["rel_adj"] = out["rel_price"] / m
     n_unadj = int(out["rel_adj"].isna().sum())
     return out, n_unadj
+
+
+def pooled_lag_curve(
+    windows: pd.DataFrame,
+    value_col: str = "rel_adj",
+    bin_min: int = -14,
+    bin_max: int = 14,
+    n_boot: int = 2000,
+    seed: int = 42,
+) -> pd.DataFrame:
+    """Pooled daily median curve with cluster-bootstrap CIs (resample events)."""
+    w = windows.dropna(subset=[value_col]).copy()
+    w["t_bin"] = np.floor(w["t_days"] + 0.5).astype(int)
+    w = w[(w["t_bin"] >= bin_min) & (w["t_bin"] <= bin_max)]
+    rng = np.random.default_rng(seed)
+    event_ids = w["event_id"].unique()
+    boots = {k: [] for k in range(bin_min, bin_max + 1)}
+    grouped = {e: g for e, g in w.groupby("event_id")}
+    for _ in range(n_boot):
+        sample = rng.choice(event_ids, size=len(event_ids), replace=True)
+        frame = pd.concat([grouped[e] for e in sample])
+        meds = frame.groupby("t_bin")[value_col].median()
+        for k, vals in boots.items():
+            if k in meds.index:
+                vals.append(meds[k])
+    rows = []
+    for k in range(bin_min, bin_max + 1):
+        obs = w[w["t_bin"] == k][value_col]
+        b = np.asarray(boots[k])
+        rows.append(
+            {
+                "t_bin": k,
+                "median": float(obs.median()) if len(obs) else np.nan,
+                "ci_lo": float(np.percentile(b, 2.5)) if len(b) >= 20 else np.nan,
+                "ci_hi": float(np.percentile(b, 97.5)) if len(b) >= 20 else np.nan,
+                "n_sales": len(obs),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def estimate_lag(curve: pd.DataFrame, threshold: float = 1.0, hold_bins: int = 3) -> dict:
+    """First post-event bin whose CI floor clears `threshold` for `hold_bins`
+    consecutive bins. None when adjustment never reaches significance."""
+    c = curve.set_index("t_bin")
+    pre = c.loc[c.index < 0]
+    cover = (pre["ci_lo"] <= threshold) & (pre["ci_hi"] >= threshold)
+    share = float(cover.mean()) if len(cover) else 0.0
+    pre_ok = bool(share >= 0.8)  # calibrated: joint 95% coverage is miscalibrated
+    post_bins = sorted(c.index[c.index >= 0])
+    for k in post_bins:
+        seq = [k + j for j in range(hold_bins)]
+        if all(b in c.index for b in seq) and all(c.loc[b, "ci_lo"] > threshold for b in seq):
+            return {"lag_days": int(k), "pre_ok": pre_ok, "pre_cover_share": share}
+    return {"lag_days": None, "pre_ok": pre_ok, "pre_cover_share": share}
+
+
+def fit_half_life(
+    curve: pd.DataFrame,
+    h_min: float = 0.25,
+    h_max: float = 14.0,
+    h_step: float = 0.25,
+) -> dict:
+    """Fit median-1 = A*(1 - 2^(-t/h)) on post bins (t >= 0); grid over h, OLS for A."""
+    post = curve[curve["t_bin"] >= 0].dropna(subset=["median"])
+    t = post["t_bin"].to_numpy(dtype=float)
+    y = (post["median"] - 1.0).to_numpy(dtype=float)
+    if y.sum() <= 0 or len(t) < 5:
+        return {"half_life_days": np.nan, "amplitude": np.nan}
+    best = None
+    for h in np.arange(h_min, h_max + 1e-9, h_step):
+        g = 1.0 - np.power(2.0, -t / h)
+        a = float((y * g).sum() / (g * g).sum())
+        sse = float(((y - a * g) ** 2).sum())
+        if best is None or sse < best[0]:
+            best = (sse, h, a)
+    if best[2] <= 0.01:  # fitted move is noise-level -> report no adjustment
+        return {"half_life_days": np.nan, "amplitude": np.nan}
+    return {"half_life_days": float(best[1]), "amplitude": float(best[2])}
+
+
+def classify_adjustment(
+    windows: pd.DataFrame,
+    early_hi: float = 3.5,
+    late_lo: float = 7.0,
+    no_move: float = 0.02,
+    late_move: float = 0.05,
+    fast_ratio: float = 0.8,
+) -> pd.DataFrame:
+    """Per-event adjustment class from adjusted relative prices (see gate in spec §8)."""
+    rows = []
+    for event_id, g in windows.dropna(subset=["rel_adj"]).groupby("event_id"):
+        pre = g[g["t_days"] < 0]["rel_adj"]
+        early = g[(g["t_days"] >= 0) & (g["t_days"] < early_hi)]["rel_adj"]
+        late = g[(g["t_days"] >= late_lo)]["rel_adj"]
+        if min(len(pre), len(early), len(late)) < 2:
+            rows.append({"event_id": event_id, "pre_med": np.nan, "early_med": np.nan,
+                         "late_med": np.nan, "cls": "insufficient"})
+            continue
+        pre_med, early_med, late_med = pre.median(), early.median(), late.median()
+        move = late_med - pre_med
+        if move <= no_move:
+            cls = "no_adjustment"
+        elif (early_med - pre_med) / move >= fast_ratio:
+            cls = "fast"
+        elif abs(early_med - pre_med) <= no_move and move >= late_move:
+            cls = "late"
+        else:
+            cls = "intermediate"
+        rows.append({"event_id": event_id, "pre_med": float(pre_med),
+                     "early_med": float(early_med), "late_med": float(late_med), "cls": cls})
+    return pd.DataFrame(rows)
+
+
+def assign_strata(events: pd.DataFrame, game_logs_mlb: pd.DataFrame) -> pd.Series:
+    """'prospect' when career stage at the event is prospect/rookie_year, else 'established'.
+
+    `game_logs_mlb` must already be restricted to level == "mlb" (the caller's
+    job); career_stage assumes MLB-only rows when deriving debut season.
+    """
+    out = []
+    for e in events.itertuples():
+        stage = career_stage(game_logs_mlb, e.mlb_id, pd.Timestamp(e.event_date))
+        out.append("prospect" if stage in ("prospect", "rookie_year") else "established")
+    return pd.Series(out, index=events.index, name="stratum")

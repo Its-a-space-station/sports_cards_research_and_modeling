@@ -2,7 +2,16 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from cardprice.lag_study import adjust_for_market, event_sale_windows, market_relative_index
+from cardprice.lag_study import (
+    adjust_for_market,
+    assign_strata,
+    classify_adjustment,
+    estimate_lag,
+    event_sale_windows,
+    fit_half_life,
+    market_relative_index,
+    pooled_lag_curve,
+)
 
 
 def _sales(rows):
@@ -150,3 +159,99 @@ def test_adjust_for_market_missing_index_is_nan_not_fabricated():
     out, n_unadj = adjust_for_market(windows, mkt)
     assert pd.isna(out["rel_adj"].iloc[0])
     assert n_unadj == 1
+
+
+def _planted_windows(event_id, baseline=1.0, jump=0.3, jump_day=2.0, n_per_day=3, seed=0):
+    """Synthetic adjusted windows: rel_adj ~ N(1, .01) pre, ramps to 1+jump at jump_day."""
+    rng = np.random.default_rng(seed)
+    rows = []
+    for t in range(-14, 15):
+        level = baseline if t < jump_day else baseline + jump
+        for _ in range(n_per_day):
+            rows.append({"event_id": event_id, "t_days": t + rng.uniform(-0.3, 0.3),
+                         "rel_adj": level + rng.normal(0, 0.01)})
+    return pd.DataFrame(rows)
+
+
+def test_pooled_lag_curve_bins_and_cis():
+    windows = pd.concat([_planted_windows(0, seed=1), _planted_windows(1, seed=2)])
+    curve = pooled_lag_curve(windows, n_boot=200, seed=42)
+    row = curve[curve["t_bin"] == 5].iloc[0]
+    assert row["median"] > 1.2
+    assert row["ci_lo"] > 1.0
+    pre = curve[curve["t_bin"] == -5].iloc[0]
+    assert pre["ci_lo"] <= 1.0 <= pre["ci_hi"]
+
+
+def test_estimate_lag_recovers_planted_two_day_lag():
+    windows = pd.concat([_planted_windows(e, jump_day=2.0, seed=e) for e in range(6)])
+    curve = pooled_lag_curve(windows, n_boot=200, seed=42)
+    res = estimate_lag(curve)
+    assert res["lag_days"] is not None and res["lag_days"] <= 3
+    assert res["pre_ok"]
+    assert res["pre_cover_share"] >= 0.8
+
+
+def test_estimate_lag_pre_ok_false_when_pre_shifted():
+    # jump planted at day -5 -> 10 of 14 pre bins are elevated -> coverage share
+    # collapses -> pre_ok must be False (catches a broken baseline)
+    windows = pd.concat([_planted_windows(e, jump_day=-5.0, seed=e) for e in range(6)])
+    curve = pooled_lag_curve(windows, n_boot=200, seed=42)
+    res = estimate_lag(curve)
+    assert not res["pre_ok"]
+    assert res["pre_cover_share"] < 0.8
+
+
+def test_estimate_lag_none_when_no_adjustment():
+    windows = pd.concat([_planted_windows(e, jump=0.0, seed=e) for e in range(6)])
+    curve = pooled_lag_curve(windows, n_boot=200, seed=42)
+    res = estimate_lag(curve)
+    assert res["lag_days"] is None
+
+
+def test_fit_half_life_planted():
+    windows = pd.concat([_planted_windows(e, jump=0.3, jump_day=0.0, seed=e) for e in range(6)])
+    curve = pooled_lag_curve(windows, n_boot=200, seed=42)
+    res = fit_half_life(curve)
+    assert res["half_life_days"] <= 1.0  # jump is immediate at t=0
+    assert 0.2 < res["amplitude"] < 0.4
+
+
+def test_fit_half_life_no_move_is_nan():
+    windows = pd.concat([_planted_windows(e, jump=0.0, seed=e) for e in range(3)])
+    curve = pooled_lag_curve(windows, n_boot=100, seed=42)
+    res = fit_half_life(curve)
+    assert np.isnan(res["half_life_days"])
+
+
+def test_classify_adjustment_fast_late_flat():
+    fast = _planted_windows(0, jump_day=1.0, seed=1)
+    slow = _planted_windows(1, jump_day=9.0, seed=2)
+    flat = _planted_windows(2, jump=0.0, seed=3)
+    out = classify_adjustment(pd.concat([fast, slow, flat])).set_index("event_id")
+    assert out.loc[0, "cls"] == "fast"
+    assert out.loc[1, "cls"] in {"late", "intermediate"}
+    assert out.loc[2, "cls"] == "no_adjustment"
+
+
+def test_classify_adjustment_insufficient_segment():
+    rows = [{"event_id": 0, "t_days": 1.0, "rel_adj": 1.3}]  # one sale total
+    out = classify_adjustment(pd.DataFrame(rows))
+    assert out.iloc[0]["cls"] == "insufficient"
+
+
+def test_assign_strata_uses_career_stage_at_event_date():
+    logs = pd.DataFrame(
+        {"mlb_id": [1, 1], "group": ["hitting", "hitting"], "season": [2023, 2023],
+         "date": pd.to_datetime(["2023-04-01", "2023-04-02"]), "level": ["mlb", "mlb"]}
+    )
+    events = pd.DataFrame(
+        {"mlb_id": [1, 1, 2],
+         "event_date": pd.to_datetime(["2022-06-01", "2023-06-01", "2024-06-01"])}
+    )
+    strata = assign_strata(events, logs)
+    assert list(strata) == ["prospect", "prospect", "prospect"]
+    # mlb_id 2 has no MLB logs at all -> prospect; pre-debut 2022 event -> prospect;
+    # 2023-06 is rookie_year (debut season 2023) -> prospect stratum
+    events2 = pd.DataFrame({"mlb_id": [1], "event_date": pd.to_datetime(["2026-06-01"])})
+    assert list(assign_strata(events2, logs)) == ["established"]
