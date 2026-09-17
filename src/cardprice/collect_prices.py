@@ -10,7 +10,7 @@ from cardprice.scp_parse import calibrate_chart_grades, parse_attributes, parse_
 from cardprice.storage import save_raw
 from cardprice.web import ChallengeError, fetch_page
 
-META_COLS = ["player_name", "mlb_id", "rookie_year", "set_slug", "card_slug"]
+META_COLS = ["player_name", "mlb_id", "rookie_year", "set_slug", "card_slug", "card_type"]
 
 # Markers of a real SCP card page; a soft-404 page passes the challenge-title
 # check but has neither, so don't snapshot it.
@@ -45,6 +45,8 @@ def collect_cards(cards: pd.DataFrame, sleep_s: float = 5.0) -> tuple[pd.DataFra
             "rookie_year": int(card.rookie_year),
             "set_slug": card.set_slug,
             "card_slug": slug,
+            # cards_seed.csv predates card_type; tolerate older inputs without it
+            "card_type": getattr(card, "card_type", None),
         }
         sales = parse_sales_tables(html)
         if len(sales):

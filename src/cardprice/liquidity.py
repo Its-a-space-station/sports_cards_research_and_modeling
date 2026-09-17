@@ -3,12 +3,17 @@
 import pandas as pd
 
 from cardprice.validate import contamination_audit, quarantine_outliers
+from cardprice.weekly import normalize_grade
 
-PANEL_GRADES = ("psa_9", "psa_10")
+PANEL_SERIES = ("ungraded", "psa_9", "psa_10")
+# Deprecated alias kept for Plan 3-era imports; use PANEL_SERIES.
+PANEL_GRADES = PANEL_SERIES
 
 
 def liquidity_report(sales: pd.DataFrame, chart: pd.DataFrame) -> pd.DataFrame:
-    sales = sales[sales["grade"].isin(PANEL_GRADES)]
+    sales = sales.copy()
+    sales["grade"] = sales["grade"].map(normalize_grade)
+    sales = sales[sales["grade"].isin(PANEL_SERIES)]
     flagged = quarantine_outliers(sales)
     contaminated = contamination_audit(sales)
     rows = []

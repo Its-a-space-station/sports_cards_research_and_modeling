@@ -3,8 +3,15 @@
 import pandas as pd
 
 
+def normalize_grade(grade) -> str:
+    if grade is None or (isinstance(grade, float) and pd.isna(grade)) or grade == "":
+        return "ungraded"
+    return str(grade)
+
+
 def weekly_price_series(sales: pd.DataFrame, min_sales: int = 2) -> pd.DataFrame:
-    df = sales[sales["grade"].notna()].copy()
+    df = sales.copy()
+    df["grade"] = df["grade"].map(normalize_grade)
     df["week"] = df["sale_date"].dt.to_period("W-SUN").dt.start_time  # Mondays
     grouped = (
         df.groupby(["card_slug", "grade", "week"])

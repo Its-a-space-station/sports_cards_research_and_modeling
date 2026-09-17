@@ -14,7 +14,7 @@ def make_sales():
         # different grade same week
         ("card/a", "psa_9", "2026-09-01", 10.0, False),
         ("card/a", "psa_9", "2026-09-03", 20.0, False),
-        # ungraded (grade None) -> excluded
+        # ungraded (grade None) -> normalized to "ungraded", kept as a series
         ("card/a", None, "2026-09-01", 3.0, False),
     ]
     df = pd.DataFrame(rows, columns=["card_slug", "grade", "sale_date", "price", "best_offer"])
@@ -33,8 +33,12 @@ def test_weekly_aggregation_and_min_sales():
     assert row["best_offer_share"] == 1 / 3
 
 
-def test_grades_separate_and_ungraded_excluded():
+def test_grades_separate_and_ungraded_kept():
     out = weekly_price_series(make_sales())
+    # the lone ungraded sale is below min_sales=2, so its series is omitted here
     assert set(out["grade"]) == {"psa_10", "psa_9"}
     psa9 = out[out["grade"] == "psa_9"].iloc[0]
     assert psa9["median_price"] == 15.0 and psa9["n_sales"] == 2
+    out_min1 = weekly_price_series(make_sales(), min_sales=1)
+    raw = out_min1[out_min1["grade"] == "ungraded"].iloc[0]
+    assert raw["median_price"] == 3.0 and raw["n_sales"] == 1
