@@ -421,7 +421,10 @@ def test_series_month_ends_filters_and_aggregates():
 def test_hold_returns_exact_and_truncated():
     me = series_month_ends(make_chart(months=30))  # 2021-01 .. 2023-06
     out = hold_returns(me)
-    row = out[out["entry_month"] == pd.Timestamp("2021-04-01")].iloc[0]
+    # math check needs 2021-04 + 36m = 2024-04 present: use a 40-month chart
+    me_long = series_month_ends(make_chart(months=40))  # 2021-01 .. 2024-04
+    out_long = hold_returns(me_long)
+    row = out_long[out_long["entry_month"] == pd.Timestamp("2021-04-01")].iloc[0]
     # growth=0.01 log-linear: annualized return == 0.12 at every horizon
     for h in HORIZONS:
         assert abs(row[f"ret_{h}m"] - 0.12) < 1e-9
