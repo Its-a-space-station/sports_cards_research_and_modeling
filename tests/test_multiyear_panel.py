@@ -45,10 +45,38 @@ def tiny_universe():
                 "sacFlies": 0,
                 "stolenBases": 0,
             },
+            {
+                "mlb_id": 1,
+                "group": "hitting",
+                "season": 2021,
+                "date": "2021-07-01",
+                "level": "mlb",
+                "gamesPlayed": 1,
+                "atBats": 3,
+                "hits": 2,
+                "doubles": 1,
+                "triples": 0,
+                "homeRuns": 1,
+                "rbi": 2,
+                "baseOnBalls": 1,
+                "strikeOuts": 0,
+                "hitByPitch": 0,
+                "sacFlies": 0,
+                "stolenBases": 0,
+            },
         ]
     )
     game_logs["date"] = pd.to_datetime(game_logs["date"])
-    events = pd.DataFrame(columns=["mlb_id", "event_date", "event_type", "details"])
+    events = pd.DataFrame(
+        [
+            {
+                "mlb_id": 1,
+                "event_date": pd.Timestamp("2021-11-01"),
+                "event_type": "award_win",
+                "details": "fake award",
+            }
+        ]
+    )
     info = pd.DataFrame(
         [
             {

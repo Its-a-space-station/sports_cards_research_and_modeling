@@ -16,6 +16,16 @@ META_COLS = ["mlb_id", "player_name", "rookie_year", "card_type"]
 def series_month_ends(chart: pd.DataFrame) -> pd.DataFrame:
     df = chart[chart["grade"].isin(PANEL_SERIES)].copy()
     df = df[~df["grade"].astype(str).str.startswith("key:")]
+    # duplicate (slug, grade, date) prints exist on some psa_10 pages (chart
+    # calibration artifacts) — collapse by median so the month-end pick is
+    # order-independent
+    df = df.groupby(["card_slug", "grade", "date"], as_index=False).agg(
+        price=("price", "median"),
+        mlb_id=("mlb_id", "first"),
+        player_name=("player_name", "first"),
+        rookie_year=("rookie_year", "first"),
+        card_type=("card_type", "first"),
+    )
     df["month"] = df["date"].dt.to_period("M").dt.start_time
     return (
         df.sort_values("date")

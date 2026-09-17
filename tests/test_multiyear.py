@@ -65,6 +65,27 @@ def test_hold_returns_gap_month_is_nan_not_fabricated():
     assert not pd.isna(row["ret_12m"])
 
 
+def test_series_month_ends_collapses_duplicate_dates_by_median():
+    # two prints on the same day with different prices (real psa_10 chart pattern)
+    chart = pd.DataFrame(
+        {
+            "card_slug": ["set/card"] * 4,
+            "grade": ["psa_10"] * 4,
+            "date": [pd.Timestamp("2021-04-01")] * 2 + [pd.Timestamp("2021-05-01")] * 2,
+            "price": [10.0, 20.0, 30.0, 30.0],
+            "mlb_id": 1,
+            "player_name": "T",
+            "rookie_year": 2021,
+            "card_type": "flagship",
+        }
+    )
+    me = series_month_ends(chart)
+    apr = me[me["month"] == pd.Timestamp("2021-04-01")].iloc[0]
+    assert apr["price"] == 15.0  # median of the dupes, not file-order "last" (20.0)
+    may = me[me["month"] == pd.Timestamp("2021-05-01")].iloc[0]
+    assert may["price"] == 30.0
+
+
 def test_trailing_features():
     me = series_month_ends(make_chart(months=30))
     tf = trailing_features(me)
