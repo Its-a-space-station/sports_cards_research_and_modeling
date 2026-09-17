@@ -32,7 +32,7 @@ Top-5 features (LASSO stability | GBM SHAP), top-5 overlap:
 
 Agreement/disagreement: 3–4 of 5 top features overlap at every cell — no wild disagreement. `price_level` and trailing `ret_3m` are top-2 by both methods nearly everywhere (only miss: GBM top-5 omits ret_3m at psa_10/36m, where LASSO has it at 0.925). Systematic split: LASSO favors `market_ret_3m` and the career-stage dummies; GBM favors `age`/`age_at_debut` — linear vs nonlinear cuts of the same career clock. `price_level` is stable ≥0.99 in 8/8 fits, `ret_3m` ≥0.90 in 8/8.
 
-Honesty caveat on this section: these R² are strikingly high for return modeling because the pass is in-sample — median imputation and standardization use the full frame (Task 2, by design). The walk-forward gate (§5) re-imputes and re-standardizes from train years only and is the honest out-of-sample test; it fails at the registered horizon. The dominant "predictors" are price persistence (level + 3m momentum), not player stats.
+Honesty caveat on this section: these R² are strikingly high for return modeling because the pass is in-sample — median imputation and standardization use the full frame (Task 2, by design). The walk-forward gate (§5) re-standardizes from train years only but inherits `build_hold_frame`'s full-frame median imputation (the walk-forward's own train-median fillna is armed but finds no NaNs as composed), so it is honest out-of-sample on standardization, not on imputation; it fails at the registered horizon regardless. The dominant "predictors" are price persistence (level + 3m momentum), not player stats.
 
 ## 3. Career arc
 
@@ -84,7 +84,7 @@ Summary: no effect is consistent across entry years at the magnitude the pooled 
 
 ## 5. The gate
 
-Pre-registered cell: **12m, ungraded**, top-5 picks per entry year, train on entry years < y (train-median imputation, train standardization, LassoCV cv=5), realized = pick return − entry-year universe median, block bootstrap (10,000 resamples) over years, fee 0.14 log. Prediction years 2023/2024/2025 (2021 is a train-only year — Apr+ entries; 2025 entries truncate at 2025-09 for 12m). No year had <5 test cards (2021: 228 · 2022: 356 · 2023: 443 · 2024: 534 · 2025: 437); LassoCV emitted no convergence warnings.
+Pre-registered cell: **12m, ungraded**, top-5 picks per entry year, train on entry years < y (train-years-only standardization, LassoCV cv=5; feature imputation uses full-frame medians from `build_hold_frame` — the walk-forward's own train-median fillna is armed but finds no NaNs as composed), realized = pick return − entry-year universe median, block bootstrap (10,000 resamples) over years, fee 0.14 log. Imputation detail: on this frame 126/1,998 rows (≈6%) had NaN `price_level`/`ret_3m` and 48 had NaN `market_ret_3m`, all filled with full-frame medians; any resulting bias is toward PASS, so the FAIL verdict below is conservative. Prediction years 2023/2024/2025 (2021 is a train-only year — Apr+ entries; 2025 entries truncate at 2025-09 for 12m). No year had <5 test cards (2021: 228 · 2022: 356 · 2023: 443 · 2024: 534 · 2025: 437); LassoCV emitted no convergence warnings.
 
 Picks (all 15 rows):
 
