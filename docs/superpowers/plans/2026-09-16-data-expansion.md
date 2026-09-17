@@ -14,7 +14,7 @@
 ## Facts established (verified live 2026-09-15/16 — code below is built on them)
 
 - Minor-league game logs: `GET /api/v1/people/{id}/stats?stats=gameLog&group=hitting&season={y}&sportId={11|12|13|14}` — AAA=11, AA=12, A+=13, A=14. Verified: Trout 2011 AA = 91 G; Bryant 2014 AAA = 45 G; Henderson 2022 AAA = 65 G. Plural `sportIds=` returns PARTIAL data — never use it; one call per level.
-- MLB gameLog covers 2015+: Bryant 2015 = 145 G, Judge 2016 = 27 G. So game logs are uniform for everything ≥2015 MLB / ≥2011 minors; NO season-line fallback needed.
+- MLB gameLog covers 2015+: Bryant 2015 = 151 G (corrected during Task 3 execution from an erroneous 145 probe — snapshot splits=151, gamesPlayed sums to 151, matches his real 2015 season), Judge 2016 = 27 G. So game logs are uniform for everything ≥2015 MLB / ≥2011 minors; NO season-line fallback needed.
 - SCP pre-2022 card chart history starts 2021-03 (Soto 2018 Update: all buckets incl. ungraded, 67 monthly points to 2026-09).
 - Console listing pattern: `https://www.sportscardspro.com/console/{set_slug}?rookies-only=true&exclude-variants=true` (flagship sets); 2018 anchors verified live (`juan-soto-hmt55`, `ronald-acuna-jr-193`).
 - Bowman 1st cards live in `baseball-cards-<year>-bowman-chrome` (and `-bowman-draft`) sets; they are NOT rookies-only flagged — resolution scans console listings for the player name across candidate years (rookie_year−6 … rookie_year), earliest year wins, autograph/parallel anchors excluded.
@@ -323,9 +323,9 @@ def test_collect_writes_levels_and_snapshots(tmp_path, monkeypatch):
 
     monkeypatch.setattr(stats_api, "fetch_game_log", fake_game_log)
     monkeypatch.setattr(stats_api, "fetch_minor_league_logs", fake_minors)
-    import collect_universe_stats
-    monkeypatch.setattr(collect_universe_stats, "fetch_game_log", fake_game_log)
-    monkeypatch.setattr(collect_universe_stats, "fetch_minor_league_logs", fake_minors)
+    import collect_universe_stats as collect_mod  # aliased: bare `import` would shadow the function above
+    monkeypatch.setattr(collect_mod, "fetch_game_log", fake_game_log)
+    monkeypatch.setattr(collect_mod, "fetch_minor_league_logs", fake_minors)
 
     players = pd.DataFrame([{"mlb_id": 1, "name": "Test Player", "role": "hitter"}])
     df = collect_universe_stats(players, mlb_seasons=[2021, 2022], minor_seasons=[2021], sleep_s=0)
@@ -424,7 +424,7 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run tests, then the real collection (network, ~15-25 min)**
 
 Run: `python -m pytest tests/test_collect_universe_stats.py -v` — 1 PASS.
-Then: `python scripts/collect_universe_stats.py` — expect roughly 12-20k game rows across 39 players (MLB ~4000-6000; minors the rest). Verify goldens inline after the run: Henderson 2022 AAA = 65 rows, Trout not in universe (skip), Soto 2017 A = 23 rows, Bryant 2015 MLB = 145 rows. Report row counts per level.
+Then: `python scripts/collect_universe_stats.py` — expect roughly 25-40k game rows across 39 players (actual: 35,152; the 12-20k estimate was low). Verify goldens inline after the run: Henderson 2022 AAA = 65 rows, Trout not in universe (skip), Soto 2017 A = 23 rows, Bryant 2015 MLB = 151 rows (corrected from 145 — see Facts). Report row counts per level.
 
 - [ ] **Step 5: Commit**
 
@@ -647,7 +647,7 @@ git commit -m "feat: universe liquidity report and modeling card selection"
 ## Done criteria for this plan
 
 - `python -m pytest -v` all offline tests PASS; ruff clean; live suite PASS (`-m live`: 2 new minors tests + the 4 existing live tests = 6).
-- `data/processed/game_logs_universe.parquet` — MLB 2015-2026 + minors 2011-2026, 39 players, level-tagged; golden counts verified (Henderson AAA 65, Bryant MLB 2015 145, Soto A 2017 23).
+- `data/processed/game_logs_universe.parquet` — MLB 2015-2026 + minors 2011-2026, 39 players, level-tagged; golden counts verified (Henderson AAA 65, Bryant MLB 2015 151, Soto A 2017 23).
 - `data/processed/universe_sales.parquet` + `universe_chart_monthly.parquet` — ≥60 card pages collected; ungraded series first-class.
 - `data/reference/cards_modeling.csv` — the selected modeling universe with a documented coverage table.
 - Misses documented honestly (unresolved cards, thin classes) in the final report, not patched.
