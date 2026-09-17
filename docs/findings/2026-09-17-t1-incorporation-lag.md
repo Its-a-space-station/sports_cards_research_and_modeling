@@ -56,6 +56,14 @@ anticipation-vs-reaction framing cannot be settled from this sample alone.
 | psa_10/established | 66 (56) | 818 / 29 | 40 | null | true (0.929) | 0.5 d (0.025) | identical to psa_10/all |
 | psa_10/prospect | 0 | 404 / 0 | 0 | — | — | — | skipped (kept < 5) |
 
+Adjustment-share denominators: shares are over the events with ≥ 1 market-adjusted
+sale — **43 of 48** distinct events (ungraded) and **51 of 56** (psa_10); 5 events per
+grade class have every window sale on a NaN-index day and so drop out of the
+classification entirely (not even as `insufficient`; raw counts reconcile — ungraded
+27 insuff / 9 no_adj / 5 interm / 2 fast, psa_10 42 insuff / 4 interm / 3 no_adj /
+2 fast). Segment definitions: pre = all sales before the event, early = [0, 3.5) d,
+late = ≥ 7 d (uncapped).
+
 Key curve bins, median [CI] (n sales), from lag_curves.csv:
 
 | bin | ungraded/all | psa_10/all |
