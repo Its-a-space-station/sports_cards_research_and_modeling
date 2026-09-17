@@ -714,7 +714,7 @@ git commit -m "feat: daily market-relative index and market adjustment for event
 - Consumes: Task 3's adjusted windows (`rel_adj`).
 - Produces (used by Task 5):
   - `pooled_lag_curve(windows, value_col="rel_adj", bin_min=-14, bin_max=14, n_boot=2000, seed=42) -> pd.DataFrame` — columns: `t_bin` (int; bin k covers `[k−0.5, k+0.5)` days), `median`, `ci_lo`, `ci_hi`, `n_sales`. Bootstrap resamples `event_id`s with replacement (cluster bootstrap).
-  - `estimate_lag(curve, threshold=1.0, hold_bins=3) -> dict` — `{"lag_days": int | None, "pre_ok": bool}`; first bin k ≥ 0 where `ci_lo` stays > threshold for `hold_bins` consecutive bins; `pre_ok` = all pre-bins' CIs cover 1.0.
+  - `estimate_lag(curve, threshold=1.0, hold_bins=3) -> dict` — `{"lag_days": int | None, "pre_ok": bool, "pre_cover_share": float}`; first bin k ≥ 0 where `ci_lo` stays > threshold for `hold_bins` consecutive bins; `pre_ok` = **at least 80 % of pre-bins' CIs cover 1.0**, with the raw share reported as `pre_cover_share`. (Corrected 2026-09-17 after an honest-golden BLOCKED: the original "all pre-bins cover 1.0" is statistically miscalibrated — 14 joint 95 % CIs pass ≈ 0.95¹⁴ ≈ 49 % of the time even at nominal coverage, and cluster-bootstrap CIs run narrow, measured 15 % pass rate. The share form is the calibrated version of the same sanity check.)
   - `fit_half_life(curve, h_min=0.25, h_max=14.0, h_step=0.25) -> dict` — `{"half_life_days": float, "amplitude": float}`; fits `median − 1 = A·(1 − 2^(−t/h))` on bins t ≥ 0 by grid search over h with A solved by least squares; returns both NaN when Σ post-bin (median−1) ≤ 0 **or** the fitted amplitude ≤ 0.01 (noise-level move).
   - `classify_adjustment(windows, early_hi=3.5, late_lo=7.0, no_move=0.02, late_move=0.05, fast_ratio=0.8) -> pd.DataFrame` — per `event_id`: `pre_med` (t ∈ [−14, 0)), `early_med` (t ∈ [0, 3.5)), `late_med` (t ∈ [7, 14]), `cls` ∈ `{"fast", "intermediate", "late", "no_adjustment", "insufficient"}` (each segment needs ≥ 2 sales else `insufficient`). `late − pre ≤ no_move` → `no_adjustment`; `(early−pre)/(late−pre) ≥ fast_ratio` → `fast`; `|early−pre| ≤ no_move and late−pre ≥ late_move` → `late`; else `intermediate`.
   - `assign_strata(events, game_logs_mlb) -> pd.Series` — `"prospect"` when `career.career_stage(game_logs_mlb, mlb_id, event_date)` ∈ {`prospect`, `rookie_year`}, else `"established"`.
@@ -758,6 +758,17 @@ def test_estimate_lag_recovers_planted_two_day_lag():
     res = estimate_lag(curve)
     assert res["lag_days"] is not None and res["lag_days"] <= 3
     assert res["pre_ok"]
+    assert res["pre_cover_share"] >= 0.8
+
+
+def test_estimate_lag_pre_ok_false_when_pre_shifted():
+    # jump planted at day -5 -> 10 of 14 pre bins are elevated -> coverage share
+    # collapses -> pre_ok must be False (catches a broken baseline)
+    windows = pd.concat([_planted_windows(e, jump_day=-5.0, seed=e) for e in range(6)])
+    curve = pooled_lag_curve(windows, n_boot=200, seed=42)
+    res = estimate_lag(curve)
+    assert not res["pre_ok"]
+    assert res["pre_cover_share"] < 0.8
 
 
 def test_estimate_lag_none_when_no_adjustment():
@@ -876,13 +887,15 @@ def estimate_lag(curve: pd.DataFrame, threshold: float = 1.0, hold_bins: int = 3
     consecutive bins. None when adjustment never reaches significance."""
     c = curve.set_index("t_bin")
     pre = c.loc[c.index < 0]
-    pre_ok = bool(((pre["ci_lo"] <= threshold) & (pre["ci_hi"] >= threshold)).all())
+    cover = (pre["ci_lo"] <= threshold) & (pre["ci_hi"] >= threshold)
+    share = float(cover.mean()) if len(cover) else 0.0
+    pre_ok = bool(share >= 0.8)  # calibrated: joint 95% coverage is miscalibrated
     post_bins = sorted(c.index[c.index >= 0])
     for k in post_bins:
         seq = [k + j for j in range(hold_bins)]
         if all(b in c.index for b in seq) and all(c.loc[b, "ci_lo"] > threshold for b in seq):
-            return {"lag_days": int(k), "pre_ok": pre_ok}
-    return {"lag_days": None, "pre_ok": pre_ok}
+            return {"lag_days": int(k), "pre_ok": pre_ok, "pre_cover_share": share}
+    return {"lag_days": None, "pre_ok": pre_ok, "pre_cover_share": share}
 
 
 def fit_half_life(
@@ -954,7 +967,7 @@ def assign_strata(events: pd.DataFrame, game_logs_mlb: pd.DataFrame) -> pd.Serie
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `pytest tests/test_lag_study.py -v`
-Expected: 16 passed. Full suite: `pytest` → all green. `ruff check src tests` → clean.
+Expected: 18 passed (9 from Tasks 2–3, 9 new including the pre-shifted negative test). Full suite: `pytest` → all green. `ruff check src tests` → clean.
 
 - [ ] **Step 5: Commit**
 
