@@ -650,7 +650,7 @@ git commit -m "feat: universe liquidity report and modeling card selection"
 
 - `python -m pytest -v` all offline tests PASS; ruff clean; live suite PASS (`-m live`: 2 new minors tests + the 4 existing live tests = 6).
 - `data/processed/game_logs_universe.parquet` — MLB 2015-2026 + minors 2011-2026, 39 players, level-tagged; golden counts verified (Henderson AAA 65, Bryant MLB 2015 151, Soto A 2017 23).
-- `data/processed/universe_sales.parquet` + `universe_chart_monthly.parquet` — ≥60 card pages collected; ungraded series first-class.
+- `data/processed/universe_sales.parquet` + `universe_chart_monthly.parquet` — 59 card pages collected (100% of resolved URLs; the original ≥60 estimate predates the 19 genuinely-unresolved SCP catalog gaps); ungraded series first-class.
 - `data/reference/cards_modeling.csv` — the selected modeling universe with a documented coverage table.
 - Misses documented honestly (unresolved cards, thin classes) in the final report, not patched.
 - Next: P6b (multi-year panel builder: career-to-date features, career_stage, hold-return outcomes).
