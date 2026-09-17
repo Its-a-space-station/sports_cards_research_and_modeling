@@ -14,18 +14,27 @@ Resolution rules:
    non-empty rookie-year game log fetch_game_log(mlb_id, ROLE_GROUP[role],
    rookie_year). Sleeps >=0.3s between MLB API calls.
 2. flagship: SCP console listings baseball-cards-{rookie_year}-topps-chrome AND
-   ...-topps-chrome-update with ?rookies-only=true&exclude-variants=true;
-   name-matched base anchor under /game/<set>/ with word-boundary parallel
-   exclusion (PARALLEL_RE, shared with resolve_seed_cards); no fallback to
-   parallels; the plain topps-chrome set wins when both match. Known update-set
-   players: Rutschman, Strider, Skenes, Kurtz, Anthony.
+   ...-topps-chrome-update; name-matched base anchor under /game/<set>/ with
+   word-boundary parallel exclusion (PARALLEL_RE, shared with
+   resolve_seed_cards); no fallback to parallels; the plain topps-chrome set
+   wins when both yield a match. Per set, the rookies-only listing
+   (?rookies-only=true&exclude-variants=true) is tried first; when it yields no
+   match, the SAME set's full listing (?exclude-variants=true) is retried with
+   identical name/parallel discipline — SCP's rookies-only tagging has verified
+   gaps (Bryant 2015 #112, Correa 2015 Update #US174, Bellinger 2017 #79,
+   A. Garcia 2021 Update #USC64). The fallback never leaves the two rule-2 sets
+   and never relaxes variant exclusion; the audit records which listing
+   (rookies-only vs full) produced each match. Known update-set players:
+   Rutschman, Strider, Skenes, Kurtz, Anthony.
 3. bowman_1st: console listings baseball-cards-{y}-bowman-chrome for y in
    rookie_year-6..rookie_year (?exclude-variants=true), scanned ascending and
    stopping at the first year with a valid match (earliest matching year wins);
    name-matched anchors with word-boundary exclusion of parallel/insert keywords
-   (BOWMAN_EXCLUDE_RE); within the winning year an anchor whose text contains
-   "1st" is preferred. Every name-matched (year, anchor, url) triple is kept in
-   an audit trail printed at the end of the run for manual review.
+   (BOWMAN_EXCLUDE_RE — including Talent Pipeline inserts, whose console anchors
+   carry the bare "#TP-<team>" card number, so TP is excluded as a word too);
+   within the winning year an anchor whose text contains "1st" is preferred.
+   Every name-matched (year, anchor, url) triple is kept in an audit trail
+   printed at the end of the run for manual review.
 
 Console pages are cached per set in-process; >=5s of sleep precedes every
 uncached SCP fetch — politeness identical to scripts/resolve_seed_cards.py.
@@ -54,11 +63,15 @@ CARDS = ROOT / "data" / "reference" / "cards_universe.csv"
 MLB_SLEEP_S = 0.3
 BOWMAN_LOOKBACK_YEARS = 6
 CARD_TYPES = ("flagship", "bowman_1st")
+FLAGSHIP_LISTINGS = (
+    ("rookies-only", "rookies-only=true&exclude-variants=true"),
+    ("full", "exclude-variants=true"),
+)
 
 BOWMAN_EXCLUDE_RE = re.compile(
     r"\b(?:Autograph|Auto|Refractor|Shimmer|Gold|Orange|Purple|Blue|Green|Red|Black"
     r"|Superfractor|Variation|Wave|Sparkle|Speckle|Mojo|Atomic|Lunar"
-    r"|Rookie of the Year Favorites)\b",
+    r"|Rookie of the Year Favorites|Talent Pipeline|TP)\b",
     re.IGNORECASE,
 )
 FIRST_RE = re.compile(r"\b1st\b", re.IGNORECASE)
@@ -171,20 +184,41 @@ def _listing_anchors(html: str, set_slug: str) -> list[tuple[str, str]]:
     ]
 
 
-def _resolve_flagship(name: str, rookie_year: int) -> tuple[str, str]:
-    """(scp_url, set_slug); ('', '') when unresolved. Plain topps-chrome is
-    preferred over topps-chrome-update when both yield a base match."""
+def _resolve_flagship(name: str, rookie_year: int) -> tuple[str, str, list[dict]]:
+    """(scp_url, set_slug, audit); ('', '', audit) when unresolved. Each rule-2
+    set is tried rookies-only first, then its full listing as a same-set
+    fallback with identical name/parallel discipline; plain topps-chrome is
+    preferred when both sets yield a match. Every attempt's listing
+    (rookies-only vs full) is recorded in the audit."""
     found: dict[str, tuple[str, str]] = {}
+    audit: list[dict] = []
     for family in ("topps-chrome", "topps-chrome-update"):
         slug = f"baseball-cards-{rookie_year}-{family}"
-        url = f"{SCP_BASE}/console/{slug}?rookies-only=true&exclude-variants=true"
-        href = pick_flagship(name, _listing_anchors(_console_page(slug, url), slug))
-        if href:
-            found[family] = (SCP_BASE + href, slug)
+        for listing, params in FLAGSHIP_LISTINGS:
+            url = f"{SCP_BASE}/console/{slug}?{params}"
+            anchors = _listing_anchors(_console_page(url, url), slug)
+            href = pick_flagship(name, anchors)
+            entry: dict = {"slug": slug, "listing": listing}
+            if href:
+                entry.update(
+                    result="match",
+                    anchor=next(t for t, h in anchors if h == href),
+                    url=SCP_BASE + href,
+                )
+                found[family] = (SCP_BASE + href, slug)
+            else:
+                entry["result"] = "no-match"
+            audit.append(entry)
+            if href:
+                break
     for family in ("topps-chrome", "topps-chrome-update"):
         if family in found:
-            return found[family]
-    return "", ""
+            url, slug = found[family]
+            for entry in audit:
+                if entry.get("url") == url:
+                    entry["result"] = "chosen"
+            return url, slug, audit
+    return "", "", audit
 
 
 def _resolve_bowman_1st(name: str, rookie_year: int) -> tuple[str, str, dict]:
@@ -212,9 +246,9 @@ def _resolve_bowman_1st(name: str, rookie_year: int) -> tuple[str, str, dict]:
 
 def resolve_player_card_details(name: str, rookie_year: int) -> dict[str, tuple[str, str, dict]]:
     """card_type -> (scp_url, set_slug, audit) for both card families."""
-    url, slug = _resolve_flagship(name, rookie_year)
-    b_url, b_slug, audit = _resolve_bowman_1st(name, rookie_year)
-    return {"flagship": (url, slug, {}), "bowman_1st": (b_url, b_slug, audit)}
+    url, slug, f_audit = _resolve_flagship(name, rookie_year)
+    b_url, b_slug, b_audit = _resolve_bowman_1st(name, rookie_year)
+    return {"flagship": (url, slug, {"attempts": f_audit}), "bowman_1st": (b_url, b_slug, b_audit)}
 
 
 def resolve_player_cards(name: str, rookie_year: int) -> dict[str, str]:
@@ -226,6 +260,7 @@ def resolve_player_cards(name: str, rookie_year: int) -> dict[str, str]:
 def main() -> None:
     players = pd.read_csv(UNIVERSE, dtype=str).fillna("")
     rows: list[dict] = []
+    flagship_audits: dict[str, dict] = {}
     audits: dict[str, dict] = {}
     resolved = {"mlb_id": 0, "flagship": 0, "bowman_1st": 0}
     for p in players.itertuples():
@@ -236,6 +271,7 @@ def main() -> None:
         except ChallengeError as e:
             print(f"WARN {name}: SCP challenge unresolved ({e}); card cells left empty")
             details = {ct: ("", "", {}) for ct in CARD_TYPES}
+        flagship_audits[name] = details["flagship"][2]
         audits[name] = details["bowman_1st"][2]
         id_str = str(mlb_id) if mlb_id is not None else ""
         for card_type in CARD_TYPES:
@@ -253,9 +289,14 @@ def main() -> None:
             )
             resolved[card_type] += bool(url)
         resolved["mlb_id"] += mlb_id is not None
+        chosen = next(
+            (e for e in flagship_audits[name].get("attempts", []) if e.get("result") == "chosen"),
+            None,
+        )
+        suffix = f" ({chosen['listing']} listing)" if chosen else ""
         print(
             f"{name}: mlb_id={id_str or '-'} "
-            f"flagship={details['flagship'][0] or '-'} "
+            f"flagship={details['flagship'][0] or '-'}{suffix} "
             f"bowman_1st={details['bowman_1st'][0] or '-'}"
         )
         pd.DataFrame(rows).to_csv(CARDS, index=False)  # incremental: survive a mid-run crash
@@ -266,6 +307,18 @@ def main() -> None:
         f"flagship {resolved['flagship']}/{total}, "
         f"bowman_1st {resolved['bowman_1st']}/{total} -> {CARDS}"
     )
+    print("\n=== FLAGSHIP AUDIT TRAIL (which listing produced each match) ===")
+    for name in players["player_name"]:
+        attempts = (flagship_audits.get(name) or {}).get("attempts") or []
+        matches = [e for e in attempts if e.get("result") in ("match", "chosen")]
+        print(f"\n{name}:")
+        if not matches:
+            print("  (no match in rookies-only or full listings of either rule-2 set)")
+        for e in matches:
+            print(
+                f"  [{e['result']}] {e['slug']} ({e['listing']}) "
+                f"{e.get('anchor')} -> {e.get('url')}"
+            )
     print("\n=== BOWMAN_1ST AUDIT TRAIL (all name-matched candidates considered) ===")
     for name in players["player_name"]:
         audit = audits.get(name) or {}

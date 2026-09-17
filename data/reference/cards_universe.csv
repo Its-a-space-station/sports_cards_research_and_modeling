@@ -1,7 +1,7 @@
 player_name,mlb_id,rookie_year,role,card_type,set_slug,scp_url
-Kris Bryant,592178,2015,hitter,flagship,,
+Kris Bryant,592178,2015,hitter,flagship,baseball-cards-2015-topps-chrome,https://www.sportscardspro.com/game/baseball-cards-2015-topps-chrome/kris-bryant-112
 Kris Bryant,592178,2015,hitter,bowman_1st,,
-Carlos Correa,621043,2015,hitter,flagship,,
+Carlos Correa,621043,2015,hitter,flagship,baseball-cards-2015-topps-chrome-update,https://www.sportscardspro.com/game/baseball-cards-2015-topps-chrome-update/carlos-correa-us174
 Carlos Correa,621043,2015,hitter,bowman_1st,baseball-cards-2015-bowman-chrome,https://www.sportscardspro.com/game/baseball-cards-2015-bowman-chrome/carlos-correa-110
 Francisco Lindor,596019,2015,hitter,flagship,baseball-cards-2015-topps-chrome-update,https://www.sportscardspro.com/game/baseball-cards-2015-topps-chrome-update/francisco-lindor-us286
 Francisco Lindor,596019,2015,hitter,bowman_1st,baseball-cards-2015-bowman-chrome,https://www.sportscardspro.com/game/baseball-cards-2015-bowman-chrome/francisco-lindor-89
@@ -11,7 +11,7 @@ Trea Turner,607208,2016,hitter,flagship,baseball-cards-2016-topps-chrome,https:/
 Trea Turner,607208,2016,hitter,bowman_1st,baseball-cards-2016-bowman-chrome,https://www.sportscardspro.com/game/baseball-cards-2016-bowman-chrome/trea-turner-51
 Aaron Judge,592450,2017,hitter,flagship,baseball-cards-2017-topps-chrome,https://www.sportscardspro.com/game/baseball-cards-2017-topps-chrome/aaron-judge-169
 Aaron Judge,592450,2017,hitter,bowman_1st,,
-Cody Bellinger,641355,2017,hitter,flagship,,
+Cody Bellinger,641355,2017,hitter,flagship,baseball-cards-2017-topps-chrome,https://www.sportscardspro.com/game/baseball-cards-2017-topps-chrome/cody-bellinger-79
 Cody Bellinger,641355,2017,hitter,bowman_1st,baseball-cards-2017-bowman-chrome,https://www.sportscardspro.com/game/baseball-cards-2017-bowman-chrome/cody-bellinger-27
 Alex Bregman,608324,2017,hitter,flagship,baseball-cards-2017-topps-chrome,https://www.sportscardspro.com/game/baseball-cards-2017-topps-chrome/alex-bregman-9
 Alex Bregman,608324,2017,hitter,bowman_1st,,
@@ -37,10 +37,10 @@ Devin Williams,642207,2020,pitcher,flagship,,
 Devin Williams,642207,2020,pitcher,bowman_1st,baseball-cards-2014-bowman-chrome,https://www.sportscardspro.com/game/baseball-cards-2014-bowman-chrome/devin-williams-bcp7
 Jonathan India,663697,2021,hitter,flagship,baseball-cards-2021-topps-chrome-update,https://www.sportscardspro.com/game/baseball-cards-2021-topps-chrome-update/jonathan-india-usc74
 Jonathan India,663697,2021,hitter,bowman_1st,,
-Adolis Garcia,666969,2021,hitter,flagship,,
+Adolis Garcia,666969,2021,hitter,flagship,baseball-cards-2021-topps-chrome-update,https://www.sportscardspro.com/game/baseball-cards-2021-topps-chrome-update/adolis-garcia-usc64
 Adolis Garcia,666969,2021,hitter,bowman_1st,,
 Wander Franco,677551,2021,hitter,flagship,,
-Wander Franco,677551,2021,hitter,bowman_1st,baseball-cards-2021-bowman-chrome,https://www.sportscardspro.com/game/baseball-cards-2021-bowman-chrome/wander-franco-tp-tbr
+Wander Franco,677551,2021,hitter,bowman_1st,,
 Jarred Kelenic,672284,2021,hitter,flagship,baseball-cards-2021-topps-chrome-update,https://www.sportscardspro.com/game/baseball-cards-2021-topps-chrome-update/jarred-kelenic-usc2
 Jarred Kelenic,672284,2021,hitter,bowman_1st,,
 Bobby Witt Jr,677951,2022,hitter,flagship,baseball-cards-2022-topps-chrome,https://www.sportscardspro.com/game/baseball-cards-2022-topps-chrome/bobby-witt-jr-221
