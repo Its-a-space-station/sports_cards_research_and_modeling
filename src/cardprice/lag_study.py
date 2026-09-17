@@ -245,3 +245,87 @@ def assign_strata(events: pd.DataFrame, game_logs_mlb: pd.DataFrame) -> pd.Serie
         stage = career_stage(game_logs_mlb, e.mlb_id, pd.Timestamp(e.event_date))
         out.append("prospect" if stage in ("prospect", "rookie_year") else "established")
     return pd.Series(out, index=events.index, name="stratum")
+
+
+def main() -> None:
+    """Run the lag study end to end on the universe data."""
+    import argparse
+    import json
+
+    from cardprice.breakout_events import dedupe_overlaps, detect_breakouts, merge_debuts
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--sales", default="data/processed/universe_sales.parquet")
+    ap.add_argument("--game-logs", default="data/processed/game_logs_universe.parquet")
+    ap.add_argument("--events", default="data/processed/events_universe.parquet")
+    ap.add_argument("--out-events", default="data/processed/breakout_events.parquet")
+    ap.add_argument("--out-curves", default="data/processed/lag_curves.csv")
+    ap.add_argument("--out-summary", default="data/processed/lag_summary.json")
+    args = ap.parse_args()
+
+    sales = pd.read_parquet(args.sales)
+    logs = pd.read_parquet(args.game_logs)
+    registry = pd.read_parquet(args.events)
+
+    events = merge_debuts(detect_breakouts(logs), registry)
+    events = dedupe_overlaps(events)
+    events["stratum"] = assign_strata(events, logs[logs["level"] == "mlb"]).to_numpy()
+    events.to_parquet(args.out_events, index=False)
+    print(f"events: {len(events)} "
+          f"({events['event_type'].value_counts().to_dict()}, "
+          f"levels {events['level'].value_counts(dropna=False).to_dict()})")
+
+    summary = {"n_events": len(events), "runs": {}}
+    curves_all = []
+    for grade_class in ("ungraded", "psa_10"):
+        mkt = market_relative_index(sales, grade_class=grade_class)
+        for stratum in ("all", "prospect", "established"):
+            ev = events if stratum == "all" else events[events["stratum"] == stratum]
+            windows, drop_log = event_sale_windows(sales, ev, grade_class=grade_class)
+            # empty windows (kept == 0) have object-dtype columns; nothing to adjust
+            windows, n_unadj = adjust_for_market(windows, mkt) if len(windows) else (windows, 0)
+            key = f"{grade_class}/{stratum}"
+            print(f"{key}: events={len(ev)} drop_log={drop_log} unadjusted_sales={n_unadj}")
+            if drop_log["kept"] < 5:
+                print(f"{key}: too few event-card pairs, skipped")
+                summary["runs"][key] = {
+                    "skipped": True, "drop_log": drop_log, "n_unadjusted": n_unadj,
+                }
+                continue
+            curve = pooled_lag_curve(windows)
+            lag = estimate_lag(curve)
+            hl = fit_half_life(curve)
+            cls = classify_adjustment(windows)
+            shares = cls["cls"].value_counts(normalize=True).round(4).to_dict()
+            curve["grade_class"], curve["stratum"] = grade_class, stratum
+            curves_all.append(curve)
+            summary["runs"][key] = {
+                "drop_log": drop_log, "n_unadjusted": n_unadj, "lag": lag,
+                "half_life": hl, "adjustment_shares": shares,
+                "n_event_card_pairs": int(windows["event_id"].nunique()),
+            }
+            print(f"{key}: lag={lag} half_life={hl} shares={shares}")
+
+    if curves_all:
+        pd.concat(curves_all).to_csv(args.out_curves, index=False)
+    with open(args.out_summary, "w") as f:
+        json.dump(summary, f, indent=2, default=float)
+
+    primary = summary["runs"].get("ungraded/all", {})
+    if primary.get("adjustment_shares"):
+        s = primary["adjustment_shares"]
+        fast = s.get("fast", 0.0)
+        late = s.get("late", 0.0)
+        print("\nGATE (spec §8, primary = ungraded/all):")
+        print(f"  fast share (>=80% adjusted within 72h): {fast:.3f}")
+        print(f"  late share (>=20% adjusting at >=7d):   {late:.3f}")
+        if fast >= 0.8:
+            print("  VERDICT: reaction-timing DEAD -> reframe T3 to anticipation")
+        elif late >= 0.2:
+            print("  VERDICT: timing edge PLAUSIBLE -> proceed as designed")
+        else:
+            print("  VERDICT: intermediate -> report as measured")
+
+
+if __name__ == "__main__":
+    main()

@@ -193,7 +193,7 @@ def test_estimate_lag_recovers_planted_two_day_lag():
 
 
 def test_estimate_lag_pre_ok_false_when_pre_shifted():
-    # jump planted at day -5 -> 10 of 14 pre bins are elevated -> coverage share
+    # jump planted at day -5 -> 5 of 14 pre bins are elevated -> coverage share
     # collapses -> pre_ok must be False (catches a broken baseline)
     windows = pd.concat([_planted_windows(e, jump_day=-5.0, seed=e) for e in range(6)])
     curve = pooled_lag_curve(windows, n_boot=200, seed=42)
