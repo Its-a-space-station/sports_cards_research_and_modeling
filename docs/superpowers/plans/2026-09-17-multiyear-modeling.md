@@ -393,6 +393,14 @@ def test_stage_effects_recovers_planted_effect():
     assert soph["p_value"] < 0.01
 
 
+def test_stage_effects_rookie_year_is_reference():
+    out = stage_effects(make_frame(), 12)
+    stage_terms = out[out["term"].str.contains("career_stage")]["term"].tolist()
+    assert not any("rookie_year" in t for t in stage_terms)  # reference level, not a term
+    assert any("sophomore" in t for t in stage_terms)
+    assert any("established" in t for t in stage_terms)
+
+
 def test_consistency_adapter_columns():
     ad = consistency_adapter(make_frame(20), 12)
     assert {"excess_ret", "games", "stats_season", "position_group"} <= set(ad.columns)
