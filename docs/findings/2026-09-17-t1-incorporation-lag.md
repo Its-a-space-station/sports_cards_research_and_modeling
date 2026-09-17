@@ -96,8 +96,8 @@ decided from T1's established-only, density-limited sample. No retrofitted narra
   density (median 2 sales/card/month), zero prospect-stratum and zero debut events
   survive the evidence rules under any parameter setting (probe 2026-09-17: 48/590
   post-floor events kept, 100% established breakouts). Re-confirmed by this run:
-  prospect kept = 0 pairs in both grade classes; debut events kept = 0 in both
-  (50/48 debut pairs dropped on baseline). The gate verdict therefore applies to
+  prospect kept = 0 pairs in both grade classes; debut events kept = 0 in both.
+  The gate verdict therefore applies to
   established-star breakouts only; prospect-window repricing speed remains unmeasured
   and needs T2's breadth (or denser price data).
 - Recalibrated density rules (baseline 56d, window ±21d, min 3 sales; user-approved
