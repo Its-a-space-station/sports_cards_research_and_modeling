@@ -18,6 +18,7 @@
 - No look-ahead: baselines use only data **strictly before** their anchor date.
 - Seed every RNG; tests must be deterministic.
 - **Spec correction folded into this plan (apply in Task 5):** the baseline anchor is the **event date** (sales strictly before the event), not each sale's own trailing median — a per-sale trailing baseline would absorb the very repricing being measured. Spec §9's line "baseline uses sales strictly before the sale date" is corrected to "strictly before the event date".
+- **Recalibration 2026-09-17 (user-approved, measured on real data):** `event_sale_windows` defaults are `baseline_days=56, window_days=21, min_baseline=3, min_window=3` (spec originally said 28/14/3/5). Probe results: original rules → 42 pairs/35 events kept of 590 post-floor events, **zero** prospect or debut events; calibrated → 69 pairs/48 events/740 sales, still 100% established breakouts. Prospect-window and debut repricing are unobservable at this universe's sale density — a first-class finding, reported as such in the Task 5 findings doc; the gate (spec §8) reads on the established-heavy `ungraded/all` sample. Pooled curves still read ±14 d bins; the ±21 d window only admits thin cards under `min_window`.
 - Sales `bucket` column is contaminated with non-card vocabulary (`manual-only`, `cib`, …) — **never use it**; grade classes come from the `grade` column only (`NaN` = ungraded).
 - Data artifacts under `data/processed/` are gitignored — numbers go into the findings doc, artifacts stay local.
 
@@ -353,10 +354,11 @@ git commit -m "feat: breakout-game detection (hitter composite + Bill James game
 - Consumes: Task 1's events table (`mlb_id`, `event_date`, …) and the sales parquet schema.
 - Produces (used by Tasks 3–5):
   - `GRADE_CLASSES = {"ungraded": None, "psa_10": "psa_10"}` — filter spec: `ungraded` keeps `grade.isna()`, `psa_10` keeps `grade == "psa_10"`.
-  - `event_sale_windows(sales, events, grade_class="ungraded", baseline_days=28, window_days=14, min_baseline=3, min_window=5) -> tuple[pd.DataFrame, dict]`
+  - `event_sale_windows(sales, events, grade_class="ungraded", baseline_days=56, window_days=21, min_baseline=3, min_window=3) -> tuple[pd.DataFrame, dict]`
     - Returns `(windows, drop_log)`. `windows` columns: `event_id` (int, positional index into `events`), `mlb_id`, `card_slug`, `event_date` (datetime64), `sale_date` (datetime64), `t_days` (float, sale − event in days), `rel_price` (float, price ÷ baseline).
     - Baseline = **median price of the card's same-grade-class sales with `sale_date` in `[event_date − baseline_days, event_date)`** (strictly pre-event). Requires ≥ `min_baseline` baseline sales.
-    - Window = sales with `sale_date` in `[event_date − window_days, event_date + window_days]`. Requires ≥ `min_window` window sales.
+    - Window = sales with `sale_date` in `[event_date − window_days, event_date + window_days]`. Requires ≥ `min_window` window sales. Note: windows are collected at ±21 d, but pooled curves (Task 4) read only the ±14 d bins — the wider window exists solely to admit thin cards under `min_window`.
+    - **Recalibrated 2026-09-17 (user-approved)** from the spec's original `28/14/3/5`: real-data probe showed the original density rules keep 42/590 post-floor events, and zero prospect/debut events. Calibrated values keep 69 pairs / 48 events / 740 sales. The prospect/debut unobservability is unchanged by any setting and is a first-class finding (Task 5 findings doc).
     - `drop_log`: `{"dropped_baseline": int, "dropped_window": int, "kept": int}` counting **event-card pairs**.
 
 - [ ] **Step 1: Write the failing tests**
@@ -446,12 +448,13 @@ def test_grade_class_filters():
 
 
 def test_window_bounds():
-    # sales at exactly -14d and +14d are inside; +15d is outside
+    # sales at exactly -14d and +14d are inside; +15d is outside (explicit ±14d
+    # window: the calibrated default is ±21d, bounds logic is window-agnostic)
     rows = _card_sales(n_base=5, n_pre_in_window=0, post=[130.0] * 3)
     rows.append((pd.Timestamp("2024-06-01"), 99.0, None, 1, "a/x"))   # exactly -14d
     rows.append((pd.Timestamp("2024-06-29"), 130.0, None, 1, "a/x"))   # exactly +14d
     rows.append((pd.Timestamp("2024-06-30"), 130.0, None, 1, "a/x"))   # +15d -> outside
-    windows, drop_log = event_sale_windows(_sales(rows), _events())
+    windows, drop_log = event_sale_windows(_sales(rows), _events(), window_days=14)
     assert drop_log["kept"] == 1
     assert windows["t_days"].min() == pytest.approx(-14.0)
     assert windows["t_days"].max() == pytest.approx(14.0)
@@ -495,10 +498,10 @@ def event_sale_windows(
     sales: pd.DataFrame,
     events: pd.DataFrame,
     grade_class: str = "ungraded",
-    baseline_days: int = 28,
-    window_days: int = 14,
+    baseline_days: int = 56,
+    window_days: int = 21,
     min_baseline: int = 3,
-    min_window: int = 5,
+    min_window: int = 3,
 ) -> tuple[pd.DataFrame, dict]:
     """Align a card's sales around each event; normalize by pre-event baseline.
 
@@ -1096,8 +1099,16 @@ curves table or key bins (-1, 0, +1, +3, +7, +14)>
 <fast/late shares on ungraded/all; verdict; consequence for T3 framing>
 
 ## Caveats
-<thinness, 39-player universe, prospect-stratum event scarcity, best_offer mix,
-mix-of-grades handled via grade classes, SCP floor 2021-03>
+- **Prospect/debut unobservability (first-class finding):** at this universe's sale
+  density (median 2 sales/card/month), zero prospect-stratum and zero debut events
+  survive the evidence rules under any parameter setting (probe 2026-09-17: 48/590
+  post-floor events kept, 100% established breakouts). The gate verdict therefore
+  applies to established-star breakouts only; prospect-window repricing speed
+  remains unmeasured and needs T2's breadth (or denser price data).
+- Recalibrated density rules (baseline 56d, window ±21d, min 3 sales; user-approved
+  2026-09-17) — original spec values kept only 42 pairs.
+- best_offer mix, mix-of-grades handled via grade classes, 39-player universe,
+  SCP floor 2021-03.
 
 ## Reproduce
 `python -m cardprice.lag_study` (venv, repo root); artifacts in data/processed/ (gitignored).

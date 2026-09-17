@@ -47,8 +47,8 @@ No new dependencies (pandas/numpy/scipy stack already present).
 
 ## 6. Lag estimation
 
-- Normalize each sale by its card's trailing 28-day median price (relative index; 1.0 = baseline).
-- Pool daily (12 h bins if volume allows) median relative price from −14 d to +14 d per stratum; bootstrap CIs clustered by event.
+- Normalize each sale by its card's event-anchored baseline: median of same-grade-class sales strictly before the event over the trailing **56 days** (relative index; 1.0 = baseline). Recalibrated from 28 d on 2026-09-17 (see note below).
+- Sales windows collected at **±21 d**; pooled daily median relative-price curve read on **±14 d bins** per stratum; bootstrap CIs clustered by event.
 - **Lag** = first day the CI floor clears 1.0 and holds for 3 consecutive days.
 - **Half-life**: exponential-adjustment fit to the post-event path.
 - Both reported as a **distribution across events**, not one pooled point estimate.
@@ -57,8 +57,10 @@ No new dependencies (pandas/numpy/scipy stack already present).
 
 - Subtract the all-universe daily median index (market drift confound).
 - Recompute within grade buckets (ungraded / PSA 10) — hype events shift the *mix* of what sells; a level shift driven by mix is not repricing.
-- Event-cards with < 5 sales in the window are dropped and counted (report the count).
+- Event-cards with < 3 sales in the window are dropped and counted (report the count). Recalibrated from < 5 on 2026-09-17 (see note below).
 - `best_offer=True` sales flagged; weekday/weekend composition noted.
+
+**Recalibration note (2026-09-17, user-approved):** the original density rules (28 d baseline, ±14 d window, ≥ 5 window sales) kept only 42 event-card pairs of 590 post-floor events on real data — and **zero** prospect-stratum or debut events under any parameter setting (median 2 sales/card-month). Calibrated values (56 d baseline, ±21 d collection window, ≥ 3 window sales) keep 69 pairs / 48 events / 740 sales, still 100 % established breakouts. **Prospect-window and debut repricing are unobservable at this universe's sale density** — a first-class finding of this thread; the §8 gate reads on the established-heavy `ungraded/all` sample, and prospect-window lag measurement is deferred to T2's breadth (or denser price data).
 
 ## 8. Pre-registered decision gate
 
@@ -70,5 +72,5 @@ No new dependencies (pandas/numpy/scipy stack already present).
 
 - Synthetic fixture: planted event with a known 2-day lag must be recovered within ±1 day.
 - Golden breakout rows from known real games (hand-picked multi-HR / high-K games), verified against the game logs.
-- Unit tests: window dedupe, market-index subtraction, grade-bucket split, trailing-median normalization (no look-ahead: baseline uses sales strictly before the sale date).
+- Unit tests: window dedupe, market-index subtraction, grade-bucket split, event-anchored baseline normalization (no look-ahead: baseline uses sales strictly before the EVENT date; a per-sale trailing baseline would absorb the repricing being measured — wording corrected in the T1 plan).
 - Honest-golden discipline: mismatches stop the run; never fudge.
