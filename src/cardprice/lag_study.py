@@ -6,6 +6,7 @@ visible instead of absorbed by a moving baseline. Pooled curves + cluster
 bootstrap live in part 2 (Tasks 3-4).
 """
 
+import numpy as np
 import pandas as pd
 
 GRADE_CLASSES = {"ungraded": None, "psa_10": "psa_10"}
@@ -66,3 +67,53 @@ def event_sale_windows(
                     }
                 )
     return pd.DataFrame(rows, columns=WINDOW_COLUMNS), drop_log
+
+
+def market_relative_index(
+    sales: pd.DataFrame,
+    grade_class: str = "ungraded",
+    baseline_days: int = 28,
+    min_cards: int = 3,
+    max_gap_days: int = 3,
+) -> pd.Series:
+    """Daily cross-card median of (card daily median price / card trailing baseline).
+
+    A card contributes to a day only when it both trades that day and has >= 1
+    baseline sale in the trailing `baseline_days` (strictly pre-date). Days
+    with < `min_cards` contributing cards are NaN; NaN gaps of <= `max_gap_days`
+    are linearly interpolated.
+    """
+    s = sales[_grade_mask(sales, grade_class) & sales["price"].notna()].copy()
+    s["d"] = s["sale_date"].dt.normalize()
+    per_day: dict[pd.Timestamp, list[float]] = {}
+    for _, g in s.groupby("card_slug"):
+        g = g.sort_values("d")
+        days = g["d"].to_numpy()
+        prices = g["price"].to_numpy(dtype=float)
+        daily = g.groupby("d")["price"].median()
+        for day, med in daily.items():
+            lo = np.datetime64(day - pd.Timedelta(days=baseline_days))
+            i0 = np.searchsorted(days, lo, side="left")
+            i1 = np.searchsorted(days, np.datetime64(day), side="left")  # strictly pre-date
+            if i1 - i0 < 1:
+                continue
+            base = float(np.median(prices[i0:i1]))
+            if base > 0:
+                per_day.setdefault(day, []).append(float(med) / base)
+    idx = pd.date_range(s["d"].min(), s["d"].max(), freq="D")
+    mkt = pd.Series(
+        [float(np.median(per_day[d])) if len(per_day.get(d, [])) >= min_cards else np.nan
+         for d in idx],
+        index=idx,
+    )
+    return mkt.interpolate(limit=max_gap_days, limit_direction="both")
+
+
+def adjust_for_market(windows: pd.DataFrame, mkt: pd.Series) -> tuple[pd.DataFrame, int]:
+    """rel_adj = rel_price / market_index(sale day). NaN index -> NaN, counted."""
+    out = windows.copy()
+    day = out["sale_date"].dt.normalize()
+    m = day.map(mkt)
+    out["rel_adj"] = out["rel_price"] / m
+    n_unadj = int(out["rel_adj"].isna().sum())
+    return out, n_unadj
