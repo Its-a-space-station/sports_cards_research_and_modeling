@@ -138,7 +138,7 @@ moved = (ou["market_ret_3m"] != nu["market_ret_3m"]).sum()
 print(f"ungraded market_ret_3m moved on {moved}/{len(ou)} rows (expected: subset of entries sharing a month with corrected psa_10 cards)")
 ```
 
-Goldens to re-verify and report (expected: all unchanged — ungraded has 0 dupes, and the career/stage/awards predictors don't touch chart prices): Soto ungraded ret_12m at 2021-04 = −0.2716796494005069; Bryant career_home_runs 142 at 2021-04; Henderson sophomore at 2023-08; Judge awards 2 at 2023-01; Skenes pitcher path. Report new psa_10 row count + how many month-end prices moved vs the pre-fix panel. If ANY ungraded row differs, STOP and report — do not proceed.
+Goldens to re-verify and report (expected: all unchanged — ungraded has 0 dupes, and the career/stage/awards predictors don't touch chart prices): Soto ungraded ret_12m at 2021-04 = −0.2716796494005069; Bryant career_home_runs 142 at 2021-04; Henderson sophomore at 2023-08; Judge awards 2 at 2023-01; Skenes pitcher path. Report new psa_10 row count + how many month-end prices moved vs the pre-fix panel (actual: 101/2,715, all on Buehler/Kelenic, max 71.2%; ungraded market_ret_3m moved on 1,062 rows + 52 both-NaN strict-`!=` artifacts = 1,114 printed). If ANY ungraded column other than market_ret_3m differs, STOP and report — do not proceed.
 
 - [ ] **Step 5: Commit**
 
