@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from resolve_class_universe import (
     _fetch_player_info_batched,
+    load_player_directory,
     players_from_checklists,
     resolve_base_cards,
     resolve_class_player_id,
@@ -182,34 +183,65 @@ def test_resolve_class_player_id_no_exact_match(monkeypatch):
                                    directory={}) == (None, "no_exact_match")
 
 
-# --- round 2 (2026-09-18, plan amendment f1f0f63): sportId=11 hydrate retry,
-# MiLB directory fallback, suffix rule, fetch_player_info batching. Directory
-# mocks mirror the live probe of GET {BASE}/sports/14/players?season=2015:
+# --- rounds 2-3 (2026-09-18, plan amendments f1f0f63 + edf7cfd): multi-sportId
+# hydrate retry, MiLB directory fallback {11..17}, suffix rule, fetch_player_info
+# batching. Directory mocks mirror the live probe of
+# GET {BASE}/sports/14/players?season=2015:
 # {"copyright": ..., "people": [{"id", "fullName", "firstName", "lastName"}]}.
 
 
-def test_resolve_class_player_id_validated_via_sportid_retry(monkeypatch):
-    # Seaver King 814409 (controller probe): yearByYear without sportId -> 0
-    # splits; with sportId=11 inside the hydrate -> splits -> "ok"
+def test_resolve_class_player_id_validated_via_multi_sportid_retry(monkeypatch):
+    # Cam Gibson 622057 (controller probe: splits at 12-17, zero at 11 and at
+    # no-sportId) — mock is empty at no-sportId/14/13/12, non-empty at 16;
+    # iteration must short-circuit at 16 (never query 11/17/15)
     hydrate_calls = []
 
     def fake_get(url, params=None, timeout=None):
         if url.endswith("/people/search"):
-            return _FakeResp({"people": [{"id": 814409, "fullName": "Seaver King"}]})
+            return _FakeResp({"people": [{"id": 622057, "fullName": "Cam Gibson"}]})
         hydrate_calls.append(params["hydrate"])
-        if "sportId=11" in params["hydrate"]:
-            return _FakeResp(_person_payload(814409, "Seaver King", [
-                _year_group("hitting", [_split("2024", "Fredericksburg Nationals")]),
-            ]))
-        return _FakeResp(_person_payload(814409, "Seaver King", [_year_group("hitting", [])]))
+        stats = []
+        if "sportId=16" in params["hydrate"]:
+            stats = [_year_group("hitting", [_split("2016", "GCL Tigers West")])]
+        return _FakeResp(_person_payload(622057, "Cam Gibson", stats))
 
     monkeypatch.setattr(requests, "get", fake_get)
-    mlb_id, status = resolve_class_player_id("Seaver King", 2024, sleep_s=0.0, directory={})
-    assert (mlb_id, status) == (814409, "ok")
+    mlb_id, status = resolve_class_player_id("Cam Gibson", 2015, sleep_s=0.0, directory={})
+    assert (mlb_id, status) == (622057, "ok")
     assert hydrate_calls == [
         "stats(group=[hitting,pitching],type=yearByYear)",
-        "stats(group=[hitting,pitching],type=yearByYear,sportId=11)",
+        "stats(group=[hitting,pitching],type=yearByYear,sportId=14)",
+        "stats(group=[hitting,pitching],type=yearByYear,sportId=13)",
+        "stats(group=[hitting,pitching],type=yearByYear,sportId=12)",
+        "stats(group=[hitting,pitching],type=yearByYear,sportId=16)",
     ]
+
+
+def test_load_player_directory_extended_sports_with_empty_cells(monkeypatch):
+    saved = []
+
+    def fake_load_latest(dataset, key):
+        raise FileNotFoundError(f"no snapshots for {dataset}/{key}")
+
+    def fake_save_raw(dataset, key, payload):
+        saved.append(key)
+
+    def fake_get(url, params=None, timeout=None):
+        # probe shape: {"copyright": ..., "people": [{"id", "fullName", ...}]}
+        sport_id = int(url.rsplit("/sports/", 1)[1].split("/")[0])
+        people = [] if sport_id == 15 else [{"id": 900000 + sport_id, "fullName": "Dir Player"}]
+        return _FakeResp({"copyright": "c", "people": people})
+
+    monkeypatch.setattr("resolve_class_universe.load_latest", fake_load_latest)
+    monkeypatch.setattr("resolve_class_universe.save_raw", fake_save_raw)
+    monkeypatch.setattr(requests, "get", fake_get)
+    directory = load_player_directory(sleep_s=0.0)
+    expected = {(sid, season) for sid in (11, 12, 13, 14, 15, 16, 17)
+                for season in range(2014, 2027)}
+    assert set(directory) == expected  # 91 cells
+    assert len(saved) == 91
+    assert directory[(16, 2023)] == [{"id": 900016, "fullName": "Dir Player"}]
+    assert directory[(15, 2023)] == []  # empty sport-15 cells tolerated as gaps
 
 
 def test_resolve_class_player_id_directory_exact_fold_hit(monkeypatch):

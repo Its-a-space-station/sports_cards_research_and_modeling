@@ -28,9 +28,13 @@ OUT_CARDS = Path("data/reference/cards_class_universe.csv")
 OUT_AUDIT = Path("data/reference/class_universe_audit.csv")
 OUT_INFO = Path("data/reference/player_info_class.csv")
 CARD_TYPE = "bowman_1st_base"
-DIR_SPORT_IDS = (11, 12, 13, 14)  # aaa, aa, a_plus, a
+DIR_SPORT_IDS = (11, 12, 13, 14, 15, 16, 17)  # aaa, aa, a_plus, a + rookie/DSL levels
 DIR_SEASONS = range(2014, 2027)  # 2014..2026 inclusive
 SUFFIX_TOKENS = {"jr", "sr", "ii", "iii", "iv", "v"}
+# yearByYear without sportId is MLB-only for many players; careers that never
+# reached AAA (measured: Gamboa/Smith/Gibson) have splits only at 12-17 —
+# iterate hydrate variants in this order, short-circuit on first non-empty split
+_HYDRATE_SPORT_IDS: tuple[int | None, ...] = (None, 14, 13, 12, 16, 11, 17, 15)
 
 
 def players_from_checklists(checklists: pd.DataFrame) -> pd.DataFrame:
@@ -91,14 +95,14 @@ def resolve_class_player_id(
 
 
 def _has_pro_stats(mlb_id: int, sleep_s: float) -> bool:
-    """GET /people/{id}?hydrate=stats(group=[hitting,pitching],type=yearByYear);
-    if zero splits, retry with sportId=11 inside the hydrate (yearByYear without
-    sportId is MLB-only for many minor leaguers — measured 8/15 unmapped
-    exact-matches with splits=0). True iff either call has a non-empty split."""
-    for hydrate in (
-        "stats(group=[hitting,pitching],type=yearByYear)",
-        "stats(group=[hitting,pitching],type=yearByYear,sportId=11)",
-    ):
+    """GET /people/{id}?hydrate=stats(group=[hitting,pitching],type=yearByYear[,sportId=<sid>])
+    for sid in [none, 14, 13, 12, 16, 11, 17, 15] — True iff any variant has a
+    non-empty split; short-circuits on the first. (Third correction 2026-09-18:
+    sportId=11-only missed careers that topped out below AAA; without sportId
+    the hydrate is MLB-only for many players.)"""
+    for sport_id in _HYDRATE_SPORT_IDS:
+        hydrate = "stats(group=[hitting,pitching],type=yearByYear"
+        hydrate += f",sportId={sport_id})" if sport_id is not None else ")"
         resp = requests.get(f"{BASE}/people/{mlb_id}", params={"hydrate": hydrate}, timeout=30)
         resp.raise_for_status()
         time.sleep(sleep_s)
@@ -110,8 +114,10 @@ def _has_pro_stats(mlb_id: int, sleep_s: float) -> bool:
 
 def load_player_directory(sleep_s: float = 0.3) -> dict[tuple[int, int], list[dict]]:
     """MiLB player directories {(sport_id, season): [{"id", "fullName"}]} for
-    sport_id 11-14 x seasons 2014-2026. Snapshot-cached (save_raw/load_latest —
-    one live call per missing cell); fetched once per run, shared across players."""
+    sport_id 11-17 x seasons 2014-2026 (91 cells; sport-15 cells may be empty in
+    recent years — tolerated as gaps, still snapshotted). Snapshot-cached
+    (save_raw/load_latest — one live call per missing cell); fetched once per
+    run, shared across players."""
     directory: dict[tuple[int, int], list[dict]] = {}
     for sport_id in DIR_SPORT_IDS:
         for season in DIR_SEASONS:
