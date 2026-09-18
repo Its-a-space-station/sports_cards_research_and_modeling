@@ -13,7 +13,7 @@ Rationale (from P6c findings): season-cumulative stats barely predict returns �
 
 ## 2. Decisions locked in brainstorming
 
-- **Universe:** full 1st Bowman **auto checklists from both families** — Bowman Chrome (BCAP/CPA, international-signee-heavy) and Bowman Draft (CDA, draftee-heavy) — classes **2015–2025** (~1,300 players), unioned per player (a player's class = year of their *earliest* 1st Bowman auto across families). Checklists fixed at print time → includes busts → no ex-post selection. *Amended 2026-09-17 per spike `2026-09-17-scp-checklists.md`: originally "1st Bowman Chrome Prospect auto checklist" — but draftees' 1st Bowman lives in Bowman Draft (e.g. Witt Jr. is 2019 Draft CDA, absent from 2019 Chrome), so Chrome-only would silently drop drafted players.*
+- **Universe:** full 1st Bowman **auto checklists from both families** — Bowman Chrome (BCAP/CPA, international-signee-heavy) and Bowman Draft (CDA, draftee-heavy) — classes **2015–2025** (~1,300 players), unioned per player (a player's class = year of their *earliest* 1st Bowman auto across families). Checklists fixed at print time → includes busts → no ex-post selection. *Amended 2026-09-17 per spike `2026-09-17-scp-checklists.md`: originally "1st Bowman Chrome Prospect auto checklist" — Chrome-only would silently drop drafted players. **Further corrected after the full pull:** SCP's draft-auto checklists may be incomplete (Witt Jr. absent from SCP's 2019 Draft auto set; his earliest SCP-listed auto is 2020 Chrome CPA-BWJ). Classes derive strictly from data (earliest auto across families), and a Cardboard Connection completeness audit of one draft year is required (Task 2).*
 - **Era flag:** `price_visible_breakout` = first pro season ≥ 2020. SCP's price archive floor is **2021-03** (verified 2026-09-17: global sales/chart floor 2021-03-13 / 2021-03-01; even a 2015 card's first observable sale is 2021-05). Classes 2015–2019 contribute late-window rows only; the early-prediction core is classes 2020–2025.
 - **Priced card:** base **non-auto** 1st Bowman (Chrome `BCP` or Draft `BDC` base, matching the family of the player's 1st auto), **raw** (deepest sales per player; consistent with the raw-prices decision). The auto may be added later as a second `card_type`.
 - **Data budget:** free-first; anything paywalled stops and asks.
@@ -77,7 +77,7 @@ Extend the multiyear builder → `panel_class.parquet` (card × entry-month, sam
 
 ## 9. Testing
 
-- Golden checklist rows: known names per class (e.g. 2016 class ⊃ Guerrero Jr. via Bowman Chrome CPA; 2019 class ⊃ Witt Jr. via Bowman **Draft** CDA — spike-verified 2026-09-17; exact names verified against published checklists during planning, never assumed). Negative golden: Witt Jr. must NOT appear in the 2019 Chrome checklist.
+- Golden checklist rows: known names per class (e.g. 2016 class ⊃ Guerrero Jr. via Bowman Chrome CPA — exact names verified against published checklists, never assumed). Negative golden: Witt Jr. must NOT appear in the 2019 Chrome checklist. Witt's own class derives from data: earliest auto across families per SCP listing (2020 Chrome CPA-BWJ as of the 2026-09-17 pull; draft completeness audited in Task 2).
 - Golden sales/chart counts for 3 known cards against captured fixtures.
 - Hand-computed surprise goldens (one hitter pace-vs-projection, one pitcher).
 - Panel join invariants: no duplicated card-months; era-flag goldens (Bryant 2015 → late-window).
