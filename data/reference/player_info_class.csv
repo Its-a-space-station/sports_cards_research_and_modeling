@@ -34,6 +34,7 @@ mlb_id,name,birth_date,position
 553968,Endrys Briceno,1992-02-07,P
 553988,Dixon Machado,1992-02-22,2B
 554347,Luis Meza,1990-07-13,P
+570482,Gio Urshela,1991-10-11,3B
 571685,Anthony García,1992-01-04,LF
 571851,Spencer Kieboom,1991-03-16,C
 571970,Max Muncy,1990-08-25,3B
@@ -74,6 +75,7 @@ mlb_id,name,birth_date,position
 606424,Jarlín García,1993-01-18,P
 606988,Grayson Greiner,1992-10-11,C
 607044,John Norwood,1992-09-24,RF
+607188,Jake Faria,1993-07-30,P
 607237,Amir Garrett,1992-05-03,P
 607385,Tyler Collins,1990-06-06,LF
 607455,Anthony Banda,1993-08-10,P
@@ -225,6 +227,7 @@ mlb_id,name,birth_date,position
 643617,Zac Reininger,1993-01-28,P
 644364,Víctor Arano,1995-02-07,P
 644443,Luis Ysla,1992-04-27,P
+645277,Ozzie Albies,1997-01-07,2B
 645307,Ricardo Sánchez,1997-04-11,P
 647228,Adam Hall,1999-05-22,2B
 647304,Josh Naylor,1997-06-22,1B
@@ -343,6 +346,7 @@ mlb_id,name,birth_date,position
 660758,Sandro Fabian,1998-03-06,RF
 660813,Brusdar Graterol,1998-08-26,P
 660821,Jesús Sánchez,1997-10-07,RF
+660829,Hoy Park,1996-04-07,SS
 660853,Enyel De Los Santos,1995-12-25,P
 660896,Jorge Alcala,1995-07-28,P
 661099,Alvaro Seijas,1998-10-10,P
@@ -544,6 +548,7 @@ mlb_id,name,birth_date,position
 666818,Luis Frías,1998-05-23,P
 666915,Bobby Dalbec,1995-06-29,1B
 666931,Jared Oliva,1995-11-27,CF
+666969,Adolis García,1993-03-02,RF
 667355,Joan Martinez,1996-08-29,P
 667373,Angel Rondón,1997-12-01,P
 667421,Blaine Knight,1996-06-28,P
@@ -621,6 +626,7 @@ mlb_id,name,birth_date,position
 669224,Austin Wells,1999-07-12,C
 669227,Kendall Simmons,2000-04-11,SS
 669228,Nolan Martinez,1998-06-30,P
+669234,Justyn-Henry Malloy,2000-02-19,RF
 669236,Jeremiah Jackson,2000-03-26,2B
 669245,Jacob Pearson,1998-06-01,OF
 669257,Will Smith,1995-03-28,C
@@ -1258,6 +1264,7 @@ mlb_id,name,birth_date,position
 687888,Brandon Walter,1996-09-08,P
 687931,Carson Whisenhunt,2000-10-20,P
 687942,Torin Montgomery,2001-05-02,1B
+687952,Christian Encarnacion-Strand,1999-12-01,3B
 687957,Dustin Harris,1999-07-08,LF
 687981,John Rhodes,2000-08-15,OF
 688002,Javier Valdes,1998-11-19,C
@@ -1288,6 +1295,7 @@ mlb_id,name,birth_date,position
 690291,Jace Jung,2000-10-04,3B
 690544,Bailey Horn,1998-01-15,P
 690626,Dylan DeLucia,2000-08-01,P
+690667,Trey Dombroski,2001-03-13,P
 690829,Ben Joyce,2000-09-17,P
 690902,Ben Metzinger,1999-06-26,3B
 690924,Braxton Fulford,1998-12-09,DH
@@ -1373,6 +1381,7 @@ mlb_id,name,birth_date,position
 691636,Malfrin Sosa,2002-09-13,OF
 691708,Junior Tilien,2002-09-09,LF
 691710,Vincent Perozo,2003-03-06,C
+691718,Pete Crow-Armstrong,2002-03-25,CF
 691720,Kyle Karros,2002-07-26,3B
 691721,Jared Kelley,2001-10-03,P
 691723,Coby Mayo,2001-12-10,3B
@@ -1413,6 +1422,7 @@ mlb_id,name,birth_date,position
 692046,Axel Sanchez,2002-12-10,2B
 692150,Émilien Pitre,2002-10-04,SS
 692179,Thomas Ireland,2002-06-27,P
+692216,CJ Kayfus,2001-10-28,LF
 692221,Sammy Infante,2001-06-22,SS
 692225,Kristian Campbell,2002-06-28,2B
 692226,Ty Floyd,2001-08-28,P
@@ -1658,6 +1668,7 @@ mlb_id,name,birth_date,position
 699305,Diego Mosquera,2004-03-14,SS
 699393,Pedro Ramírez,2004-04-01,2B
 699471,Ivan Melendez,2000-01-24,1B
+699625,Jimmy Crooks,2001-07-19,C
 699712,Raylin Heredia,2003-11-10,OF
 699912,Jose Fernandez,2003-09-22,DH
 700020,Dario Borrero,2003-11-13,1B
@@ -1711,6 +1722,7 @@ mlb_id,name,birth_date,position
 701649,James Triantos,2003-01-29,2B
 701655,Reed Trimble,2000-06-06,LF
 701675,Nathan Church,2000-07-12,CF
+701678,Hao-Yu Lee,2003-02-03,2B
 701679,Brody Brecht,2002-09-27,P
 701701,Quincy Scott,2003-01-15,OF
 701762,Nick Kurtz,2003-03-12,1B
@@ -1858,6 +1870,7 @@ mlb_id,name,birth_date,position
 800204,Derek Bernard,2005-08-09,OF
 800208,Axiel Plaz,2005-08-12,C
 800209,Estuar Suero,2005-08-29,OF
+800231,Won-Bin Cho,2003-08-20,OF
 800232,Luis Baez,2004-01-11,OF
 800239,Sabier Marte,2004-02-10,P
 800246,Engelth Urena,2004-08-17,C

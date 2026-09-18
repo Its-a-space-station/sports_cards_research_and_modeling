@@ -1,9 +1,7 @@
 player_name,class_year,reason
 Conor Biggio,2015,no_exact_match
 Corelle Prime,2015,no_exact_match
-Giovanny Urshela,2015,no_exact_match
 Joe Wendle,2015,no_exact_match
-Ozhaino Albies,2015,no_exact_match
 Trent Clark,2015,no_exact_match
 Wimer Difo,2015,no_exact_match
 Zach Bird,2015,no_exact_match
@@ -11,8 +9,6 @@ Antonio Santillan,2016,no_exact_match
 Buddy Reed,2016,no_exact_match
 Daniel Poncedeleon,2016,no_exact_match
 Eddy Julio Martinez,2016,no_exact_match
-Hoy Jun Park,2016,no_exact_match
-Jacob Faria,2016,no_exact_match
 Javier Guerra,2016,no_exact_match
 Joshua Lowe,2016,no_exact_match
 Oneal Cruz,2016,no_exact_match
@@ -23,7 +19,6 @@ Isaiah White,2017,no_exact_match
 Lazarito Armenteros,2017,no_exact_match
 Mitchell White,2017,no_exact_match
 Greg Soto,2018,no_exact_match
-Jose Adolis Garcia,2018,no_exact_match
 Leonardo Rivas,2018,no_exact_match
 Noah Naylor,2018,no_exact_match
 Shao Ching Chiang,2018,no_exact_match
@@ -35,10 +30,8 @@ Quintin Torres Costa,2019,no_exact_match
 Canaan Smith,2020,no_exact_match
 Daxton Fulton,2020,no_exact_match
 Glenallen Hill Jr.,2020,no_exact_match
-Pete Crow Armstrong,2020,no_exact_match
 Philip Clarke,2020,no_exact_match
 Thad Ward,2020,no_exact_match
-Christian Encarnacion Strand,2021,no_exact_match
 Dominic Hamel,2021,no_exact_match
 Jose Bonilla,2021,ambiguous:directory duplicate candidate 678593 at sport 14 season 2021; candidate 682661 at sport 14 season 2021
 Mac Wainwright,2021,no_exact_match
@@ -51,17 +44,11 @@ Cameron Cauley,2022,no_exact_match
 Cole Phillips,2022,no_exact_match
 Dominic Keegan,2022,no_exact_match
 Ignacio Alvarez,2022,no_exact_match
-Jimmy Crooks III,2022,no_exact_match
 Leonardo Balcazar,2022,no_exact_match
 Michael Burrows,2022,no_exact_match
 Ricardo Cabrera,2022,no_exact_match
-Trey Dombroski III,2022,no_exact_match
-Won Bin Cho,2022,no_exact_match
 Brandon Mayea,2023,no_exact_match
-C. J. Kayfus,2023,no_exact_match
-Hao Yu Lee,2023,no_exact_match
 Jun Seok Shim,2023,no_exact_match
-Justyn Henry Malloy,2023,no_exact_match
 Leonardo Bernal,2023,no_exact_match
 Mairoshendrick Martinus,2023,no_exact_match
 Nikau Pouaka Grego,2023,no_exact_match
@@ -744,3 +731,4 @@ Nick Lorusso,2025,no_base_card
 Sabier Marte,2025,no_base_card
 Trevor Harrison,2025,no_base_card
 Zander Darby,2025,no_base_card
+Trey Dombroski III,2022,no_base_card
