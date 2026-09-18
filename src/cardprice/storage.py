@@ -18,6 +18,11 @@ def save_raw(dataset: str, key: str, payload: dict, on: date | None = None) -> P
     return path
 
 
+def snapshot_exists(dataset: str, key: str) -> bool:
+    d = RAW_ROOT / dataset / key
+    return d.is_dir() and any(d.glob("*.json"))
+
+
 def load_latest(dataset: str, key: str) -> dict:
     files = sorted((RAW_ROOT / dataset / key).glob("*.json"))
     if not files:
