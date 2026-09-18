@@ -94,9 +94,9 @@ def _mini_panel_inputs():
     )
     expectations = pd.DataFrame(
         {
-            "player_name": ["P One"], "mlb_id": [1], "season": [2023],
-            "source": ["pipeline"], "rank": [7], "fv": [pd.NA],
-            "as_of": [pd.Timestamp("2023-04-01")],
+            "player_name": ["P One"] * 2, "mlb_id": [1] * 2, "season": [2023] * 2,
+            "source": ["pipeline", "mlb_draft"], "rank": [7, 5], "fv": [pd.NA] * 2,
+            "as_of": [pd.Timestamp("2023-04-01")] * 2,
         }
     )
     info = pd.DataFrame({"mlb_id": [1], "name": ["P One"],
@@ -132,9 +132,20 @@ def test_build_panel_surprise_rank_era_and_no_lookahead():
     assert june["surprise_ops"] == pytest.approx(1.35 - marcel_june)
     assert june["surprise_ops"] != row["surprise_ops"]
     # as_of guard: an expectation dated AFTER the entry month must not appear
-    late = expectations.assign(as_of=[pd.Timestamp("2023-08-01")])
+    late = expectations.assign(as_of=pd.Timestamp("2023-08-01"))
     panel2 = build_panel(me, outcomes, trailing, logs, late, info, events)
     assert panel2["prospect_rank"].isna().all()
+
+
+def test_build_panel_draft_rank_from_mlb_draft():
+    # fixture carries one mlb_draft row (rank 5, as_of 2023-04-01 < both entries)
+    me, outcomes, trailing, logs, expectations, info, events = _mini_panel_inputs()
+    panel = build_panel(me, outcomes, trailing, logs, expectations, info, events)
+    assert (panel["draft_rank"] == 5).all()
+    # a draft rank dated AFTER the entry month must not appear
+    late = expectations.assign(as_of=pd.Timestamp("2023-08-01"))
+    panel2 = build_panel(me, outcomes, trailing, logs, late, info, events)
+    assert panel2["draft_rank"].isna().all()
 
 
 def test_build_panel_league_games_after_entry_do_not_leak_into_marcel():
