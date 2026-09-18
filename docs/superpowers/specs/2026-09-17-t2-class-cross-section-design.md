@@ -13,38 +13,44 @@ Rationale (from P6c findings): season-cumulative stats barely predict returns �
 
 ## 2. Decisions locked in brainstorming
 
-- **Universe:** full 1st Bowman Chrome **Prospect Auto checklist**, classes **2015–2025** (~1,300 players). Checklist fixed at print time → includes busts → no ex-post selection.
+- **Universe:** full 1st Bowman **auto checklists from both families** — Bowman Chrome (BCAP/CPA, international-signee-heavy) and Bowman Draft (CDA, draftee-heavy) — classes **2015–2025** (~1,300 players), unioned per player (a player's class = year of their *earliest* 1st Bowman auto across families). Checklists fixed at print time → includes busts → no ex-post selection. *Amended 2026-09-17 per spike `2026-09-17-scp-checklists.md`: originally "1st Bowman Chrome Prospect auto checklist" — but draftees' 1st Bowman lives in Bowman Draft (e.g. Witt Jr. is 2019 Draft CDA, absent from 2019 Chrome), so Chrome-only would silently drop drafted players.*
 - **Era flag:** `price_visible_breakout` = first pro season ≥ 2020. SCP's price archive floor is **2021-03** (verified 2026-09-17: global sales/chart floor 2021-03-13 / 2021-03-01; even a 2015 card's first observable sale is 2021-05). Classes 2015–2019 contribute late-window rows only; the early-prediction core is classes 2020–2025.
-- **Priced card:** base **non-auto** 1st Bowman Chrome, **raw** (deepest sales per player; consistent with the raw-prices decision). The auto may be added later as a second `card_type`.
+- **Priced card:** base **non-auto** 1st Bowman (Chrome `BCP` or Draft `BDC` base, matching the family of the player's 1st auto), **raw** (deepest sales per player; consistent with the raw-prices decision). The auto may be added later as a second `card_type`.
 - **Data budget:** free-first; anything paywalled stops and asks.
 - **Gate shape:** same pre-registered form as P6c — plus a cross-sectional quintile-spread test.
+- **Expectations term (amended 2026-09-17, user-approved):** pre-debut = MLB Pipeline Top-100 rank (+ FG "The Board" dated draft-board FV as secondary); post-debut = **in-house Marcel-style lagged projection** (5/4/3 season weights, regression to the mean) computed from our own season stats. *Replaces the original Steamer/ZiPS + BA Top-100 design: both are paywalled + Cloudflare-protected (probe `2026-09-17-expectations-sources.md`). FG membership for true Steamer/ZiPS is recorded as an optional paid upgrade, not purchased.*
 
 ## 3. Data depth (known constraints)
 
 - **Prices:** SCP per-sale + monthly charts, floor 2021-03. Cards released 2022+ tracked from release.
-- **Stats:** MLB Stats API game logs (MLB + minors) verified deep (minors to 2011); 2015–2025 collection is volume, not feasibility.
-- **Expectations:** preseason Steamer/ZiPS (FanGraphs historical pages, 2021–2026); dated MLB Pipeline Top-100 + Baseball America Top-100 via Wayback captures (2015–2025). Each expectation row carries source + as-of date.
-- **Checklist source:** SCP set pages (keeps slug convention), audited against a second free source (e.g. Cardboard Connection checklists).
+- **Stats:** MLB Stats API game logs (MLB + minors) verified deep (minors to 2011); 2015–2025 collection is volume, not feasibility (~1,300 players ≈ 7–9 h at 0.3 s/call → collectors **must be resumable**: skip-if-snapshot-exists + incremental parquet flushes — amended 2026-09-17).
+- **Expectations (amended 2026-09-17 per probe):** MLB Pipeline Top-100 2015–2025 — free, dated, plain-HTTP (mlb.com `/milb/prospects/YYYY/top100/` for 2020–2025, news-article full lists for 2015–2019; Akamai 403s intermittently → retry/backoff). FG "The Board" dated draft boards (secondary, draft classes). Marcel projections computed in-house at panel time. BA Top-100 dropped (paywall + CF); Wayback deferred (archive.org rate-limited at probe time; not on the critical path). Each expectation row carries source + as-of date.
+- **Checklist source (spike-verified 2026-09-17):** SCP auto set pages per year × family, slugs discovered via one GET of `/brand/baseball-cards/bowman` (never guessed — slug forms drift: `-prospect-autograph` / `-prospects-autographs` / `-prospects-autograph`); `?exclude-variants=true` single GET covers most years, cursor-POST pagination loop for >150-entry sets. Parsed from `table#games_table`; base = anchors without `[Parallel]` bracket. Cross-audit vs Cardboard Connection (2015 verified: CC ⊂ SCP). SCP quirks: duplicate numbers across players, spelling-variant rows → dedupe + audit.
 
 ## 4. Architecture
 
 ```
-src/cardprice/checklist.py        1st Bowman auto checklists 2015-2025 -> universe
-src/cardprice/collect_prices.py   extended: base non-auto card per player (batched, resumable)
-src/cardprice/collect_stats.py    extended: ~1,300 players, MLB+minors 2015-2026
-src/cardprice/expectations.py     projections + dated rankings -> expectations.parquet
-src/cardprice/multiyear.py        extended: surprise features -> panel_class.parquet
-data/processed/: class_universe.parquet, class_sales.parquet,
-                 class_chart_monthly.parquet, class_liquidity.csv,
-                 game_logs_class.parquet, expectations.parquet, panel_class.parquet
+scripts/build_class_checklists.py  Chrome+Draft auto set pages (brand-page slug
+                                   discovery, cursor-POST pagination) -> checklists
+scripts/resolve_class_universe.py  mlb_id mapping + 1st-Bowman family/year +
+                                   base-card resolution (incremental CSV, audit)
+src/cardprice/collect_prices.py    extended: resumable (skip-if-snapshot-exists,
+                                   incremental flush) — amendment 2026-09-17
+scripts/collect_universe_stats.py  extended: same resumability treatment
+src/cardprice/expectations.py      Pipeline lists + FG draft boards -> expectations.parquet
+src/cardprice/multiyear.py         extended: surprise features -> panel_class.parquet
+data/reference/: class_checklists.parquet, cards_class_universe.csv
+data/processed/: class_sales.parquet, class_chart_monthly.parquet,
+                 class_liquidity.csv, game_logs_class.parquet,
+                 expectations.parquet, panel_class.parquet
 ```
 
 ## 5. Data plan
 
-- **Universe assembly:** checklist rows (player, class year, card number) → `mlb_id` via the existing MLB API search pattern. Unmapped players (name collisions, never-affiliated) logged to an audit CSV with reason — never silently dropped. Audit table (like the GemRate spike's) committed to the findings doc.
-- **Prices:** base non-auto 1st Bowman Chrome per player → `class_sales.parquet` (per-sale), `class_chart_monthly.parquet` (ungraded + psa_10), `class_liquidity.csv`. Batched, resumable SCP scrape, ≥ 5 s politeness (existing collector conventions); ~1,300 cards ≈ hours unattended.
+- **Universe assembly:** checklist rows from BOTH families (Chrome + Draft) per year → union per player, class = year of earliest 1st Bowman auto → `mlb_id` via the existing MLB API search pattern. Unmapped players (name collisions, never-affiliated) logged to an audit CSV with reason — never silently dropped. Audit table (like the GemRate spike's) committed to the findings doc.
+- **Prices:** base non-auto 1st Bowman per player (`BCP` Chrome or `BDC` Draft, matching the family of the player's 1st auto; earliest year wins) → `class_sales.parquet` (per-sale), `class_chart_monthly.parquet` (ungraded + psa_10), `class_liquidity.csv`. Resumable SCP scrape, ≥ 5 s politeness (existing collector conventions); ~1,300 cards ≈ hours unattended.
 - **Stats:** extend game-log collection to all mapped players, MLB + minors, 2015–2026 → `game_logs_class.parquet` (existing rate-limited client + resumable cache).
-- **Expectations:** per player-season: preseason projection (Steamer preferred, ZiPS fallback), prospect rank (Pipeline primary, BA secondary), source, as-of date. Pre-debut players: prospect rank **is** the expectations term.
+- **Expectations:** per player-season: Pipeline Top-100 rank (primary; as-of = list publication date, preseason), FG draft-board FV (secondary, draft classes), source, as-of date. Pre-debut players: prospect rank **is** the expectations term. Post-debut: Marcel-style lagged projection (5/4/3 weights, regression to mean) computed from our own `season_stats` at panel-build time — fully in-house, no external dependency.
 
 ## 6. Surprise panel & features
 
@@ -65,13 +71,13 @@ Extend the multiyear builder → `panel_class.parquet` (card × entry-month, sam
 
 ## 8. Error handling
 
-- Checklist↔SCP mismatches: exact-match rules as in `pop_gemrate.py` (no-guess); ambiguous → audit CSV, manual review, documented in findings.
-- Collector per-card failures: row written with empty fields, run continues, failures summarized.
-- Wayback gaps: missing ranking capture → that source-season NaN, never interpolated from later lists (look-ahead).
+- Checklist↔SCP mismatches: exact-match rules as in `pop_gemrate.py` (no-guess); ambiguous → audit CSV, manual review, documented in findings. Known SCP quirks (spike-verified): duplicate card numbers across two players; spelling-variant duplicate rows — dedupe rules must be explicit.
+- Collector per-card failures: row written with empty fields, run continues, failures summarized; runs are resumable (skip-if-snapshot-exists) so crashes never restart from zero.
+- Pipeline gaps: a missing year/list page after retries → that source-season NaN, never interpolated from later lists (look-ahead).
 
 ## 9. Testing
 
-- Golden checklist rows: known names per class (e.g. 2016 class ⊃ Guerrero Jr.; 2019 class ⊃ Witt Jr.) — exact names verified against published checklists during planning, never assumed.
+- Golden checklist rows: known names per class (e.g. 2016 class ⊃ Guerrero Jr. via Bowman Chrome CPA; 2019 class ⊃ Witt Jr. via Bowman **Draft** CDA — spike-verified 2026-09-17; exact names verified against published checklists during planning, never assumed). Negative golden: Witt Jr. must NOT appear in the 2019 Chrome checklist.
 - Golden sales/chart counts for 3 known cards against captured fixtures.
 - Hand-computed surprise goldens (one hitter pace-vs-projection, one pitcher).
 - Panel join invariants: no duplicated card-months; era-flag goldens (Bryant 2015 → late-window).
