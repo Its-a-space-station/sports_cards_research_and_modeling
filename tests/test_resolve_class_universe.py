@@ -8,6 +8,7 @@ import requests
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from resolve_class_universe import (
+    _fetch_player_info_batched,
     players_from_checklists,
     resolve_base_cards,
     resolve_class_player_id,
@@ -143,7 +144,8 @@ def test_resolve_class_player_id_exact_with_pro_stats(monkeypatch):
         requests, "get",
         _fake_get([{"id": 669261, "fullName": "Jack Suwinski"}], {669261: hydrate}),
     )
-    assert resolve_class_player_id("Jack Suwinski", 2019, sleep_s=0.0) == (669261, "ok")
+    assert resolve_class_player_id("Jack Suwinski", 2019, sleep_s=0.0,
+                                   directory={}) == (669261, "ok")
 
 
 def test_resolve_class_player_id_exact_no_pro_stats(monkeypatch):
@@ -155,7 +157,8 @@ def test_resolve_class_player_id_exact_no_pro_stats(monkeypatch):
         requests, "get",
         _fake_get([{"id": 700001, "fullName": "Test Prospect"}], {700001: hydrate}),
     )
-    assert resolve_class_player_id("Test Prospect", 2024, sleep_s=0.0) == (None, "no_pro_stats")
+    assert resolve_class_player_id("Test Prospect", 2024, sleep_s=0.0,
+                                   directory={}) == (None, "no_pro_stats")
 
 
 def test_resolve_class_player_id_two_exact_none_with_stats_ambiguous(monkeypatch):
@@ -165,7 +168,7 @@ def test_resolve_class_player_id_two_exact_none_with_stats_ambiguous(monkeypatch
         700003: {"people": [{"id": 700003, "fullName": "Twin Guy"}]},  # stats key absent
     }
     monkeypatch.setattr(requests, "get", _fake_get(people, hydrates))
-    mlb_id, status = resolve_class_player_id("Twin Guy", 2020, sleep_s=0.0)
+    mlb_id, status = resolve_class_player_id("Twin Guy", 2020, sleep_s=0.0, directory={})
     assert mlb_id is None
     assert status == ("ambiguous:candidate 700002 without pro stats; "
                       "candidate 700003 without pro stats")
@@ -175,4 +178,94 @@ def test_resolve_class_player_id_no_exact_match(monkeypatch):
     monkeypatch.setattr(
         requests, "get", _fake_get([{"id": 700004, "fullName": "Jack Suwinskii"}], {})
     )
-    assert resolve_class_player_id("Jack Suwinski", 2019, sleep_s=0.0) == (None, "no_exact_match")
+    assert resolve_class_player_id("Jack Suwinski", 2019, sleep_s=0.0,
+                                   directory={}) == (None, "no_exact_match")
+
+
+# --- round 2 (2026-09-18, plan amendment f1f0f63): sportId=11 hydrate retry,
+# MiLB directory fallback, suffix rule, fetch_player_info batching. Directory
+# mocks mirror the live probe of GET {BASE}/sports/14/players?season=2015:
+# {"copyright": ..., "people": [{"id", "fullName", "firstName", "lastName"}]}.
+
+
+def test_resolve_class_player_id_validated_via_sportid_retry(monkeypatch):
+    # Seaver King 814409 (controller probe): yearByYear without sportId -> 0
+    # splits; with sportId=11 inside the hydrate -> splits -> "ok"
+    hydrate_calls = []
+
+    def fake_get(url, params=None, timeout=None):
+        if url.endswith("/people/search"):
+            return _FakeResp({"people": [{"id": 814409, "fullName": "Seaver King"}]})
+        hydrate_calls.append(params["hydrate"])
+        if "sportId=11" in params["hydrate"]:
+            return _FakeResp(_person_payload(814409, "Seaver King", [
+                _year_group("hitting", [_split("2024", "Fredericksburg Nationals")]),
+            ]))
+        return _FakeResp(_person_payload(814409, "Seaver King", [_year_group("hitting", [])]))
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    mlb_id, status = resolve_class_player_id("Seaver King", 2024, sleep_s=0.0, directory={})
+    assert (mlb_id, status) == (814409, "ok")
+    assert hydrate_calls == [
+        "stats(group=[hitting,pitching],type=yearByYear)",
+        "stats(group=[hitting,pitching],type=yearByYear,sportId=11)",
+    ]
+
+
+def test_resolve_class_player_id_directory_exact_fold_hit(monkeypatch):
+    # search indexes nobody; accent-folded exact match in a directory cell
+    monkeypatch.setattr(requests, "get", _fake_get([], {}))
+    directory = {(14, 2023): [{"id": 683349, "fullName": "Yainer Díaz"}]}
+    mlb_id, status = resolve_class_player_id("Yainer Diaz", 2020, sleep_s=0.0,
+                                             directory=directory)
+    assert (mlb_id, status) == (683349, "ok:directory")
+
+
+def test_resolve_class_player_id_directory_suffix_hit(monkeypatch):
+    # SCP "Jazz Chisholm" vs directory "Jazz Chisholm Jr." -> suffix rule
+    monkeypatch.setattr(requests, "get", _fake_get([], {}))
+    directory = {(11, 2021): [{"id": 665862, "fullName": "Jazz Chisholm Jr."}]}
+    mlb_id, status = resolve_class_player_id("Jazz Chisholm", 2021, sleep_s=0.0,
+                                             directory=directory)
+    assert (mlb_id, status) == (665862, "ok:directory")
+
+
+def test_resolve_class_player_id_directory_nearest_season_wins(monkeypatch):
+    # hits in two (level, season) cells -> nearest season to class_year wins
+    # (distinct ids per cell so the chosen cell is observable)
+    monkeypatch.setattr(requests, "get", _fake_get([], {}))
+    directory = {
+        (11, 2018): [{"id": 800001, "fullName": "Multi Year"}],
+        (14, 2021): [{"id": 800002, "fullName": "Multi Year"}],
+    }
+    mlb_id, status = resolve_class_player_id("Multi Year", 2020, sleep_s=0.0,
+                                             directory=directory)
+    assert (mlb_id, status) == (800002, "ok:directory")  # 2021 nearer 2020 than 2018
+
+
+def test_resolve_class_player_id_directory_miss_everywhere(monkeypatch):
+    # a non-suffix extra token ("Smith") must NOT satisfy the suffix rule
+    monkeypatch.setattr(requests, "get", _fake_get([], {}))
+    directory = {(14, 2023): [{"id": 800003, "fullName": "Somebody Else"},
+                              {"id": 800004, "fullName": "Jazz Chisholm Smith"}]}
+    mlb_id, status = resolve_class_player_id("Jazz Chisholm", 2021, sleep_s=0.0,
+                                             directory=directory)
+    assert (mlb_id, status) == (None, "no_exact_match")
+
+
+def test_fetch_player_info_batched_chunks_at_100(monkeypatch):
+    calls = []
+
+    def fake_get(url, params=None, timeout=None):
+        assert url.endswith("/people")
+        ids = [int(i) for i in params["personIds"].split(",")]
+        calls.append(len(ids))
+        return _FakeResp({"people": [
+            {"id": i, "fullName": f"Player {i}", "birthDate": "2000-01-01",
+             "primaryPosition": {"abbreviation": "P"}} for i in ids
+        ]})
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    info = _fetch_player_info_batched(list(range(250)), sleep_s=0.0)
+    assert calls == [100, 100, 50]
+    assert len(info) == 250
