@@ -1,0 +1,3055 @@
+{
+  "_comment": "Trimmed real capture of GET https://statsapi.mlb.com/api/v1/draft/prospects/2023 (captured 2026-09-18, timeout 60). Wrapper keys preserved verbatim from the live response; `prospects` trimmed to the first 25 entries (payload order, NOT rank order) from the full 2,699. Full per-year snapshots are saved by the runner under data/raw/expectations/ via save_raw.",
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "offset": 0,
+  "queriedSize": 2699,
+  "returnedSize": 2699,
+  "totalSize": 0,
+  "prospects": [
+    {
+      "bisPlayerId": 5020296,
+      "pickRound": "5",
+      "pickNumber": 152,
+      "rank": 225,
+      "home": {
+        "city": "Fall River",
+        "state": "Wisconsin",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-christian-oppor-lhp?t=mlb-draft",
+      "school": {
+        "name": "Gulf Coast CC",
+        "schoolClass": "JC J1",
+        "city": "Panama City",
+        "country": "USA",
+        "state": "FL"
+      },
+      "blurb": "Oppor was the best high school pitching prospect in Wisconsin a year ago, a lefty who offered athleticism and projection, along with a lot of rawness, on the mound. The A's took a Day 3 flier on Oppor in the 11th round and using the return of the draft-and-follow, sent him off to Gulf Coast State, a junior college located in Florida's panhandle. Oppor, who can sign with the A's up until the start of this year's Draft, made some progress on the mound but also showed he's still very much a project, this spring. Long and loose, Oppor came out of the gate looking like he might be taking a huge step forward, firing his fastball up to 98 mph. He hasn't maintained that kind of velocity, though he's still been consistently up to 95 mph and has shown an ability to maintain it throughout a start. His secondary stuff is a work in progress, though he's made an effort to be a more complete pitcher and incorporate his slider and changeup more. The breaking ball is a bit of a slurvy spinner, thrown in the upper-70s, and he has some feel for a low-80s changeup. A former basketball player, Oppor's athleticism shows on the mound with things like an improved pickoff move. That gives evaluators faith that the southpaw can reach what is his considerable upside, even if it will take some time, instruction and strength/conditioning work. If the A's don't come to terms with him, he could be an intriguing high potential play should he re-enter the Draft.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/803291/headshot/draft/current",
+      "person": {
+        "id": 803291,
+        "fullName": "Christian Oppor",
+        "link": "/api/v1/people/803291",
+        "firstName": "Christian",
+        "lastName": "Oppor",
+        "birthDate": "2004-07-23",
+        "currentAge": 22,
+        "birthCity": "Madison",
+        "birthStateProvince": "WI",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 175,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Christian",
+        "useLastName": "Oppor",
+        "middleName": "Elliott",
+        "boxscoreName": "Oppor",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Christian Oppor",
+        "nameSlug": "christian-oppor-803291",
+        "firstLastName": "Christian Oppor",
+        "lastFirstName": "Oppor, Christian",
+        "lastInitName": "Oppor, C",
+        "initLastName": "C Oppor",
+        "fullFMLName": "Christian Elliott Oppor",
+        "fullLFMName": "Oppor, Christian Elliott",
+        "strikeZoneTop": 3.299,
+        "strikeZoneBottom": 1.665
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 145,
+        "name": "Chicago White Sox",
+        "link": "/api/v1/teams/145",
+        "season": 2026,
+        "venue": {
+          "id": 4,
+          "name": "Rate Field",
+          "link": "/api/v1/venues/4"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "cha",
+        "fileCode": "cws",
+        "abbreviation": "CWS",
+        "teamName": "White Sox",
+        "locationName": "Chicago",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 202,
+          "name": "American League Central",
+          "link": "/api/v1/divisions/202"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Chi White Sox",
+        "franchiseName": "Chicago",
+        "clubName": "White Sox",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 807532,
+      "pickRound": "4",
+      "pickNumber": 122,
+      "rank": 86,
+      "home": {
+        "city": "Aliso Viejo",
+        "state": "California",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-quinn-mathews-lhp?t=mlb-draft",
+      "school": {
+        "name": "Stanford",
+        "schoolClass": "4YR SR",
+        "city": "Palo Alto",
+        "country": "USA",
+        "state": "CA"
+      },
+      "blurb": "After spending the shortened 2020 season and full 2021 campaign largely pitching out of Stanford's rotation, Mathews threw well in a four-start stint in the Cape Cod League in 2021. He followed that up by pitching well as a swingman/multi-inning reliever last year, landing on MLB Pipeline's Draft Top 250 list. The Rays took him close to the end of the Draft, and Matthews returned to campus for his senior year, where he's been effective as the Cardinals' Friday night starter. The 6-foot-5 left-hander brings four pitches and plenty of funk and deception to the mound. He can dial his fastball up to 94 mph, and it averages just over 91 mph, but his best pitch is his low 80s changeup, which features a ton of fade to both miss bats and get ground-ball outs. He throws his tight slider around the same velocity, and he also has a slower low-70s curve with three-quarter shape to it. The long and lanky southpaw has done a better job of finding the strike zone compared to last year while continuing to post high strikeout rates. His ceiling might be somewhat limited to a back-end starter, with teams considering him knowing that he knows how to get outs coming out of the bullpen.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/687273/headshot/draft/current",
+      "person": {
+        "id": 687273,
+        "fullName": "Quinn Mathews",
+        "link": "/api/v1/people/687273",
+        "firstName": "Quinn",
+        "lastName": "Mathews",
+        "primaryNumber": "60",
+        "birthDate": "2000-10-04",
+        "currentAge": 25,
+        "birthCity": "Mission Viejo",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "6' 5\"",
+        "weight": 188,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Quinn",
+        "useLastName": "Mathews",
+        "middleName": "Jack",
+        "boxscoreName": "Mathews",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "mlbDebutDate": "2026-08-01",
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Quinn Mathews",
+        "nameSlug": "quinn-mathews-687273",
+        "firstLastName": "Quinn Mathews",
+        "lastFirstName": "Mathews, Quinn",
+        "lastInitName": "Mathews, Q",
+        "initLastName": "Q Mathews",
+        "fullFMLName": "Quinn Jack Mathews",
+        "fullLFMName": "Mathews, Quinn Jack",
+        "strikeZoneTop": 3.433,
+        "strikeZoneBottom": 1.733
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 138,
+        "name": "St. Louis Cardinals",
+        "link": "/api/v1/teams/138",
+        "season": 2026,
+        "venue": {
+          "id": 2889,
+          "name": "Busch Stadium",
+          "link": "/api/v1/venues/2889"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "sln",
+        "fileCode": "stl",
+        "abbreviation": "STL",
+        "teamName": "Cardinals",
+        "locationName": "St. Louis",
+        "firstYearOfPlay": "1892",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 205,
+          "name": "National League Central",
+          "link": "/api/v1/divisions/205"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "St. Louis",
+        "franchiseName": "St. Louis",
+        "clubName": "Cardinals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5027044,
+      "pickRound": "5",
+      "pickNumber": 158,
+      "rank": 204,
+      "home": {
+        "city": "Fort Myers",
+        "state": "Florida",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-zach-levenson-of?t=mlb-draft",
+      "school": {
+        "name": "Miami",
+        "schoolClass": "4YR JR",
+        "city": "Coral Gables",
+        "country": "USA",
+        "state": "FL"
+      },
+      "blurb": "After playing two sports at Lake Howell High School outside of Orlando, Fla., Levenson first went the junior college route, playing a year at Seminole State College of Florida and earning Second-Team All-Conference honors. His performance earned him a spot at Miami, and he showed off his offensive potential, often coming off the bench or serving as the DH. He finished with a .951 OPS. After hitting well in the wood-bat Northwoods League, he's once again displayed some right-handed thump as a regular in the Hurricanes' lineup this spring. Most of Levenson's value comes in his bat and power potential. He's slugged well over .500 in his Miami career and reached double-digit homers this spring. The over-the-fence pop has come to his pull side, and while he doesn't strike out a ton, especially for someone with that kind of power, it's a bit of a grooved swing. He has punished fastballs but struggled more with breaking stuff. Levenson gets high marks for how hard he plays the game and how he competes, but he's just an adequate defender who has a fringy arm. That might limit him to left field at the next level, but the power production in a big college conference should have him in play at some point on Day 2 of the Draft.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/804241/headshot/draft/current",
+      "person": {
+        "id": 804241,
+        "fullName": "Zach Levenson",
+        "link": "/api/v1/people/804241",
+        "firstName": "Zachary",
+        "lastName": "Levenson",
+        "birthDate": "2002-03-06",
+        "currentAge": 24,
+        "birthCity": "Orlando",
+        "birthStateProvince": "FL",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 211,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Zach",
+        "useLastName": "Levenson",
+        "boxscoreName": "Levenson",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Zach Levenson",
+        "nameSlug": "zach-levenson-804241",
+        "firstLastName": "Zach Levenson",
+        "lastFirstName": "Levenson, Zach",
+        "lastInitName": "Levenson, Z",
+        "initLastName": "Z Levenson",
+        "fullFMLName": "Zachary Levenson",
+        "fullLFMName": "Levenson, Zachary ",
+        "strikeZoneTop": 3.21,
+        "strikeZoneBottom": 1.62
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 138,
+        "name": "St. Louis Cardinals",
+        "link": "/api/v1/teams/138",
+        "season": 2026,
+        "venue": {
+          "id": 2889,
+          "name": "Busch Stadium",
+          "link": "/api/v1/venues/2889"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "sln",
+        "fileCode": "stl",
+        "abbreviation": "STL",
+        "teamName": "Cardinals",
+        "locationName": "St. Louis",
+        "firstYearOfPlay": "1892",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 205,
+          "name": "National League Central",
+          "link": "/api/v1/divisions/205"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "St. Louis",
+        "franchiseName": "St. Louis",
+        "clubName": "Cardinals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5012267,
+      "pickRound": "5",
+      "pickNumber": 146,
+      "rank": 172,
+      "home": {
+        "city": "New Johnsonville",
+        "state": "Tennessee",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-andrew-lindsey-rhp?t=mlb-draft",
+      "school": {
+        "name": "Tennessee",
+        "schoolClass": "4YR 5S",
+        "city": "Knoxville",
+        "country": "USA",
+        "state": "TN"
+      },
+      "blurb": "After two successful years at Walters State (Tenn.) CC and a decent one at Charlotte, Lindsey decided to give up baseball and took the 2022 season off. Coaching a youth team rekindled his desire to return to the game, and after pitching in the summer Appalachian League, he transferred to Tennessee. He worked his way into the weekend rotation by mid-April and was the Volunteers' most reliable starter down the stretch. Lindsey's velocity has increased 2-3 mph on all his pitches this season, and he now operates with a 93-95 mph fastball that tops out at 98 with a flat approach angle and some carry. His most effective pitch is a tight upper-80s slider that reaches 91 mph, and he can land it for strikes or use it to get chases outside the zone. He also dabbles with an upper-70s curveball but hasn't much used a mid-80s changeup with a bit of fade that was effective when he was at Charlotte. Lindsey maintained his improved stuff after moving from the bullpen to the rotation. He also has displayed better control and command than in the past. He's one of the more attractive fifth-year collegians in the 2023 Draft, with a chance to succeed as a starter, while having a nice floor as a fastball/slider reliever.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/701604/headshot/draft/current",
+      "person": {
+        "id": 701604,
+        "fullName": "Andrew Lindsey",
+        "link": "/api/v1/people/701604",
+        "firstName": "Andrew",
+        "lastName": "Lindsey",
+        "birthDate": "1999-11-15",
+        "currentAge": 26,
+        "birthCity": "New Johnsonville",
+        "birthStateProvince": "TN",
+        "birthCountry": "USA",
+        "height": "6' 3\"",
+        "weight": 216,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Andrew",
+        "useLastName": "Lindsey",
+        "middleName": "Ryan",
+        "boxscoreName": "Lindsey",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Andrew Lindsey",
+        "nameSlug": "andrew-lindsey-701604",
+        "firstLastName": "Andrew Lindsey",
+        "lastFirstName": "Lindsey, Andrew",
+        "lastInitName": "Lindsey, A",
+        "initLastName": "A Lindsey",
+        "fullFMLName": "Andrew Ryan Lindsey",
+        "fullLFMName": "Lindsey, Andrew Ryan",
+        "strikeZoneTop": 3.344,
+        "strikeZoneBottom": 1.688
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 146,
+        "name": "Miami Marlins",
+        "link": "/api/v1/teams/146",
+        "season": 2026,
+        "venue": {
+          "id": 4169,
+          "name": "loanDepot park",
+          "link": "/api/v1/venues/4169"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "mia",
+        "fileCode": "mia",
+        "abbreviation": "MIA",
+        "teamName": "Marlins",
+        "locationName": "Miami",
+        "firstYearOfPlay": "1991",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Miami",
+        "franchiseName": "Miami",
+        "clubName": "Marlins",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5013592,
+      "pickRound": "4",
+      "pickNumber": 110,
+      "rank": 228,
+      "home": {
+        "city": "Des plaines",
+        "state": "Illinois",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-emmett-olson-lhp?t=mlb-draft",
+      "school": {
+        "name": "Nebraska",
+        "schoolClass": "4YR JR",
+        "city": "Lincoln",
+        "country": "USA",
+        "state": "NE"
+      },
+      "blurb": "Olson joined Nebraska's weekend rotation midway through his sophomore season in 2022, earning second-team all-Big Ten Conference recognition and an invitation to try out for the U.S. collegiate national team. A fast start this spring and a lack of quality left-handers in the Draft gave him some momentum to go in the first four rounds, but his stock took a hit when he faded in May. He's better than any Cornhuskers pitching prospect of the past 15 years, with the exception of 2021 Twins third-rounder Cade Povich (now with the Orioles). A pitchability left-hander, Olson is at his best when his low-80s slider is working well enough to give him a solid offering. It's his lone pitch that grades as better than average at times, while his fringy 90-93 mph fastball tops out at 95 and doesn't miss a lot of bats. He also mixes in a firm mid-80s changeup with some depth that could be solid if he refines it by using it more often, as well as a slow mid-70s curveball that often drops out of the strike zone. Operating out of a high three-quarters arm slot, Olson provides consistent strikes with everything but his curveball. At 6-foot-4 and 230 pounds, he doesn't have any projection remaining. He lacks a high ceiling but has a decent floor as a back-of-the-rotation starter.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/801207/headshot/draft/current",
+      "person": {
+        "id": 801207,
+        "fullName": "Emmett Olson",
+        "link": "/api/v1/people/801207",
+        "firstName": "Emmett",
+        "lastName": "Olson",
+        "birthDate": "2002-05-15",
+        "currentAge": 24,
+        "birthCity": "Des Plaines",
+        "birthStateProvince": "IL",
+        "birthCountry": "USA",
+        "height": "6' 4\"",
+        "weight": 230,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Emmett",
+        "useLastName": "Olson",
+        "middleName": "James",
+        "boxscoreName": "Olson",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Emmett Olson",
+        "nameSlug": "emmett-olson-801207",
+        "firstLastName": "Emmett Olson",
+        "lastFirstName": "Olson, Emmett",
+        "lastInitName": "Olson, E",
+        "initLastName": "E Olson",
+        "fullFMLName": "Emmett James Olson",
+        "fullLFMName": "Olson, Emmett James",
+        "strikeZoneTop": 3.388,
+        "strikeZoneBottom": 1.71
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 146,
+        "name": "Miami Marlins",
+        "link": "/api/v1/teams/146",
+        "season": 2026,
+        "venue": {
+          "id": 4169,
+          "name": "loanDepot park",
+          "link": "/api/v1/venues/4169"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "mia",
+        "fileCode": "mia",
+        "abbreviation": "MIA",
+        "teamName": "Marlins",
+        "locationName": "Miami",
+        "firstYearOfPlay": "1991",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Miami",
+        "franchiseName": "Miami",
+        "clubName": "Marlins",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5012596,
+      "pickRound": "7",
+      "pickNumber": 214,
+      "rank": 163,
+      "home": {
+        "city": "Overland Park",
+        "state": "Kansas",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-nick-goodwin?t=mlb-draft",
+      "school": {
+        "name": "Kansas State",
+        "schoolClass": "4YR JR",
+        "city": "Manhattan",
+        "country": "USA",
+        "state": "KS"
+      },
+      "blurb": "An immediate starter at Kansas State, Goodwin tied the school's freshman home run record with 10 in 2021. He never has posted big numbers for the Wildcats, though he acquitted himself well with wood bats in the Cape Cod League last summer after struggling there the year before. He could become the program's first position player selected in the top five rounds since Jared King a decade ago. Goodwin has made more consistent contact as a junior, though scouts still consider him more of a power-over-hit guy. He uses his right-handed swing to drive balls in the air to his pull side and could provide 15-20 homers per season in pro ball. He works counts and draw walks, though he could be more selective about which pitches he puts in play. With fringy speed and an arm that rates as average to maybe a tick above, Goodwin is unlikely to stay at shortstop at the next level. He has improved his defensive consistency this spring and can make the routine play, but he profiles better as an offensive second baseman or a utilityman. He made eight errors in 27 games at second on the Cape last summer.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/800959/headshot/draft/current",
+      "person": {
+        "id": 800959,
+        "fullName": "Nick Goodwin",
+        "link": "/api/v1/people/800959",
+        "firstName": "Nicholas",
+        "lastName": "Goodwin",
+        "birthDate": "2001-09-06",
+        "currentAge": 25,
+        "birthCity": "Kansas City",
+        "birthStateProvince": "MO",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 215,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "Nick",
+        "useLastName": "Goodwin",
+        "middleName": "David",
+        "boxscoreName": "Goodwin",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Nick Goodwin",
+        "nameSlug": "nick-goodwin-800959",
+        "firstLastName": "Nick Goodwin",
+        "lastFirstName": "Goodwin, Nick",
+        "lastInitName": "Goodwin, N",
+        "initLastName": "N Goodwin",
+        "fullFMLName": "Nicholas David Goodwin",
+        "fullLFMName": "Goodwin, Nicholas David",
+        "strikeZoneTop": 3.223,
+        "strikeZoneBottom": 1.626
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 141,
+        "name": "Toronto Blue Jays",
+        "link": "/api/v1/teams/141",
+        "season": 2026,
+        "venue": {
+          "id": 14,
+          "name": "Rogers Centre",
+          "link": "/api/v1/venues/14"
+        },
+        "springVenue": {
+          "id": 2536,
+          "link": "/api/v1/venues/2536"
+        },
+        "teamCode": "tor",
+        "fileCode": "tor",
+        "abbreviation": "TOR",
+        "teamName": "Blue Jays",
+        "locationName": "Toronto",
+        "firstYearOfPlay": "1977",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 201,
+          "name": "American League East",
+          "link": "/api/v1/divisions/201"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Toronto",
+        "franchiseName": "Toronto",
+        "clubName": "Blue Jays",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5000814,
+      "pickRound": "4",
+      "pickNumber": 102,
+      "rank": 216,
+      "home": {
+        "city": "Peachtree City",
+        "state": "Georgia",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-andrew-pinckney-of?t=mlb-draft",
+      "school": {
+        "name": "Alabama",
+        "schoolClass": "4YR SR",
+        "city": "Tuscaloosa",
+        "country": "USA",
+        "state": "AL"
+      },
+      "blurb": "Pinckney has gradually gotten better during four years at Alabama, going from redshirting in 2020 to earning second-team all-Southeastern Conference recognition in 2023. He has some of the best all-around tools in college baseball's top league and could sneak into the top five rounds after going undrafted a year ago. He helped his cause by going 3-for-3 with a home run in an April matchup against Louisiana State's Paul Skenes, the top pitcher in the Draft. The key to Pinckney's improvement has been adopting a more disciplined approach, though he still struggles to make consistent contact against non-fastballs. He has a quick right-handed swing along with plenty of strength and leverage in his 6-foot-3, 215-pound frame. He does a good job of using the entire field and his solid power plays from gap to gap. Pinckney has plus speed and can get from home to first base in less than four seconds on a drag bunt. Including summer ball, he has stolen 43 bases in 49 attempts during the last three years. He saw more time in right field than center with the Crimson Tide, but he has the solid range and instincts to play up the middle as well as a strong arm.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/687605/headshot/draft/current",
+      "person": {
+        "id": 687605,
+        "fullName": "Andrew Pinckney",
+        "link": "/api/v1/people/687605",
+        "firstName": "Andrew",
+        "lastName": "Pinckney",
+        "primaryNumber": "45",
+        "birthDate": "2000-12-07",
+        "currentAge": 25,
+        "birthCity": "Tuscaloosa",
+        "birthStateProvince": "AL",
+        "birthCountry": "USA",
+        "height": "6' 4\"",
+        "weight": 215,
+        "active": true,
+        "primaryPosition": {
+          "code": "7",
+          "name": "Outfielder",
+          "type": "Outfielder",
+          "abbreviation": "LF"
+        },
+        "useName": "Andrew",
+        "useLastName": "Pinckney",
+        "middleName": "David",
+        "boxscoreName": "Pinckney",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "mlbDebutDate": "2026-08-05",
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Andrew Pinckney",
+        "nameSlug": "andrew-pinckney-687605",
+        "firstLastName": "Andrew Pinckney",
+        "lastFirstName": "Pinckney, Andrew",
+        "lastInitName": "Pinckney, A",
+        "initLastName": "A Pinckney",
+        "fullFMLName": "Andrew David Pinckney",
+        "fullLFMName": "Pinckney, Andrew David",
+        "strikeZoneTop": 3.37,
+        "strikeZoneBottom": 1.7
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 120,
+        "name": "Washington Nationals",
+        "link": "/api/v1/teams/120",
+        "season": 2026,
+        "venue": {
+          "id": 3309,
+          "name": "Nationals Park",
+          "link": "/api/v1/venues/3309"
+        },
+        "springVenue": {
+          "id": 5000,
+          "link": "/api/v1/venues/5000"
+        },
+        "teamCode": "was",
+        "fileCode": "was",
+        "abbreviation": "WSH",
+        "teamName": "Nationals",
+        "locationName": "Washington",
+        "firstYearOfPlay": "1968",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Washington",
+        "franchiseName": "Washington",
+        "clubName": "Nationals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5027000,
+      "pickRound": "6",
+      "pickNumber": 172,
+      "rank": 184,
+      "home": {
+        "city": "Fayetteville",
+        "state": "Arkansas",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-cade-denton-rhp?t=mlb-draft",
+      "school": {
+        "name": "Oral Roberts",
+        "schoolClass": "4YR JR",
+        "city": "Tulsa",
+        "country": "USA",
+        "state": "OK"
+      },
+      "blurb": "After posting an 0.41 ERA as a sophomore in 2022, Denton encored this spring by helping Oral Roberts become just the third No. 4 seed to reach the College World Series since the playoff field expanded to 16 four-team regionals in 1999. He tied for the NCAA Division I lead with a school-record 15 saves, closed out all three wins at the Stillwater Regional to earn MVP honors there and picked up a super-regional victory over Oregon. The Summit League pitcher of the year, he's the Golden Eagles' best pitching prospect since 2013 first-rounder Chi Chi Gonzalez. Denton attacks with two pitches that move in opposite directions and work against both left-handers and right-handers. His fastball sits at 93-95 mph and reaches 99, approaching the plate on a flat angle before veering toward the right. His low-80s slider is a slightly better offering that breaks toward the left and also features good depth. Denton occasionally will unveil an upper-80s changeup, but he's mainly a two-pitch guy who racks up a lot of empty swings and weak ground balls with his fastball and slider. He's athletic and repeatedly fills the strike zone while working from a nearly sidearm slot that provides deception. While he's purely a reliever, he's one of the best in this Draft.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/814106/headshot/draft/current",
+      "person": {
+        "id": 814106,
+        "fullName": "Cade Denton",
+        "link": "/api/v1/people/814106",
+        "firstName": "Cade",
+        "lastName": "Denton",
+        "birthDate": "2001-12-28",
+        "currentAge": 24,
+        "birthCity": "Garland",
+        "birthStateProvince": "TX",
+        "birthCountry": "USA",
+        "height": "6' 4\"",
+        "weight": 205,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Cade",
+        "useLastName": "Denton",
+        "middleName": "Collins",
+        "boxscoreName": "Denton",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Cade Denton",
+        "nameSlug": "cade-denton-814106",
+        "firstLastName": "Cade Denton",
+        "lastFirstName": "Denton, Cade",
+        "lastInitName": "Denton, C",
+        "initLastName": "C Denton",
+        "fullFMLName": "Cade Collins Denton",
+        "fullLFMName": "Denton, Cade Collins",
+        "strikeZoneTop": 3.388,
+        "strikeZoneBottom": 1.71
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 115,
+        "name": "Colorado Rockies",
+        "link": "/api/v1/teams/115",
+        "season": 2026,
+        "venue": {
+          "id": 19,
+          "name": "Coors Field",
+          "link": "/api/v1/venues/19"
+        },
+        "springVenue": {
+          "id": 4249,
+          "link": "/api/v1/venues/4249"
+        },
+        "teamCode": "col",
+        "fileCode": "col",
+        "abbreviation": "COL",
+        "teamName": "Rockies",
+        "locationName": "Denver",
+        "firstYearOfPlay": "1992",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Colorado",
+        "franchiseName": "Colorado",
+        "clubName": "Rockies",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5026324,
+      "pickRound": "3",
+      "pickNumber": 96,
+      "rank": 213,
+      "home": {
+        "city": "Yabucoa",
+        "country": "PR"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-jandiel-gonzalez-c?t=mlb-draft",
+      "school": {
+        "name": "Anita Otero Hernandez HS",
+        "schoolClass": "HS SR",
+        "city": "Humacao",
+        "country": "PR"
+      },
+      "blurb": "The crop of talent coming out of Puerto Rico this year is a little light, with Gonzalez the best of the class despite not having been scouted a ton as he was working his way back from a knee injury. There hasn't been a catcher taken from Puerto Rico in the top 10 rounds since the A's took Santis Sanchez in the sixth round back in 2017, also the last time a player from the island was a first-rounder (Heliot Ramos). Gonzalez has the chance to break the backstop drought, helping himself by getting more exposure at the Draft Combine in June. Gonzalez checks off one box organizations love: He's a left-handed hitting catcher. While he's not been tested that much against top competition, he has shown off considerable raw power, particularly to the pull side, and registered an above-average volume of exit velocities over 96 mph at the Combine. He also has the chance to be an excellent defender in time. He has plus arm strength, though he can get a little long in back, and has the blocking and receiving skills to stick back there, even if it will take a little bit of extra development. Committed to Indiana State, Gonzalez could be an intriguing Day 2 steal who has flown under the radar because of the time he missed this spring.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/806083/headshot/draft/current",
+      "person": {
+        "id": 806083,
+        "fullName": "J.D. Gonzalez",
+        "link": "/api/v1/people/806083",
+        "firstName": "Jandaniel",
+        "lastName": "Gonzalez",
+        "primaryNumber": "71",
+        "birthDate": "2005-10-03",
+        "currentAge": 20,
+        "birthCity": "Caguas",
+        "birthCountry": "Puerto Rico",
+        "height": "6' 0\"",
+        "weight": 182,
+        "active": true,
+        "primaryPosition": {
+          "code": "2",
+          "name": "Catcher",
+          "type": "Catcher",
+          "abbreviation": "C"
+        },
+        "useName": "J.D.",
+        "useLastName": "Gonzalez",
+        "boxscoreName": "Gonzalez, J",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "J.D. Gonzalez",
+        "nameSlug": "j-d-gonzalez-806083",
+        "firstLastName": "J.D. Gonzalez",
+        "lastFirstName": "Gonzalez, J.D.",
+        "lastInitName": "Gonzalez, J",
+        "initLastName": "J Gonzalez",
+        "fullFMLName": "Jandaniel Gonzalez",
+        "fullLFMName": "Gonzalez, Jandaniel ",
+        "strikeZoneTop": 3.21,
+        "strikeZoneBottom": 1.62
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 135,
+        "name": "San Diego Padres",
+        "link": "/api/v1/teams/135",
+        "season": 2026,
+        "venue": {
+          "id": 2680,
+          "name": "Petco Park",
+          "link": "/api/v1/venues/2680"
+        },
+        "springVenue": {
+          "id": 2530,
+          "link": "/api/v1/venues/2530"
+        },
+        "teamCode": "sdn",
+        "fileCode": "sd",
+        "abbreviation": "SD",
+        "teamName": "Padres",
+        "locationName": "San Diego",
+        "firstYearOfPlay": "1968",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "San Diego",
+        "franchiseName": "San Diego",
+        "clubName": "Padres",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5025989,
+      "pickRound": "3",
+      "pickNumber": 72,
+      "rank": 60,
+      "home": {
+        "city": "Millburn",
+        "state": "New Jersey",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-steven-echavarria-rhp?t=mlb-draft",
+      "school": {
+        "name": "Millburn HS",
+        "schoolClass": "HS SR",
+        "city": "Millburn",
+        "country": "USA",
+        "state": "NJ"
+      },
+      "blurb": "The New Jersey high school ranks may always be best known for producing Mike Trout, but the Garden State has had a healthy bounty of early-round Draft picks of late, with five picks in the top four rounds since 2019, headlined by first-rounders Anthony Volpe in 2019 and Chase Petty in 2021. While Echavarria doesn't quite look like an opening-round arm just yet, appearances at the Area Code Games and the WWBA World Championships have put him much more firmly on the map, with strong performances this spring moving him further up Draft boards. A 6-foot-1 right-hander, Echavarria does have an intriguing combination of present feel for pitching and projection of his stuff, with a potential four-pitch mix. While he's been described as having \u0093sneaky\u0094 velocity in the past with his fastball, up to 93-94 mph consistently, he had gained a tick early this spring, consistently hitting 96 and touching 98 mph. He misses a good amount of bats with it thanks to its ride up in the zone, and he also can throw a 92-93 mph two-seamer down in the zone, with more consistent velocity to come as he matures. He's shown two distinct breaking pitches, with both the slider and curve usable offerings, the sweeping slider perhaps a bit more effective. They can blend at times, and some scouts like it better when it has more of a curve-like shape to it. He shows feel for a low-80s changeup as well. Especially for a prep arm in a cold-weather state, Echavarria shows off very good pitchability and can throw all of his pitches for strikes. He reminds some area scouts of eastern Pennsylvania product Michael Morales, a 2021 third-round pick of the Mariners who got second-round money to sign, and it's not hard to envision Echavarria, a Florida recruit, going in the same vicinity.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/806064/headshot/draft/current",
+      "person": {
+        "id": 806064,
+        "fullName": "Steven Echavarria",
+        "link": "/api/v1/people/806064",
+        "firstName": "Steven",
+        "lastName": "Echavarria",
+        "birthDate": "2005-08-06",
+        "currentAge": 21,
+        "birthCity": "Livingston",
+        "birthStateProvince": "NJ",
+        "birthCountry": "USA",
+        "height": "6' 1\"",
+        "weight": 195,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Steven",
+        "useLastName": "Echavarria",
+        "middleName": "Anthony",
+        "boxscoreName": "Echavarria",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Steven Echavarria",
+        "nameSlug": "steven-echavarria-806064",
+        "firstLastName": "Steven Echavarria",
+        "lastFirstName": "Echavarria, Steven",
+        "lastInitName": "Echavarria, S",
+        "initLastName": "S Echavarria",
+        "fullFMLName": "Steven Anthony Echavarria",
+        "fullLFMName": "Echavarria, Steven Anthony",
+        "strikeZoneTop": 3.255,
+        "strikeZoneBottom": 1.643
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 133,
+        "name": "Athletics",
+        "link": "/api/v1/teams/133",
+        "season": 2026,
+        "venue": {
+          "id": 2529,
+          "name": "Sutter Health Park",
+          "link": "/api/v1/venues/2529"
+        },
+        "springVenue": {
+          "id": 2507,
+          "link": "/api/v1/venues/2507"
+        },
+        "teamCode": "ath",
+        "fileCode": "ath",
+        "abbreviation": "ATH",
+        "teamName": "Athletics",
+        "locationName": "Sacramento",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Athletics",
+        "franchiseName": "Athletics",
+        "clubName": "Athletics",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5010853,
+      "pickRound": "4",
+      "pickNumber": 116,
+      "rank": 133,
+      "home": {
+        "city": "Peosta",
+        "state": "Iowa",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-calvin-harris-c?t=mlb-draft",
+      "school": {
+        "name": "Ole Miss",
+        "schoolClass": "4YR JR",
+        "city": "Oxford",
+        "country": "USA",
+        "state": "MS"
+      },
+      "blurb": "Mississippi has had seven catchers drafted in the past decade, including big leaguers Nick Fortes and Stuart Turner, and Harris should continue that tradition this July. He's finally getting the chance to play behind the plate for the Rebels after backing up Royals 2022 sixth-rounder Hayden Dunhurst and seeing most of his action in the outfield and at DH the previous two years. He starred at the College World Series last June, batting .400 with two homers in six games as Ole Miss won its first national title. Harris sports a sound left-handed swing and makes hard contact from gap to gap. He has plenty of strength in his hands and wrists, but his tendency to make ground-ball contact cuts into his power production. He did set a school record with four homers in a single game on May 6 against Missouri, underscoring his ability to drive balls out of any part of the ballpark when he's able to lift them in the air. Though he's athletic for a catcher and quicker than most with below-average speed, Harris gets mixed reviews for his defense. His receiving has improved but could use a little more polish. He had Tommy John surgery before his freshman season and his pop times have run the gamut from well-below-average to solid this spring as teams have run wild on him.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/691941/headshot/draft/current",
+      "person": {
+        "id": 691941,
+        "fullName": "Calvin Harris",
+        "link": "/api/v1/people/691941",
+        "firstName": "Calvin",
+        "lastName": "Harris",
+        "birthDate": "2001-11-15",
+        "currentAge": 24,
+        "birthCity": "Peosta",
+        "birthStateProvince": "IA",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 215,
+        "active": true,
+        "primaryPosition": {
+          "code": "2",
+          "name": "Catcher",
+          "type": "Catcher",
+          "abbreviation": "C"
+        },
+        "useName": "Calvin",
+        "useLastName": "Harris",
+        "middleName": "John",
+        "boxscoreName": "Harris, C",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Calvin Harris",
+        "nameSlug": "calvin-harris-691941",
+        "firstLastName": "Calvin Harris",
+        "lastFirstName": "Harris, Calvin",
+        "lastInitName": "Harris, C",
+        "initLastName": "C Harris",
+        "fullFMLName": "Calvin John Harris",
+        "fullLFMName": "Harris, Calvin John",
+        "strikeZoneTop": 3.18,
+        "strikeZoneBottom": 1.61
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 145,
+        "name": "Chicago White Sox",
+        "link": "/api/v1/teams/145",
+        "season": 2026,
+        "venue": {
+          "id": 4,
+          "name": "Rate Field",
+          "link": "/api/v1/venues/4"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "cha",
+        "fileCode": "cws",
+        "abbreviation": "CWS",
+        "teamName": "White Sox",
+        "locationName": "Chicago",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 202,
+          "name": "American League Central",
+          "link": "/api/v1/divisions/202"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Chi White Sox",
+        "franchiseName": "Chicago",
+        "clubName": "White Sox",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5011155,
+      "pickRound": "3",
+      "pickNumber": 84,
+      "rank": 108,
+      "home": {
+        "city": "Pilot Mountain",
+        "state": "North Carolina",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-seth-keener-rhp?t=mlb-draft",
+      "school": {
+        "name": "Wake Forest",
+        "schoolClass": "4YR JR",
+        "city": "Winston Salem",
+        "country": "USA",
+        "state": "NC"
+      },
+      "blurb": "After posting a 6.31 ERA in his first two seasons at Wake Forest, Keener broke out with an all-star summer in the Cape Cod League. He has continued to excel this spring, permitting just three earned runs in his first 42 2/3 innings and ranking among the NCAA Division I leaders in WHIP (0.87, second) and opponent average (.167, third). Though he had more success as a slider-happy reliever on a loaded Demon Deacons staff, he's equipped to make it as a starter in pro ball. Keener's best weapon is a plus slider that parks in the mid-80s with two-plane depth, and he can land it for strikes or get chases out of the zone. While he doesn't use it as often, his 91-97 mph fastball with riding action has similar upside. He also has an effective fading changeup in the mid-80s that he employs to keep left-handers honest. Keener has a sound delivery and throws strikes, adding to the belief that he could pitch out of the rotation at the next level. To do so, he'll have to prove he can maintain his stuff and control deeper into games. If he remains in the bullpen, his slider gives him a chance to become a setup man.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/803143/headshot/draft/current",
+      "person": {
+        "id": 803143,
+        "fullName": "Seth Keener",
+        "link": "/api/v1/people/803143",
+        "firstName": "Seth",
+        "lastName": "Keener",
+        "birthDate": "2001-10-04",
+        "currentAge": 24,
+        "birthCity": "Pequannock",
+        "birthStateProvince": "NJ",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 195,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Seth",
+        "useLastName": "Keener",
+        "middleName": "Martin",
+        "boxscoreName": "Keener",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Seth Keener",
+        "nameSlug": "seth-keener-803143",
+        "firstLastName": "Seth Keener",
+        "lastFirstName": "Keener, Seth",
+        "lastInitName": "Keener, S",
+        "initLastName": "S Keener",
+        "fullFMLName": "Seth Keener",
+        "fullLFMName": "Keener, Seth ",
+        "strikeZoneTop": 3.299,
+        "strikeZoneBottom": 1.665
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 145,
+        "name": "Chicago White Sox",
+        "link": "/api/v1/teams/145",
+        "season": 2026,
+        "venue": {
+          "id": 4,
+          "name": "Rate Field",
+          "link": "/api/v1/venues/4"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "cha",
+        "fileCode": "cws",
+        "abbreviation": "CWS",
+        "teamName": "White Sox",
+        "locationName": "Chicago",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 202,
+          "name": "American League Central",
+          "link": "/api/v1/divisions/202"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Chi White Sox",
+        "franchiseName": "Chicago",
+        "clubName": "White Sox",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5025983,
+      "pickRound": "5",
+      "pickNumber": 162,
+      "home": {
+        "city": "Atlanta",
+        "state": "Georgia",
+        "country": "USA"
+      },
+      "school": {
+        "name": "North Atlanta HS",
+        "schoolClass": "HS SR",
+        "city": "Atlanta",
+        "country": "USA",
+        "state": "GA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/806061/headshot/draft/current",
+      "person": {
+        "id": 806061,
+        "fullName": "Isaiah Drake",
+        "link": "/api/v1/people/806061",
+        "firstName": "Isaiah",
+        "lastName": "Drake",
+        "birthDate": "2005-07-15",
+        "currentAge": 21,
+        "birthCity": "Atlanta",
+        "birthStateProvince": "GA",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 180,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Isaiah",
+        "useLastName": "Drake",
+        "middleName": "Keon",
+        "boxscoreName": "Drake",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Isaiah Drake",
+        "nameSlug": "isaiah-drake-806061",
+        "firstLastName": "Isaiah Drake",
+        "lastFirstName": "Drake, Isaiah",
+        "lastInitName": "Drake, I",
+        "initLastName": "I Drake",
+        "fullFMLName": "Isaiah Keon Drake",
+        "fullLFMName": "Drake, Isaiah Keon",
+        "strikeZoneTop": 3.21,
+        "strikeZoneBottom": 1.62
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 144,
+        "name": "Atlanta Braves",
+        "link": "/api/v1/teams/144",
+        "season": 2026,
+        "venue": {
+          "id": 4705,
+          "name": "Truist Park",
+          "link": "/api/v1/venues/4705"
+        },
+        "springVenue": {
+          "id": 5380,
+          "link": "/api/v1/venues/5380"
+        },
+        "teamCode": "atl",
+        "fileCode": "atl",
+        "abbreviation": "ATL",
+        "teamName": "Braves",
+        "locationName": "Atlanta",
+        "firstYearOfPlay": "1871",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Atlanta",
+        "franchiseName": "Atlanta",
+        "clubName": "Braves",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5013010,
+      "pickRound": "4",
+      "pickNumber": 104,
+      "rank": 196,
+      "home": {
+        "city": "Marietta",
+        "state": "Georgia",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-carlson-reed-rhp?t=mlb-draft",
+      "school": {
+        "name": "West Virginia",
+        "schoolClass": "4YR JR",
+        "city": "Morgantown",
+        "country": "USA",
+        "state": "WV"
+      },
+      "blurb": "Ever since Reed arrived at West Virginia, he's shown both an ability to miss a lot of bats and a difficulty in finding the strike zone. He's had the opportunity to both start and relieve for the Mountaineers, and scouts were hopeful to get a long look at him as part of WVU's weekend rotation this spring. That never happened, and while it was a bit harder to see him out of the bullpen, he did earn All-Big 12 First Team status serving as the school's closer. Reed does have a very real three-pitch mix, a big reason why scouts wanted to see the tall, thin right-hander start. His fastball has averaged around 95 mph and touched 98 mph in shorter relief stints this year, but it's actually his third-best pitch, one that he doesn't command well and gets hit when it lacks life. He sells his mid-80s changeup well with good arm speed, and his tight slider, thrown around the same velocity, has also generated a ton of swings and misses. With a longer arm action, Reed's biggest obstacle is his command, as he's put up big walk rates everywhere, including as a starter in the Cape Cod League last summer. A team taking him might want to help him iron out his delivery and send him out as a starter, knowing the stuff all ticks up in shorter stints out of the pen, where he could eventually serve in high-leverage situations.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/694788/headshot/draft/current",
+      "person": {
+        "id": 694788,
+        "fullName": "Carlson Reed",
+        "link": "/api/v1/people/694788",
+        "firstName": "Carlson",
+        "lastName": "Reed",
+        "birthDate": "2002-11-27",
+        "currentAge": 23,
+        "birthCity": "Atlanta",
+        "birthStateProvince": "GA",
+        "birthCountry": "USA",
+        "height": "6' 3\"",
+        "weight": 200,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Carlson",
+        "useLastName": "Reed",
+        "middleName": "Timothy",
+        "boxscoreName": "Reed",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Carlson Reed",
+        "nameSlug": "carlson-reed-694788",
+        "firstLastName": "Carlson Reed",
+        "lastFirstName": "Reed, Carlson",
+        "lastInitName": "Reed, C",
+        "initLastName": "C Reed",
+        "fullFMLName": "Carlson Timothy Reed",
+        "fullLFMName": "Reed, Carlson Timothy",
+        "strikeZoneTop": 3.344,
+        "strikeZoneBottom": 1.688
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 134,
+        "name": "Pittsburgh Pirates",
+        "link": "/api/v1/teams/134",
+        "season": 2026,
+        "venue": {
+          "id": 31,
+          "name": "PNC Park",
+          "link": "/api/v1/venues/31"
+        },
+        "springVenue": {
+          "id": 2526,
+          "link": "/api/v1/venues/2526"
+        },
+        "teamCode": "pit",
+        "fileCode": "pit",
+        "abbreviation": "PIT",
+        "teamName": "Pirates",
+        "locationName": "Pittsburgh",
+        "firstYearOfPlay": "1882",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 205,
+          "name": "National League Central",
+          "link": "/api/v1/divisions/205"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Pittsburgh",
+        "franchiseName": "Pittsburgh",
+        "clubName": "Pirates",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5012492,
+      "pickRound": "7",
+      "pickNumber": 200,
+      "rank": 243,
+      "home": {
+        "city": "Moorpark",
+        "state": "California",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-john-peck-ss?t=mlb-draft",
+      "school": {
+        "name": "Pepperdine",
+        "schoolClass": "4YR JR",
+        "city": "Malibu",
+        "country": "USA",
+        "state": "CA"
+      },
+      "blurb": "A three-year starter at Pepperdine, Peck got scouts excited with a breakout sophomore campaign in 2022, hitting .361/.417/.578 to earn all-WCC first team honors. He struggled with a wood bat in the Cape Cod League last summer and never really got it going as hoped during his junior year, leading to questions about his future at the next level. Evaluators thought Peck could be one of those middle-infield college-performer types who invariably rises up Draft boards over the course of the spring. Instead, he struggled to find consistency at the plate. The right-handed hitter is handsy with solid bat speed, but there are mechanical issues with his setup and swing that have led to concerns about making contact. He's a long strider who crashes to the ball, which in turn often makes his head move. He did OK against fastballs in 2023, but really struggled to lay off of and do damage with offspeed and breaking stuff. An average runner, Peck does have good defensive actions and at least an above-average arm, which could give him the chance to stick at shortstop, at least at the outset of his pro career. Some see second base as a better long-term fit and the fact he's played three infield positions and some outfield could help him fit in a future utility role. A team taking him on Day 2 will think his hitting mechanics can be fixed and that he has a chance to be an everyday guy up the middle.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/807726/headshot/draft/current",
+      "person": {
+        "id": 807726,
+        "fullName": "John Peck",
+        "link": "/api/v1/people/807726",
+        "firstName": "John",
+        "lastName": "Peck",
+        "primaryNumber": "18",
+        "birthDate": "2002-07-18",
+        "currentAge": 24,
+        "birthCity": "Moorpark",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 185,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "John",
+        "useLastName": "Peck",
+        "middleName": "Sanford",
+        "boxscoreName": "Peck",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "mlbDebutDate": "2026-08-31",
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "John Peck",
+        "nameTitle": "IV",
+        "nameSuffix": "IV",
+        "nameSlug": "john-peck-807726",
+        "firstLastName": "John Peck",
+        "lastFirstName": "Peck, John",
+        "lastInitName": "Peck, J",
+        "initLastName": "J Peck",
+        "fullFMLName": "John Sanford Peck",
+        "fullLFMName": "Peck, John Sanford",
+        "strikeZoneTop": 3.191,
+        "strikeZoneBottom": 1.61
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 116,
+        "name": "Detroit Tigers",
+        "link": "/api/v1/teams/116",
+        "season": 2026,
+        "venue": {
+          "id": 2394,
+          "name": "Comerica Park",
+          "link": "/api/v1/venues/2394"
+        },
+        "springVenue": {
+          "id": 2511,
+          "link": "/api/v1/venues/2511"
+        },
+        "teamCode": "det",
+        "fileCode": "det",
+        "abbreviation": "DET",
+        "teamName": "Tigers",
+        "locationName": "Detroit",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 202,
+          "name": "American League Central",
+          "link": "/api/v1/divisions/202"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Detroit",
+        "franchiseName": "Detroit",
+        "clubName": "Tigers",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5025729,
+      "pickRound": "6",
+      "pickNumber": 176,
+      "home": {
+        "city": "Lexington",
+        "state": "South Carolina",
+        "country": "USA"
+      },
+      "school": {
+        "name": "P27 Academy",
+        "schoolClass": "HS SR",
+        "city": "Lexington",
+        "country": "USA",
+        "state": "SC"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/806210/headshot/draft/current",
+      "person": {
+        "id": 806210,
+        "fullName": "Alfonsin Rosario",
+        "link": "/api/v1/people/806210",
+        "firstName": "Alfonsin",
+        "lastName": "Rosario",
+        "birthDate": "2004-06-21",
+        "currentAge": 22,
+        "birthCity": "Lexington",
+        "birthStateProvince": "SC",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 222,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Alfonsin",
+        "useLastName": "Rosario",
+        "boxscoreName": "Rosario, A",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Alfonsin Rosario",
+        "nameSlug": "alfonsin-rosario-806210",
+        "firstLastName": "Alfonsin Rosario",
+        "lastFirstName": "Rosario, Alfonsin",
+        "lastInitName": "Rosario, A",
+        "initLastName": "A Rosario",
+        "fullFMLName": "Alfonsin Rosario",
+        "fullLFMName": "Rosario, Alfonsin",
+        "strikeZoneTop": 3.222,
+        "strikeZoneBottom": 1.626
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 112,
+        "name": "Chicago Cubs",
+        "link": "/api/v1/teams/112",
+        "season": 2026,
+        "venue": {
+          "id": 17,
+          "name": "Wrigley Field",
+          "link": "/api/v1/venues/17"
+        },
+        "springVenue": {
+          "id": 4629,
+          "link": "/api/v1/venues/4629"
+        },
+        "teamCode": "chn",
+        "fileCode": "chc",
+        "abbreviation": "CHC",
+        "teamName": "Cubs",
+        "locationName": "Chicago",
+        "firstYearOfPlay": "1874",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 205,
+          "name": "National League Central",
+          "link": "/api/v1/divisions/205"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Chi Cubs",
+        "franchiseName": "Chicago",
+        "clubName": "Cubs",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5008414,
+      "pickRound": "6",
+      "pickNumber": 184,
+      "rank": 66,
+      "home": {
+        "city": "Oklahoma City",
+        "state": "Oklahoma",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-jace-bohrofen-of?t=mlb-draft",
+      "school": {
+        "name": "Arkansas",
+        "schoolClass": "4YR JR",
+        "city": "Fayetteville",
+        "country": "USA",
+        "state": "AR"
+      },
+      "blurb": "The top position player in a deep 2020 Oklahoma high school class loaded with pitching, Bohrofen was a top-three-rounds talent who ultimately couldn't be lured away from college. He didn't hit enough to claim a regular job as an Oklahoma freshman or Arkansas sophomore, though he did perform well with wood bats in the Cape Cod League in both summers. He has been one of the most dangerous hitters in the Southeastern Conference this spring and regained his former prospect status. A left-handed hitter with a sound swing, Bohrofen has improved at making contact and driving the ball in the air throughout his college career. He tried to do too much in his lone season with the Sooners, but since has learned to let his plus raw power come naturally. He has developed a more discerning eye at the plate and his prodigious strength leads to high exit velocities, though his propensity to swing and miss in the strike zone concerns some clubs. While Bohrofen will get drafted mostly based on his offensive production, he's a decent athlete. He has fringy-to-average speed and good instincts on the bases and in the outfield corners. He's a capable defender in left or right field with an average arm.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/690957/headshot/draft/current",
+      "person": {
+        "id": 690957,
+        "fullName": "Jace Bohrofen",
+        "link": "/api/v1/people/690957",
+        "firstName": "Jace",
+        "lastName": "Bohrofen",
+        "birthDate": "2001-10-19",
+        "currentAge": 24,
+        "birthCity": "Oklahoma City",
+        "birthStateProvince": "OK",
+        "birthCountry": "USA",
+        "height": "6' 1\"",
+        "weight": 205,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Jace",
+        "useLastName": "Bohrofen",
+        "middleName": "Straka",
+        "boxscoreName": "Bohrofen",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jace Bohrofen",
+        "nameSlug": "jace-bohrofen-690957",
+        "firstLastName": "Jace Bohrofen",
+        "lastFirstName": "Bohrofen, Jace",
+        "lastInitName": "Bohrofen, J",
+        "initLastName": "J Bohrofen",
+        "fullFMLName": "Jace Straka Bohrofen",
+        "fullLFMName": "Bohrofen, Jace Straka",
+        "strikeZoneTop": 3.268,
+        "strikeZoneBottom": 1.649
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 141,
+        "name": "Toronto Blue Jays",
+        "link": "/api/v1/teams/141",
+        "season": 2026,
+        "venue": {
+          "id": 14,
+          "name": "Rogers Centre",
+          "link": "/api/v1/venues/14"
+        },
+        "springVenue": {
+          "id": 2536,
+          "link": "/api/v1/venues/2536"
+        },
+        "teamCode": "tor",
+        "fileCode": "tor",
+        "abbreviation": "TOR",
+        "teamName": "Blue Jays",
+        "locationName": "Toronto",
+        "firstYearOfPlay": "1977",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 201,
+          "name": "American League East",
+          "link": "/api/v1/divisions/201"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Toronto",
+        "franchiseName": "Toronto",
+        "clubName": "Blue Jays",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5021426,
+      "pickRound": "6",
+      "pickNumber": 166,
+      "rank": 161,
+      "home": {
+        "city": "Thornton",
+        "state": "Colorado",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-jonah-cox-of?t=mlb-draft",
+      "school": {
+        "name": "Oral Roberts",
+        "schoolClass": "4YR JR",
+        "city": "Tulsa",
+        "country": "USA",
+        "state": "OK"
+      },
+      "blurb": "The son of former big league catcher Darron Cox, Jonah has posted huge numbers at three different schools in his college career. He spent his first two seasons at junior colleges, batting .397/.472/.683 with 49 steals (second in the NJCAA) at Butler (Kan.) in 2021 and .431/.502/.631 with 43 swipes (sixth in the NJCAA) at Eastern Oklahoma State last year. He earned Summit League Player of the Year accolades and helped Oral Roberts reach the College World Series this spring by batting .412/.470/.646 with 28 steals. He topped NCAA Division I with 114 hits and fashioned a 47-game hitting streak, tied for the third-longest in D-I history. Cox has well-above-average speed and an offensive approach that focuses on getting on base to take advantage of his quickness. A right-handed hitter, he makes consistent contact to all fields, is adept at bunting and can turn infield grounders into singles. While he doesn't look to launch balls, he has good bat speed and enough strength to produce 12-15 homers annually. Cox's speed translates better on the bases than it does on defense at this point. A shortstop in junior college, he's still learning the nuances of center field after shifting there with the Golden Eagles. He's quick enough to become an asset in center, albeit with a below-average arm.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/813841/headshot/draft/current",
+      "person": {
+        "id": 813841,
+        "fullName": "Jonah Cox",
+        "link": "/api/v1/people/813841",
+        "firstName": "Jonah",
+        "lastName": "Cox",
+        "primaryNumber": "53",
+        "birthDate": "2001-08-04",
+        "currentAge": 25,
+        "birthCity": "Louisville",
+        "birthStateProvince": "CO",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 204,
+        "active": true,
+        "primaryPosition": {
+          "code": "8",
+          "name": "Outfielder",
+          "type": "Outfielder",
+          "abbreviation": "CF"
+        },
+        "useName": "Jonah",
+        "useLastName": "Cox",
+        "middleName": "Abbott",
+        "boxscoreName": "Cox",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "mlbDebutDate": "2026-05-31",
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jonah Cox",
+        "nameSlug": "jonah-cox-813841",
+        "firstLastName": "Jonah Cox",
+        "lastFirstName": "Cox, Jonah",
+        "lastInitName": "Cox, J",
+        "initLastName": "J Cox",
+        "fullFMLName": "Jonah Abbott Cox",
+        "fullLFMName": "Cox, Jonah Abbott",
+        "strikeZoneTop": 3.29,
+        "strikeZoneBottom": 1.66
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 133,
+        "name": "Athletics",
+        "link": "/api/v1/teams/133",
+        "season": 2026,
+        "venue": {
+          "id": 2529,
+          "name": "Sutter Health Park",
+          "link": "/api/v1/venues/2529"
+        },
+        "springVenue": {
+          "id": 2507,
+          "link": "/api/v1/venues/2507"
+        },
+        "teamCode": "ath",
+        "fileCode": "ath",
+        "abbreviation": "ATH",
+        "teamName": "Athletics",
+        "locationName": "Sacramento",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Athletics",
+        "franchiseName": "Athletics",
+        "clubName": "Athletics",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "pickRound": "6",
+      "pickNumber": 166,
+      "rank": 161,
+      "home": {
+        "city": "Thornton",
+        "state": "Colorado",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-jonah-cox-of?t=mlb-draft",
+      "school": {
+        "name": "Oral Roberts",
+        "schoolClass": "4YR JR",
+        "city": "Tulsa",
+        "country": "USA",
+        "state": "OK"
+      },
+      "blurb": "The son of former big league catcher Darron Cox, Jonah has posted huge numbers at three different schools in his college career. He spent his first two seasons at junior colleges, batting .397/.472/.683 with 49 steals (second in the NJCAA) at Butler (Kan.) in 2021 and .431/.502/.631 with 43 swipes (sixth in the NJCAA) at Eastern Oklahoma State last year. He earned Summit League Player of the Year accolades and helped Oral Roberts reach the College World Series this spring by batting .412/.470/.646 with 28 steals. He topped NCAA Division I with 114 hits and fashioned a 47-game hitting streak, tied for the third-longest in D-I history. Cox has well-above-average speed and an offensive approach that focuses on getting on base to take advantage of his quickness. A right-handed hitter, he makes consistent contact to all fields, is adept at bunting and can turn infield grounders into singles. While he doesn't look to launch balls, he has good bat speed and enough strength to produce 12-15 homers annually. Cox's speed translates better on the bases than it does on defense at this point. A shortstop in junior college, he's still learning the nuances of center field after shifting there with the Golden Eagles. He's quick enough to become an asset in center, albeit with a below-average arm.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/813841/headshot/draft/current",
+      "person": {
+        "id": 813841,
+        "fullName": "Jonah Cox",
+        "link": "/api/v1/people/813841",
+        "firstName": "Jonah",
+        "lastName": "Cox",
+        "primaryNumber": "53",
+        "birthDate": "2001-08-04",
+        "currentAge": 25,
+        "birthCity": "Louisville",
+        "birthStateProvince": "CO",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 204,
+        "active": true,
+        "primaryPosition": {
+          "code": "8",
+          "name": "Outfielder",
+          "type": "Outfielder",
+          "abbreviation": "CF"
+        },
+        "useName": "Jonah",
+        "useLastName": "Cox",
+        "middleName": "Abbott",
+        "boxscoreName": "Cox",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "mlbDebutDate": "2026-05-31",
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jonah Cox",
+        "nameSlug": "jonah-cox-813841",
+        "firstLastName": "Jonah Cox",
+        "lastFirstName": "Cox, Jonah",
+        "lastInitName": "Cox, J",
+        "initLastName": "J Cox",
+        "fullFMLName": "Jonah Abbott Cox",
+        "fullLFMName": "Cox, Jonah Abbott",
+        "strikeZoneTop": 3.29,
+        "strikeZoneBottom": 1.66
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 133,
+        "name": "Athletics",
+        "link": "/api/v1/teams/133",
+        "season": 2026,
+        "venue": {
+          "id": 2529,
+          "name": "Sutter Health Park",
+          "link": "/api/v1/venues/2529"
+        },
+        "springVenue": {
+          "id": 2507,
+          "link": "/api/v1/venues/2507"
+        },
+        "teamCode": "ath",
+        "fileCode": "ath",
+        "abbreviation": "ATH",
+        "teamName": "Athletics",
+        "locationName": "Sacramento",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Athletics",
+        "franchiseName": "Athletics",
+        "clubName": "Athletics",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5010664,
+      "pickRound": "7",
+      "pickNumber": 196,
+      "home": {
+        "city": "Chula Vista",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Cal State Fullerton",
+        "schoolClass": "4YR JR",
+        "city": "Fullerton",
+        "country": "USA",
+        "state": "CA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/694977/headshot/draft/current",
+      "person": {
+        "id": 694977,
+        "fullName": "Nate Nankil",
+        "link": "/api/v1/people/694977",
+        "firstName": "Nathan",
+        "lastName": "Nankil",
+        "birthDate": "2002-10-16",
+        "currentAge": 23,
+        "birthCity": "San Diego",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 210,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Nate",
+        "useLastName": "Nankil",
+        "middleName": "Andrew",
+        "boxscoreName": "Nankil",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Nate Nankil",
+        "nameSlug": "nate-nankil-694977",
+        "firstLastName": "Nate Nankil",
+        "lastFirstName": "Nankil, Nate",
+        "lastInitName": "Nankil, N",
+        "initLastName": "N Nankil",
+        "fullFMLName": "Nathan Andrew Nankil",
+        "fullLFMName": "Nankil, Nathan Andrew",
+        "strikeZoneTop": 3.299,
+        "strikeZoneBottom": 1.665
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 133,
+        "name": "Athletics",
+        "link": "/api/v1/teams/133",
+        "season": 2026,
+        "venue": {
+          "id": 2529,
+          "name": "Sutter Health Park",
+          "link": "/api/v1/venues/2529"
+        },
+        "springVenue": {
+          "id": 2507,
+          "link": "/api/v1/venues/2507"
+        },
+        "teamCode": "ath",
+        "fileCode": "ath",
+        "abbreviation": "ATH",
+        "teamName": "Athletics",
+        "locationName": "Sacramento",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Athletics",
+        "franchiseName": "Athletics",
+        "clubName": "Athletics",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5026251,
+      "pickRound": "5",
+      "pickNumber": 142,
+      "rank": 119,
+      "home": {
+        "city": "Columbia",
+        "state": "Missouri",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-spencer-nivens-of?t=mlb-draft",
+      "school": {
+        "name": "Missouri State",
+        "schoolClass": "4YR JR",
+        "city": "Springfield",
+        "country": "USA",
+        "state": "MO"
+      },
+      "blurb": "Nivens had a humble start to his college career, redshirting in his first year at Missouri State and having to compete for a roster spot in his second. He responded by winning Freshman All-America honors in 2022 and won the Missouri Valley Conference player of the year honors this season. A club that believes he has average power and can stay in center field could take him as early as the late third round. Nivens had elite non-chase rates in 2022, and while he has been more aggressive this spring, he's still making consistent contact and hitting the ball harder than ever. His left-handed swing has some natural loft and he shows some feel for backspinning balls to his pull side for home runs. He's doing a better job of driving the ball in the air and could get to 20 home runs on an annual basis. Scouts clock run times anywhere from below-average to well-above-average with Nivens, and the consensus is that he's an solid runner if not much of a basestealing threat. A high school shortstop who's still adapting to the outfield, he has the quickness to remain in center, but needs to continue to refine his reads and routes. He has fringy arm strength that's playable in center or left.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/811289/headshot/draft/current",
+      "person": {
+        "id": 811289,
+        "fullName": "Spencer Nivens",
+        "link": "/api/v1/people/811289",
+        "firstName": "Spencer",
+        "lastName": "Nivens",
+        "birthDate": "2001-11-16",
+        "currentAge": 24,
+        "birthCity": "Columbia",
+        "birthStateProvince": "MO",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 185,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Spencer",
+        "useLastName": "Nivens",
+        "middleName": "Clay",
+        "boxscoreName": "Nivens",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Spencer Nivens",
+        "nameSlug": "spencer-nivens-811289",
+        "firstLastName": "Spencer Nivens",
+        "lastFirstName": "Nivens, Spencer",
+        "lastInitName": "Nivens, S",
+        "initLastName": "S Nivens",
+        "fullFMLName": "Spencer Clay Nivens",
+        "fullLFMName": "Nivens, Spencer Clay",
+        "strikeZoneTop": 3.151,
+        "strikeZoneBottom": 1.59
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 118,
+        "name": "Kansas City Royals",
+        "link": "/api/v1/teams/118",
+        "season": 2026,
+        "venue": {
+          "id": 7,
+          "name": "Kauffman Stadium",
+          "link": "/api/v1/venues/7"
+        },
+        "springVenue": {
+          "id": 2603,
+          "link": "/api/v1/venues/2603"
+        },
+        "teamCode": "kca",
+        "fileCode": "kc",
+        "abbreviation": "KC",
+        "teamName": "Royals",
+        "locationName": "Kansas City",
+        "firstYearOfPlay": "1968",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 202,
+          "name": "American League Central",
+          "link": "/api/v1/divisions/202"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Kansas City",
+        "franchiseName": "Kansas City",
+        "clubName": "Royals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5014401,
+      "pickRound": "4",
+      "pickNumber": 112,
+      "rank": 88,
+      "home": {
+        "city": "Memphis",
+        "state": "Tennessee",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-grayson-hitt-lhp?t=mlb-draft",
+      "school": {
+        "name": "Alabama",
+        "schoolClass": "4YR JR",
+        "city": "Tuscaloosa",
+        "country": "USA",
+        "state": "AL"
+      },
+      "blurb": "Hitt was one of the better high school left-handers in the 2020 class, but his senior season was truncated by the coronavirus pandemic, denying him the chance to pitch his way into the abridged five-round Draft. Though he compiled a 6.61 ERA in his first two seasons at Alabama and had only modest success in the Cape Cod League last summer, he created a lot of buzz during the Crimson Tide's fall practice. Scouts who saw him in abbreviated outings saw enough upside to land him in the upper half of the first round if he maintained similar stuff during the spring, but instead he never looked quite right before getting shut down in April with an elbow injury that required Tommy John surgery. After working with a 90-92 mph fastball that peaked at 96 and didn't miss a lot of bats as a sophomore, Hitt operated at 93-97 with improved carry in the fall. He also unveiled an upper-80s cutter that quickly became his best secondary pitch. He has a solid mid-80s slider that he can land for strikes and a mid-70s curveball that he'll use to give hitters a different look. Hitt doesn't utilize his changeup very often, and it's too firm in the upper 80s and gets pounded when he doesn't locate it at the bottom of the strike zone. Also a star wide receiver in high school, he hasn't been able to translate his quality athleticism into consistent control and command. He did a better job locating his pitches in the fall, another reason for optimism before he went down.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/694491/headshot/draft/current",
+      "person": {
+        "id": 694491,
+        "fullName": "Grayson Hitt",
+        "link": "/api/v1/people/694491",
+        "firstName": "Robert",
+        "lastName": "Hitt",
+        "birthDate": "2001-12-11",
+        "currentAge": 24,
+        "birthCity": "Memphis",
+        "birthStateProvince": "TN",
+        "birthCountry": "USA",
+        "height": "6' 3\"",
+        "weight": 210,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Grayson",
+        "useLastName": "Hitt",
+        "middleName": "Grayson",
+        "boxscoreName": "Hitt",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Grayson Hitt",
+        "nameSlug": "grayson-hitt-694491",
+        "firstLastName": "Grayson Hitt",
+        "lastFirstName": "Hitt, Grayson",
+        "lastInitName": "Hitt, G",
+        "initLastName": "G Hitt",
+        "fullFMLName": "Robert Grayson Hitt",
+        "fullLFMName": "Hitt, Robert Grayson",
+        "strikeZoneTop": 3.344,
+        "strikeZoneBottom": 1.688
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 109,
+        "name": "Arizona Diamondbacks",
+        "link": "/api/v1/teams/109",
+        "season": 2026,
+        "venue": {
+          "id": 15,
+          "name": "Chase Field",
+          "link": "/api/v1/venues/15"
+        },
+        "springVenue": {
+          "id": 4249,
+          "link": "/api/v1/venues/4249"
+        },
+        "teamCode": "ari",
+        "fileCode": "ari",
+        "abbreviation": "AZ",
+        "teamName": "D-backs",
+        "locationName": "Phoenix",
+        "firstYearOfPlay": "1996",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Arizona",
+        "franchiseName": "Arizona",
+        "clubName": "Diamondbacks",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5026885,
+      "pickRound": "3",
+      "pickNumber": 98,
+      "rank": 182,
+      "home": {
+        "city": "Hilo",
+        "state": "Hawaii",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-devin-saltiban-of?t=mlb-draft",
+      "school": {
+        "name": "Hilo HS",
+        "schoolClass": "HS SR",
+        "city": "Hilo",
+        "country": "USA",
+        "state": "HI"
+      },
+      "blurb": "The state of Hawaii has produced some very good hitting talent, with a guy like Shane Victorino signing out of high school and Kolten Wong going on to college before turning into a first-round pick. Saltiban is hoping to follow in their footsteps and become the latest prep outfielder from the Aloha State to get taken in the early rounds after Kala'I Rosario (2020), Shane Sasaki (2019) and Micah Bello (2018) all went in the top five rounds of their respective Drafts. A right-handed hitter, Saltiban has worked with Kaha Wong, Kolten's father, who has helped him develop into an outfielder with a solid all-around toolset. He has the chance to really hit, with a quick swing and excellent bat speed, which could point to decent power in the future. Challenging himself by competing in MLB's Draft League ahead of the Draft, Saltiban held his own, putting up some good exit velocities and punishing fastballs, albeit in a small sample.Saltiban runs and throws well, with a chance to play center field in the future. If he slows down as he matures, that arm would play well from a corner. He would go on to the University of Hawaii if the Draft doesn't go his way, but he's done everything he can to increase his exposure, going from the Draft League to the Combine in June.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/813880/headshot/draft/current",
+      "person": {
+        "id": 813880,
+        "fullName": "Devin Saltiban",
+        "link": "/api/v1/people/813880",
+        "firstName": "Devin",
+        "lastName": "Saltiban",
+        "birthDate": "2005-02-14",
+        "currentAge": 21,
+        "birthCity": "Hilo",
+        "birthStateProvince": "HI",
+        "birthCountry": "USA",
+        "height": "5' 9\"",
+        "weight": 180,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Devin",
+        "useLastName": "Saltiban",
+        "middleName": "Ezekiel-Boyd",
+        "boxscoreName": "Saltiban",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Devin Saltiban",
+        "nameSlug": "devin-saltiban-813880",
+        "firstLastName": "Devin Saltiban",
+        "lastFirstName": "Saltiban, Devin",
+        "lastInitName": "Saltiban, D",
+        "initLastName": "D Saltiban",
+        "fullFMLName": "Devin Ezekiel-Boyd Saltiban",
+        "fullLFMName": "Saltiban, Devin Ezekiel-Boyd",
+        "strikeZoneTop": 3.076,
+        "strikeZoneBottom": 1.553
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 143,
+        "name": "Philadelphia Phillies",
+        "link": "/api/v1/teams/143",
+        "season": 2026,
+        "venue": {
+          "id": 2681,
+          "name": "Citizens Bank Park",
+          "link": "/api/v1/venues/2681"
+        },
+        "springVenue": {
+          "id": 2700,
+          "link": "/api/v1/venues/2700"
+        },
+        "teamCode": "phi",
+        "fileCode": "phi",
+        "abbreviation": "PHI",
+        "teamName": "Phillies",
+        "locationName": "Philadelphia",
+        "firstYearOfPlay": "1883",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Philadelphia",
+        "franchiseName": "Philadelphia",
+        "clubName": "Phillies",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5002426,
+      "pickRound": "4",
+      "pickNumber": 120,
+      "rank": 188,
+      "home": {
+        "city": "Phoenix",
+        "state": "Arizona",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-hunter-haas-ss?t=mlb-draft",
+      "school": {
+        "name": "Texas A&M",
+        "schoolClass": "4YR JR",
+        "city": "College Station",
+        "country": "USA",
+        "state": "TX"
+      },
+      "blurb": "Haas started at third base as an Arizona State freshman in 2021 but lost his starting job last year, prompting him to transfer to Texas A&M for his junior season. He has taken over at shortstop for the Aggies and given them consistent performances at the plate and in the field. His floor stands out more than his ceiling and his makeup may be more impressive than any of his individual tools, but he could factor into the first five rounds. A right-handed hitter with a calm approach at the plate, Haas has a history of making consistent contact outside of the Cape Cod League last summer. He has improved his selectivity this spring, doing a better job of looking for pitches he can do damage against and drawing walks rather than just putting balls in play. He focuses on getting on-base rather than driving the ball in the air but has enough dead-pull power to hit 10-12 homers per season. Haas has fringy speed but makes the most out of it on the basepaths. He has average arm strength and is more sure-handed than rangy at shortstop. He's capable of filling in at short but not playing there regularly at the big league level, where he profiles more as a second baseman or utilityman.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/690983/headshot/draft/current",
+      "person": {
+        "id": 690983,
+        "fullName": "Hunter Haas",
+        "link": "/api/v1/people/690983",
+        "firstName": "Hunter",
+        "lastName": "Haas",
+        "birthDate": "2002-04-07",
+        "currentAge": 24,
+        "birthCity": "Phoenix",
+        "birthStateProvince": "AZ",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 180,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "Hunter",
+        "useLastName": "Haas",
+        "middleName": "Stephen",
+        "boxscoreName": "Haas",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Hunter Haas",
+        "nameSlug": "hunter-haas-690983",
+        "firstLastName": "Hunter Haas",
+        "lastFirstName": "Haas, Hunter",
+        "lastInitName": "Haas, H",
+        "initLastName": "H Haas",
+        "fullFMLName": "Hunter Stephen Haas",
+        "fullLFMName": "Haas, Hunter Stephen",
+        "strikeZoneTop": 3.165,
+        "strikeZoneBottom": 1.598
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 139,
+        "name": "Tampa Bay Rays",
+        "link": "/api/v1/teams/139",
+        "season": 2026,
+        "venue": {
+          "id": 12,
+          "name": "Tropicana Field",
+          "link": "/api/v1/venues/12"
+        },
+        "springVenue": {
+          "id": 2534,
+          "link": "/api/v1/venues/2534"
+        },
+        "teamCode": "tba",
+        "fileCode": "tb",
+        "abbreviation": "TB",
+        "teamName": "Rays",
+        "locationName": "St. Petersburg",
+        "firstYearOfPlay": "1996",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 201,
+          "name": "American League East",
+          "link": "/api/v1/divisions/201"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Tampa Bay",
+        "franchiseName": "Tampa Bay",
+        "clubName": "Rays",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5010760,
+      "pickRound": "5",
+      "pickNumber": 148,
+      "rank": 180,
+      "home": {
+        "city": "San Diego",
+        "state": "California",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-kevin-sim-1b-of?t=mlb-draft",
+      "school": {
+        "name": "University of San Diego",
+        "schoolClass": "4YR JR",
+        "city": "San Diego",
+        "country": "USA",
+        "state": "CA"
+      },
+      "blurb": "Chong Soo Shim was a star in Korea's top professional baseball league, earning the nickname \u0093Hercules\u0094 by hitting more than 300 homers in a long career in the KBO. He and his family moved to the San Diego area when Kevin was seven, leading to Sim starring at Torrey Pines High School and heading to the University of San Diego for college. He's established some power hitting bona fides of his own with the Toreros over the past two years. Sim has shown he can punish the baseball consistently from the right side of the plate. He's reached double-digits in home runs in each of his last two college seasons and also hit five homers with a wood bat in 92 Cape Cod League at-bats last summer. While he does have a power-over-hit profile, he doesn't strike out much and he has good data behind him with solid zone contact rates and high exit velocities. He's always been able to barrel fastballs and has looked better this year against breaking stuff. In addition to his power potential, Sim brings impressive position flexibility to whatever team drafts him. He's seen a lot of time at both infield corners and has looked pretty good playing the outfield corners this spring. At the next level, it might be mostly a first base and left field look, but that could lead to a lot of big league time as a right-handed power-hitting role player.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/691726/headshot/draft/current",
+      "person": {
+        "id": 691726,
+        "fullName": "Kevin Sim",
+        "link": "/api/v1/people/691726",
+        "firstName": "Jong Hyoun",
+        "lastName": "Sim",
+        "birthDate": "2002-02-07",
+        "currentAge": 24,
+        "birthCity": "Daegu",
+        "birthCountry": "Republic of Korea",
+        "height": "6' 1\"",
+        "weight": 210,
+        "active": false,
+        "primaryPosition": {
+          "code": "5",
+          "name": "Third Base",
+          "type": "Infielder",
+          "abbreviation": "3B"
+        },
+        "useName": "Kevin",
+        "useLastName": "Sim",
+        "boxscoreName": "Sim",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Kevin Sim",
+        "nameSlug": "kevin-sim-691726",
+        "firstLastName": "Kevin Sim",
+        "lastFirstName": "Sim, Kevin",
+        "lastInitName": "Sim, K",
+        "initLastName": "K Sim",
+        "fullFMLName": "Jong Hyoun Sim",
+        "fullLFMName": "Sim, Jong Hyoun ",
+        "strikeZoneTop": 3.255,
+        "strikeZoneBottom": 1.643
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 109,
+        "name": "Arizona Diamondbacks",
+        "link": "/api/v1/teams/109",
+        "season": 2026,
+        "venue": {
+          "id": 15,
+          "name": "Chase Field",
+          "link": "/api/v1/venues/15"
+        },
+        "springVenue": {
+          "id": 4249,
+          "link": "/api/v1/venues/4249"
+        },
+        "teamCode": "ari",
+        "fileCode": "ari",
+        "abbreviation": "AZ",
+        "teamName": "D-backs",
+        "locationName": "Phoenix",
+        "firstYearOfPlay": "1996",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Arizona",
+        "franchiseName": "Arizona",
+        "clubName": "Diamondbacks",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    }
+  ]
+}
