@@ -1,6 +1,7 @@
 # tests/test_resolve_class_universe.py
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pandas as pd
 import requests
@@ -9,6 +10,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from resolve_class_universe import (
     _fetch_player_info_batched,
+    _universe_row,
+    audit_multi_validated,
     load_player_directory,
     players_from_checklists,
     resolve_base_cards,
@@ -301,3 +304,118 @@ def test_fetch_player_info_batched_chunks_at_100(monkeypatch):
     info = _fetch_player_info_batched(list(range(250)), sleep_s=0.0)
     assert calls == [100, 100, 50]
     assert len(info) == 250
+
+
+# --- round 4 (2026-09-18, plan amendment 1d1142d): multi-validated =
+# ambiguous, resolution_source provenance, bidirectional suffix, NICKNAME_MAP,
+# audit_multi_validated.
+
+
+def test_resolve_class_player_id_two_validated_ambiguous(monkeypatch):
+    # two exact candidates BOTH pass validation -> never a silent API-order pick
+    people = [{"id": 700010, "fullName": "Twin Star"}, {"id": 700011, "fullName": "Twin Star"}]
+    hydrates = {
+        700010: _person_payload(700010, "Twin Star",
+                                [_year_group("hitting", [_split("2021", "A Team")])]),
+        700011: _person_payload(700011, "Twin Star",
+                                [_year_group("pitching", [_split("2022", "B Team")])]),
+    }
+    monkeypatch.setattr(requests, "get", _fake_get(people, hydrates))
+    mlb_id, status = resolve_class_player_id("Twin Star", 2021, sleep_s=0.0, directory={})
+    assert mlb_id is None
+    assert status == "ambiguous:multiple validated (700010, 700011)"
+
+
+def test_resolve_class_player_id_second_candidate_validates(monkeypatch):
+    # first exact candidate fails validation, second validates -> second wins
+    people = [{"id": 700012, "fullName": "Twin Star"}, {"id": 700013, "fullName": "Twin Star"}]
+    hydrates = {
+        700012: _person_payload(700012, "Twin Star", [_year_group("hitting", [])]),
+        700013: _person_payload(700013, "Twin Star",
+                                [_year_group("hitting", [_split("2021", "A Team")])]),
+    }
+    monkeypatch.setattr(requests, "get", _fake_get(people, hydrates))
+    mlb_id, status = resolve_class_player_id("Twin Star", 2021, sleep_s=0.0, directory={})
+    assert (mlb_id, status) == (700013, "ok")
+
+
+def test_universe_row_resolution_source():
+    p = SimpleNamespace(player_name="T Player", class_year=2020, family="chrome",
+                        auto_card_url="u/t")
+    row = _universe_row(p, 123, "ok")
+    assert row["resolution_source"] == "search"
+    assert row["player_name"] == "T Player" and row["mlb_id"] == 123
+    assert _universe_row(p, 123, "ok:directory")["resolution_source"] == "directory"
+    assert _universe_row(p, None, "no_exact_match")["resolution_source"] == ""
+
+
+def test_resolve_class_player_id_directory_suffix_on_query(monkeypatch):
+    # SCP "Jimmy Crooks III" vs directory "Jimmy Crooks" -> query-minus-suffix
+    monkeypatch.setattr(requests, "get", _fake_get([], {}))
+    directory = {(14, 2022): [{"id": 700030, "fullName": "Jimmy Crooks"}]}
+    mlb_id, status = resolve_class_player_id("Jimmy Crooks III", 2022, sleep_s=0.0,
+                                             directory=directory)
+    assert (mlb_id, status) == (700030, "ok:directory")
+
+
+def test_resolve_class_player_id_nickname_map_hit(monkeypatch):
+    # SCP "Joe Wendle" searches empty; curated map retries "joseph wendle"
+    # through the full search+validation path -> "ok"
+    searched = []
+
+    def fake_get(url, params=None, timeout=None):
+        if url.endswith("/people/search"):
+            searched.append(params["names"])
+            if params["names"] == "joseph wendle":
+                return _FakeResp({"people": [{"id": 621563, "fullName": "Joseph Wendle"}]})
+            return _FakeResp({"people": []})
+        return _FakeResp(_person_payload(621563, "Joseph Wendle", [
+            _year_group("hitting", [_split("2016", "Durham Bulls")]),
+        ]))
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    mlb_id, status = resolve_class_player_id("Joe Wendle", 2016, sleep_s=0.0, directory={})
+    assert (mlb_id, status) == (621563, "ok")
+    assert searched == ["Joe Wendle", "joseph wendle"]
+
+
+def test_resolve_class_player_id_nickname_map_unmapped_unaffected(monkeypatch):
+    searched = []
+
+    def fake_get(url, params=None, timeout=None):
+        assert url.endswith("/people/search")
+        searched.append(params["names"])
+        return _FakeResp({"people": []})
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    mlb_id, status = resolve_class_player_id("Random Player", 2020, sleep_s=0.0, directory={})
+    assert (mlb_id, status) == (None, "no_exact_match")
+    assert searched == ["Random Player"]  # no extra mapped search
+
+
+def test_audit_multi_validated(monkeypatch):
+    people_by_name = {
+        "Twin Star": [{"id": 700010, "fullName": "Twin Star"},
+                      {"id": 700011, "fullName": "Twin Star"}],
+        "Solo Guy": [{"id": 700020, "fullName": "Solo Guy"}],
+    }
+    with_splits = {700010, 700011, 700020}
+
+    def fake_get(url, params=None, timeout=None):
+        if url.endswith("/people/search"):
+            return _FakeResp({"people": people_by_name[params["names"]]})
+        mlb_id = int(url.rsplit("/people/", 1)[1])
+        stats = [_year_group("hitting", [_split("2021", "X")])] if mlb_id in with_splits else []
+        return _FakeResp(_person_payload(mlb_id, "N", stats))
+
+    monkeypatch.setattr(requests, "get", fake_get)
+    players = pd.DataFrame([
+        {"player_name": "Twin Star", "mlb_id": 700010},
+        {"player_name": "Solo Guy", "mlb_id": 700020},
+    ])
+    audit = audit_multi_validated(players, sleep_s=0.0)
+    assert len(audit) == 1
+    row = audit.iloc[0]
+    assert row["player_name"] == "Twin Star"
+    assert row["current_mlb_id"] == 700010
+    assert row["validated_ids"] == "700010,700011"

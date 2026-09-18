@@ -2,9 +2,10 @@
 """Class-universe assembly: checklist players -> mlb_id + base-card URLs.
 
 Incremental CSV flush per player (resolve_universe idiom); mlb_id via MLB
-people/search + yearByYear-hydrate pro-stats validation (any level) with an
-MiLB player-directory fallback; base cards from Task 1's saved base-page
-snapshots (parsed with checklist.parse_set_page — real anchors, no-guess).
+people/search + yearByYear-hydrate pro-stats validation (any level) with a
+curated nickname map and an MiLB player-directory fallback; base cards from
+Task 1's saved base-page snapshots (parsed with checklist.parse_set_page —
+real anchors, no-guess).
 """
 
 import argparse
@@ -31,6 +32,25 @@ CARD_TYPE = "bowman_1st_base"
 DIR_SPORT_IDS = (11, 12, 13, 14, 15, 16, 17)  # aaa, aa, a_plus, a + rookie/DSL levels
 DIR_SEASONS = range(2014, 2027)  # 2014..2026 inclusive
 SUFFIX_TOKENS = {"jr", "sr", "ii", "iii", "iv", "v"}
+# Curated search strings for known nickname/initial/hyphen forms (plan
+# correction 4): folded form -> folded form. The map proposes the search
+# string; the normal search+validation path still decides acceptance.
+NICKNAME_MAP = {
+    "joe wendle": "joseph wendle",  # MLB IF Joe Wendle
+    "giovanny urshela": "gio urshela",  # MLB 3B
+    "ozhaino albies": "ozzie albies",  # MLB 2B (full name Ozhaino)
+    "jose adolis garcia": "adolis garcia",  # MLB OF
+    "jacob faria": "jake faria",  # MLB RHP
+    "pete crow armstrong": "pete crow-armstrong",  # MLB OF (hyphenated)
+    "christian encarnacion strand": "christian encarnacion-strand",  # MLB 1B
+    "justyn henry malloy": "justyn-henry malloy",  # MLB OF
+    "hoy jun park": "hoy park",  # MLB IF (probe-verify at runtime)
+    "hao yu lee": "hao-yu lee",  # Giants IF (probe-verify)
+    "won bin cho": "won-bin cho",  # probe-verify
+    "nikau pouaka grego": "nikau pouaka-grego",  # probe-verify
+    "t j white": "tj white",  # probe-verify (SCP initials form "T. J. White")
+    "c j kayfus": "cj kayfus",  # probe-verify (SCP initials form "C. J. Kayfus")
+}
 # yearByYear without sportId is MLB-only for many players; careers that never
 # reached AAA (measured: Gamboa/Smith/Gibson) have splits only at 12-17 —
 # iterate hydrate variants in this order, short-circuit on first non-empty split
@@ -59,29 +79,30 @@ def resolve_class_player_id(
     """Three-stage id resolution. Never returns an unvalidated id.
 
     1. people/search exact normalized match, each candidate validated by
-       _has_pro_stats -> "ok".
+       _has_pro_stats: exactly one validated -> "ok"; two or more ->
+       "ambiguous:multiple validated" (never a silent API-order pick). If none
+       validate and the folded name is in NICKNAME_MAP, the search stage is
+       retried once with the curated search string (same full validation path).
     2. Directory fallback (search found no candidate, or none validated):
        accent-folded match against the snapshot-cached MiLB player directories
        — roster presence on a level-season IS the affiliation evidence
        -> "ok:directory".
-    3. Suffix rule (inside 2): candidate = query tokens + one trailing token in
-       {jr, sr, ii, iii, iv, v}.
+    3. Suffix rule (inside 2, bidirectional): candidate = query tokens + one
+       trailing token in {jr, sr, ii, iii, iv, v}, or query minus its own
+       trailing suffix token = candidate.
 
-    (Corrected 2026-09-18, twice: fetch_game_log validation was MLB-level only
-    — 27% mapping; then yearByYear without sportId proved MLB-only for many
-    minor leaguers and people/search does not index a share of them at all —
-    39% mapping. Hence the sportId=11 hydrate retry and the directory fallback.)"""
-    resp = requests.get(f"{BASE}/people/search", params={"names": name}, timeout=30)
-    resp.raise_for_status()
-    time.sleep(sleep_s)
-    people = resp.json().get("people", [])
-    exact = [p for p in people if norm_name(p.get("fullName", "")) == norm_name(name)]
-    statuses = []
-    for cand in exact:
-        mlb_id = int(cand["id"])
-        if _has_pro_stats(mlb_id, sleep_s):
-            return mlb_id, "ok"
-        statuses.append(f"candidate {mlb_id} without pro stats")
+    (Correction history in the plan doc; round 4 2026-09-18: multi-validated =
+    ambiguous, resolution_source provenance, bidirectional suffix, NICKNAME_MAP.)"""
+    exact, validated = _search_validated_ids(name, sleep_s)
+    if not validated:
+        alt = NICKNAME_MAP.get(norm_name(name))
+        if alt is not None:
+            exact, validated = _search_validated_ids(alt, sleep_s)
+    if len(validated) == 1:
+        return validated[0], "ok"
+    if len(validated) > 1:
+        ids = ", ".join(str(i) for i in sorted(validated))
+        return None, f"ambiguous:multiple validated ({ids})"
     if directory is None:
         directory = load_player_directory(sleep_s)
     dir_id, dir_status = _directory_lookup(directory, name, class_year)
@@ -89,9 +110,39 @@ def resolve_class_player_id(
         return dir_id, dir_status
     if not exact:
         return None, "no_exact_match"
-    if len(exact) > 1:
+    if len(exact) > 1:  # validated is empty here, so every exact candidate failed
+        statuses = [f"candidate {int(c['id'])} without pro stats" for c in exact]
         return None, "ambiguous:" + "; ".join(statuses)
     return None, "no_pro_stats"
+
+
+def _search_validated_ids(name: str, sleep_s: float) -> tuple[list[dict], list[int]]:
+    """people/search exact normalized matches + _has_pro_stats validation
+    -> (exact candidates, ids that validated), both in API order."""
+    resp = requests.get(f"{BASE}/people/search", params={"names": name}, timeout=30)
+    resp.raise_for_status()
+    time.sleep(sleep_s)
+    people = resp.json().get("people", [])
+    exact = [p for p in people if norm_name(p.get("fullName", "")) == norm_name(name)]
+    validated = [int(c["id"]) for c in exact if _has_pro_stats(int(c["id"]), sleep_s)]
+    return exact, validated
+
+
+def audit_multi_validated(players: pd.DataFrame, sleep_s: float = 0.3) -> pd.DataFrame:
+    """Re-validation audit (correction 4): for each already-mapped player, re-run
+    the search stage and report rows whose exact-candidate set now yields >= 2
+    validated ids. Pure query function — never writes."""
+    rows = []
+    for p in players.itertuples():
+        _, validated = _search_validated_ids(p.player_name, sleep_s)
+        if len(validated) >= 2:
+            rows.append(
+                {
+                    "player_name": p.player_name, "current_mlb_id": int(p.mlb_id),
+                    "validated_ids": ",".join(str(i) for i in sorted(validated)),
+                }
+            )
+    return pd.DataFrame(rows, columns=["player_name", "current_mlb_id", "validated_ids"])
 
 
 def _has_pro_stats(mlb_id: int, sleep_s: float) -> bool:
@@ -149,15 +200,20 @@ def _directory_lookup(
 ) -> tuple[int | None, str | None]:
     """-> (mlb_id, "ok:directory") | (None, "ambiguous:...") | (None, None).
 
-    Accent-folded exact fullName match, else the suffix rule (candidate = query
-    tokens + one trailing suffix token). Hits in several (level, season) cells
-    -> the cell nearest class_year wins; >1 distinct id in that cell -> ambiguous."""
+    Accent-folded exact fullName match, else the suffix rule — bidirectional:
+    candidate = query tokens + one trailing suffix token, or (when the query
+    itself ends in a suffix token) query minus that token = candidate. Hits in
+    several (level, season) cells -> the cell nearest class_year wins; >1
+    distinct id in that cell -> ambiguous."""
     query = _fold_tokens(name)
+    queries = [query]
+    if query and query[-1] in SUFFIX_TOKENS:
+        queries.append(query[:-1])  # bidirectional: the query carries the suffix
     exact_hits, suffix_hits = [], []
     for (sport_id, season), people in directory.items():
         for p in people:
             cand = _fold_tokens(p["fullName"])
-            if cand == query:
+            if any(cand == q for q in queries):
                 exact_hits.append((sport_id, season, p["id"]))
             elif (len(cand) == len(query) + 1 and cand[:-1] == query
                   and cand[-1] in SUFFIX_TOKENS):
@@ -244,6 +300,18 @@ def _fetch_player_info_batched(mlb_ids: list[int], sleep_s: float = 0.3) -> pd.D
     return pd.concat(frames, ignore_index=True)
 
 
+def _universe_row(p, mlb_id: int | None, status: str) -> dict:
+    """One cards_class_universe row; resolution_source records the provenance of
+    the id ("search" = stats-validated, "directory" = roster-presence)."""
+    return {
+        "player_name": p.player_name, "mlb_id": mlb_id, "class_year": p.class_year,
+        "family": p.family, "role": None, "card_type": CARD_TYPE,
+        "set_slug": None, "scp_url": None, "auto_card_url": p.auto_card_url,
+        "resolution_source": ("search" if status == "ok"
+                              else "directory" if status == "ok:directory" else ""),
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--checklists", default="data/reference/class_checklists.parquet")
@@ -260,7 +328,13 @@ def main() -> None:
     out_path = OUT_CARDS
     done = set()
     if out_path.exists():  # resume: skip players already in the CSV
-        done = set(pd.read_csv(out_path)["player_name"])
+        existing = pd.read_csv(out_path)
+        done = set(existing["player_name"])
+        if "resolution_source" not in existing.columns:
+            # pre-round-4 CSV: add the column (provenance unknown) so per-player
+            # appends stay column-aligned; the final rewrite carries it through
+            existing["resolution_source"] = ""
+            existing.to_csv(out_path, index=False)
         print("resuming;", len(done), "already resolved")
 
     audits = []
@@ -269,11 +343,7 @@ def main() -> None:
             continue
         mlb_id, status = resolve_class_player_id(p.player_name, p.class_year, args.sleep,
                                                  directory=directory)
-        row = {
-            "player_name": p.player_name, "mlb_id": mlb_id, "class_year": p.class_year,
-            "family": p.family, "role": None, "card_type": CARD_TYPE,
-            "set_slug": None, "scp_url": None, "auto_card_url": p.auto_card_url,
-        }
+        row = _universe_row(p, mlb_id, status)
         if not status.startswith("ok"):  # "ok" and "ok:directory" are both resolutions
             audits.append(pd.DataFrame([{"player_name": p.player_name, "class_year": p.class_year,
                                          "reason": status}]))
