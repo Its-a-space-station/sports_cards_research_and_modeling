@@ -87,3 +87,33 @@ def test_merge_parts_concatenates(tmp_path, monkeypatch):
     assert set(sales["player_name"]) == {"P0", "P1"}
     assert set(chart["grade"]) == {"ungraded", "psa_10"}
     assert (sales["price"] > 0).all()
+
+
+# Passes PAGE_MARKERS (price_data table + completed-auctions- div) but its empty
+# sales table yields zero parsed rows -> parse_sales_tables raises KeyError.
+POISON_HTML = """
+<html><head><title>ok</title></head><body>
+<div class="completed-auctions-used">
+<table><tr><th>Date</th><th></th><th>Title</th><th>Price</th></tr></table>
+</div>
+<table id="price_data"><tr><th>Ungraded</th></tr><tr><td>$5.00</td></tr></table>
+</body></html>
+"""
+
+
+def test_parse_failure_recorded_and_run_continues(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        ccp, "fetch_page", lambda url: POISON_HTML if url.endswith("p0-bdc-0") else CARD_HTML
+    )
+    monkeypatch.setattr(ccp, "save_raw", lambda *a, **k: None)
+    part_root = str(tmp_path / "parts")
+    res = ccp.collect_class_prices(_cards(), part_root, sleep_s=0)
+    assert res["done"] == 1  # poison card did not block the tail
+    assert len(res["failed"]) == 1
+    slug, reason = res["failed"][0]
+    assert slug == "baseball-cards-2019-bowman-draft-chrome/p0-bdc-0"
+    assert reason.startswith("parse:")
+    # poison card wrote no parts (retried next run); the healthy card after it did
+    assert not list((Path(part_root) / "sales").glob("*p0-bdc-0.parquet"))
+    ok_part = Path(part_root) / "sales" / "baseball-cards-2019-bowman-draft-chrome__p1-bdc-1.parquet"
+    assert ok_part.exists()

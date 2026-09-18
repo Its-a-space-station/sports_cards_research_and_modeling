@@ -2,8 +2,8 @@
 """Resumable class price collection: one part-file pair per card, merged at the end.
 
 Part files (part_root/sales|chart/<set>__<card>.parquet) are the done-markers —
-written even when a frame is empty. Failures (challenge, soft-404) write no
-parts, are recorded, and retry on the next run.
+written even when a frame is empty. Failures (challenge, soft-404, parse errors)
+write no parts, are recorded, and retry on the next run.
 """
 
 import argparse
@@ -57,8 +57,12 @@ def collect_class_prices(cards: pd.DataFrame, part_root: str, sleep_s: float = 5
             "rookie_year": int(card.class_year), "set_slug": card.set_slug,
             "card_slug": slug, "card_type": card.card_type,
         }
-        sales = parse_sales_tables(html)
-        chart = calibrate_chart_grades(html)
+        try:
+            sales = parse_sales_tables(html)
+            chart = calibrate_chart_grades(html)
+        except Exception as e:  # noqa: BLE001  # poison card: record, retry; don't block the run
+            failed.append((slug, f"parse:{type(e).__name__}"))
+            continue
         for df in (sales, chart):
             for k, v in meta.items():
                 df[k] = v
