@@ -145,12 +145,10 @@ def audit_multi_validated(players: pd.DataFrame, sleep_s: float = 0.3) -> pd.Dat
     return pd.DataFrame(rows, columns=["player_name", "current_mlb_id", "validated_ids"])
 
 
-def _has_pro_stats(mlb_id: int, sleep_s: float) -> bool:
-    """GET /people/{id}?hydrate=stats(group=[hitting,pitching],type=yearByYear[,sportId=<sid>])
-    for sid in [none, 14, 13, 12, 16, 11, 17, 15] — True iff any variant has a
-    non-empty split; short-circuits on the first. (Third correction 2026-09-18:
-    sportId=11-only missed careers that topped out below AAA; without sportId
-    the hydrate is MLB-only for many players.)"""
+def _pro_stat_splits(mlb_id: int, sleep_s: float) -> list[dict]:
+    """yearByYear splits from the first hydrate variant (see _HYDRATE_SPORT_IDS)
+    that has any non-empty split; [] when every variant is empty. Same call
+    sequence and short-circuit as _has_pro_stats."""
     for sport_id in _HYDRATE_SPORT_IDS:
         hydrate = "stats(group=[hitting,pitching],type=yearByYear"
         hydrate += f",sportId={sport_id})" if sport_id is not None else ")"
@@ -158,9 +156,40 @@ def _has_pro_stats(mlb_id: int, sleep_s: float) -> bool:
         resp.raise_for_status()
         time.sleep(sleep_s)
         people = resp.json().get("people", [])
-        if people and any(stat_group.get("splits") for stat_group in people[0].get("stats", [])):
-            return True
-    return False
+        if not people:
+            continue
+        splits = [s for g in people[0].get("stats", []) for s in g.get("splits", [])]
+        if splits:
+            return splits
+    return []
+
+
+def _has_pro_stats(mlb_id: int, sleep_s: float) -> bool:
+    """GET /people/{id}?hydrate=stats(group=[hitting,pitching],type=yearByYear[,sportId=<sid>])
+    for sid in [none, 14, 13, 12, 16, 11, 17, 15] — True iff any variant has a
+    non-empty split; short-circuits on the first. (Third correction 2026-09-18:
+    sportId=11-only missed careers that topped out below AAA; without sportId
+    the hydrate is MLB-only for many players.)"""
+    return bool(_pro_stat_splits(mlb_id, sleep_s))
+
+
+def disambiguate_by_career_timing(
+    class_year: int, validated_ids: list[int], sleep_s: float = 0.3
+) -> tuple[int | None, str]:
+    """Career-timing disambiguation for multi-validated resolutions: a 1st
+    Bowman auto is issued within a few years of a player's first pro season, so
+    keep candidates with class_year - 6 <= career_start <= class_year + 3
+    (career_start = earliest season across their yearByYear splits). Exactly
+    one survivor -> (id, "ok:timing"); zero or >= 2 -> (None,
+    "ambiguous:timing"). Candidates with no splits at all are eliminated."""
+    survivors = []
+    for mlb_id in validated_ids:
+        seasons = {int(s["season"]) for s in _pro_stat_splits(mlb_id, sleep_s) if s.get("season")}
+        if seasons and class_year - 6 <= min(seasons) <= class_year + 3:
+            survivors.append(mlb_id)
+    if len(survivors) == 1:
+        return survivors[0], "ok:timing"
+    return None, "ambiguous:timing"
 
 
 def load_player_directory(sleep_s: float = 0.3) -> dict[tuple[int, int], list[dict]]:

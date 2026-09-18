@@ -12,6 +12,7 @@ from resolve_class_universe import (
     _fetch_player_info_batched,
     _universe_row,
     audit_multi_validated,
+    disambiguate_by_career_timing,
     load_player_directory,
     players_from_checklists,
     resolve_base_cards,
@@ -419,3 +420,62 @@ def test_audit_multi_validated(monkeypatch):
     assert row["player_name"] == "Twin Star"
     assert row["current_mlb_id"] == 700010
     assert row["validated_ids"] == "700010,700011"
+
+
+# --- round 5 (2026-09-18): career-timing disambiguation for the 73
+# multi-validated players (data/reference/class_multivalidated_audit.csv).
+# Season fields are strings, mirroring the live yearByYear hydrate probes.
+
+
+def _timing_fake_get(stats_by_id):
+    """Hydrate-only fake: each id maps to its stats groups (any hydrate variant
+    returns the same payload, so _pro_stat_splits short-circuits on variant 1)."""
+
+    def fake_get(url, params=None, timeout=None):
+        mlb_id = int(url.rsplit("/people/", 1)[1])
+        return _FakeResp(_person_payload(mlb_id, "N", stats_by_id[mlb_id]))
+
+    return fake_get
+
+
+def _career_stats(*seasons):
+    return [_year_group("hitting", [_split(season, "Team")]) for season in seasons]
+
+
+def test_disambiguate_by_career_timing_one_survivor(monkeypatch):
+    # class 2019 -> window [2013, 2022]; 700040 starts 2018 (in), 700041 starts
+    # 2008 (out — a 1st Bowman at 2019 can't have debuted pro in 2008)
+    monkeypatch.setattr(requests, "get", _timing_fake_get({
+        700040: _career_stats("2018", "2019"),
+        700041: _career_stats("2008", "2009"),
+    }))
+    mlb_id, status = disambiguate_by_career_timing(2019, [700040, 700041], sleep_s=0.0)
+    assert (mlb_id, status) == (700040, "ok:timing")
+
+
+def test_disambiguate_by_career_timing_both_in_window(monkeypatch):
+    monkeypatch.setattr(requests, "get", _timing_fake_get({
+        700040: _career_stats("2018"),
+        700041: _career_stats("2020"),
+    }))
+    mlb_id, status = disambiguate_by_career_timing(2019, [700040, 700041], sleep_s=0.0)
+    assert (mlb_id, status) == (None, "ambiguous:timing")
+
+
+def test_disambiguate_by_career_timing_none_in_window(monkeypatch):
+    # 2008 below the window floor, 2026 above class_year + 3
+    monkeypatch.setattr(requests, "get", _timing_fake_get({
+        700040: _career_stats("2008"),
+        700041: _career_stats("2026"),
+    }))
+    mlb_id, status = disambiguate_by_career_timing(2019, [700040, 700041], sleep_s=0.0)
+    assert (mlb_id, status) == (None, "ambiguous:timing")
+
+
+def test_disambiguate_by_career_timing_empty_splits_eliminated(monkeypatch):
+    monkeypatch.setattr(requests, "get", _timing_fake_get({
+        700040: [_year_group("hitting", [])],  # no splits at all -> eliminated
+        700041: _career_stats("2018"),
+    }))
+    mlb_id, status = disambiguate_by_career_timing(2019, [700040, 700041], sleep_s=0.0)
+    assert (mlb_id, status) == (700041, "ok:timing")
