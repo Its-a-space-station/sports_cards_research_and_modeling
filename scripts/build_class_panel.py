@@ -57,10 +57,12 @@ def season_line(logs: pd.DataFrame, group: str) -> tuple[float, float]:
     return float(9.0 * er / ip), float(logs["battersFaced"].sum())
 
 
-def league_means(game_logs: pd.DataFrame) -> pd.DataFrame:
-    """Per (season, group): playing-time-weighted mean rate over all players."""
+def league_means(game_logs: pd.DataFrame, before: pd.Timestamp) -> pd.DataFrame:
+    """Per (season, group): playing-time-weighted mean rate over all players,
+    from games strictly before `before` — the Marcel regression target must not
+    see games played after the entry month (pace-style truncation league-wide)."""
     rows = []
-    for (season, group), sub in game_logs.groupby(["season", "group"]):
+    for (season, group), sub in game_logs[game_logs["date"] < before].groupby(["season", "group"]):
         rate, pt = 0.0, 0.0
         for _, g in sub.groupby("mlb_id"):
             r, p = season_line(g, group)
@@ -111,7 +113,9 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
 
     group_of = game_logs.groupby("mlb_id")["group"].first().to_dict()
     first_pro = game_logs.groupby("mlb_id")["season"].min().to_dict()
-    means = league_means(mlb_logs)
+    # league tables truncated at each entry month, computed once per month and
+    # reused across players (never recomputed per player-row)
+    means_by_month = {m: league_means(mlb_logs, m) for m in df["entry_month"].unique()}
     info_ix = info.set_index("mlb_id")
     births = info_ix["birth_date"].to_dict()
     positions = info_ix["position"].to_dict()
@@ -167,7 +171,8 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
                 rate, pt = season_line(sub, group)
                 if not np.isnan(rate) and pt > 0:
                     prior.append((rate, pt))
-        lg = means[(means["season"] == season) & (means["group"] == group)]
+        lg = means_by_month[r.entry_month]
+        lg = lg[(lg["season"] == season) & (lg["group"] == group)]
         league_rate = lg["league_rate"].iloc[0] if len(lg) else np.nan
         marcel = marcel_projection(prior, league_rate) if not np.isnan(league_rate) else None
         pace = pace_line(
