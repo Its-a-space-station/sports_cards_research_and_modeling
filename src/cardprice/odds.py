@@ -31,7 +31,7 @@ def parse_polymarket_event(payload: dict) -> pd.DataFrame:
 
 def parse_polymarket_history(payload: dict, market_id: str) -> pd.DataFrame:
     """prices-history chunk -> [market_id, ts, raw_price] (UTC, ascending)."""
-    hist = payload.get("history", payload if isinstance(payload, list) else [])
+    hist = payload if isinstance(payload, list) else payload.get("history", [])
     rows = [
         {"market_id": market_id, "ts": pd.to_datetime(int(p["t"]), unit="s", utc=True),
          "raw_price": float(p["p"])}
@@ -57,6 +57,7 @@ def vig_normalize(prices: pd.DataFrame) -> pd.DataFrame:
 
 def daily_prices(history: pd.DataFrame) -> pd.DataFrame:
     """Last price per (market_id, UTC date)."""
+    history = history.sort_values("ts")
     h = history.assign(date=history["ts"].dt.floor("D"))
     return h.groupby(["market_id", "date"], as_index=False).last()[
         ["market_id", "date", "raw_price"]
@@ -76,9 +77,12 @@ def month_grain_features(
     reference is always an earlier snapshot than odds_level's own, never the
     level snapshot itself; NaN when no snapshot precedes that cutoff. Players
     with no market in the season: has_market=0 and all odds features 0.0
-    (documented semantics). `players` (mlb_id, entry_month, season) supplies
-    the full target grid; when omitted, the grid is every mlb_id in snapshots
-    x entry_months with season = entry year.
+    (documented semantics). Exception: the level's before-set is not
+    season-filtered while `has` is, so a prior-season level may persist into a
+    season where has_market=0 (by design; magnitude negligible; snapshots
+    always predate entry, so no look-ahead). `players` (mlb_id, entry_month,
+    season) supplies the full target grid; when omitted, the grid is every
+    mlb_id in snapshots x entry_months with season = entry year.
     """
     cols = [
         "mlb_id", "entry_month", "has_market",
@@ -130,8 +134,12 @@ def attach_odds_features(frame: pd.DataFrame, snapshots: pd.DataFrame) -> pd.Dat
 
     Players with no market in the entry season get has_market=0 and all odds
     features 0.0 ("no listed market ≈ zero priced expectation" — never
-    NaN-filled from later dates); players with a market but no snapshot before
-    entry keep NaN odds features (month_grain_features semantics). Every frame
+    NaN-filled from later dates). Exception: a prior-season odds_level may
+    persist into a season where has_market=0 (the level's before-set is not
+    season-filtered while has_market is — by design; magnitude negligible;
+    snapshots always predate entry, so no look-ahead). Players with a market
+    but no snapshot before entry keep NaN odds features
+    (month_grain_features semantics). Every frame
     column passes through untouched; the join is validated many_to_one, so row
     count never grows (the feature grid is deduped per (mlb_id, entry_month) —
     the hold frame is per card_slug and repeats player-months).

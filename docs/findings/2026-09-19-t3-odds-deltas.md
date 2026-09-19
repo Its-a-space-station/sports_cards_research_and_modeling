@@ -182,8 +182,8 @@ timing-edge-plausible is established.
   season sits inside walk-forward training windows.
 - **Longshot-dominated books:** over half of mapped Polymarket snapshot rows price below 2%
   implied probability (share < 0.02: CY 0.61, MVP 0.56, ROY 0.55), and Kalshi's ROY series are
-  its thinnest (30 listed markets each — 28 carrying any traded candle — vs 42–53 in its
-  MVP/CY series). Most listed candidates can never produce a 0.10 absolute spike, so spike
+  its thinnest (30 listed markets each — 28 (AL) / 30 (NL) carrying any traded candle — vs
+  42–53 in its MVP/CY series). Most listed candidates can never produce a 0.10 absolute spike, so spike
   coverage concentrates on contenders — ROY-only players still contributed 40 of the 111
   events.
 - **No sportsbook odds:** prediction-market prices only (Polymarket + Kalshi); The Odds API
@@ -195,9 +195,8 @@ timing-edge-plausible is established.
 - **Cross-season carryover (F1 doc-debt from the Task-3 review):** `month_grain_features`
   filters `has_market` by season but takes `odds_level` from *any* pre-entry snapshot, so **30
   rows** (entry year 2026, 10 players) carry has_market=0 with non-zero odds features inherited
-  from 2025 snapshots — contradicting the "has_market=0 ⇒ all 0.0" docstrings in the reviewed
-  module. Code untouched (reviewed module frozen); documented here per the review's doc-debt
-  disposition.
+  from 2025 snapshots. Code untouched (semantics intended — the level snapshot always predates
+  entry, so no look-ahead); the module docstrings now document this exception (final-review wave).
 - **Non-class candidates' odds are panel-invisible:** pre-class stars (Judge, Ohtani,
   Raleigh…) have collected odds but no class card rows; 17,071 unmapped snapshot rows are
   expected and audited, not a join bug.
