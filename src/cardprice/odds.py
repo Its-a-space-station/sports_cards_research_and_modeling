@@ -125,6 +125,26 @@ def month_grain_features(
     return pd.DataFrame(out_rows, columns=cols)
 
 
+def attach_odds_features(frame: pd.DataFrame, snapshots: pd.DataFrame) -> pd.DataFrame:
+    """Left-join month_grain_features onto a hold frame by (mlb_id, entry_month).
+
+    Players with no market in the entry season get has_market=0 and all odds
+    features 0.0 ("no listed market ≈ zero priced expectation" — never
+    NaN-filled from later dates); players with a market but no snapshot before
+    entry keep NaN odds features (month_grain_features semantics). Every frame
+    column passes through untouched; the join is validated many_to_one, so row
+    count never grows (the feature grid is deduped per (mlb_id, entry_month) —
+    the hold frame is per card_slug and repeats player-months).
+    """
+    players = (
+        frame[["mlb_id", "entry_month"]]
+        .drop_duplicates()
+        .assign(season=lambda d: d["entry_month"].dt.year)
+    )
+    feats = month_grain_features(snapshots, players["entry_month"], players)
+    return frame.merge(feats, on=["mlb_id", "entry_month"], how="left", validate="many_to_one")
+
+
 def parse_kalshi_candles(payload: dict, market_ticker: str) -> pd.DataFrame:
     """Kalshi daily candlesticks -> [market_id, ts, raw_price, volume].
 
