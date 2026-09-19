@@ -1,9 +1,10 @@
 # scripts/build_odds_features.py
 """Attach award-odds features to the class hold frame -> class_hold_odds.parquet.
 
-Scope (Task 3 brief): the registered cell's frame — ungraded hitters, all
-horizons (6/12/24/36) — plus the ungraded 12m pitcher frame for the pitcher
-descriptive cell. The psa_10 descriptive cell is out of scope.
+Scope (Task 3 brief, widened in Task 4): the registered cell's frame —
+ungraded hitters, all horizons (6/12/24/36) — plus the ungraded 12m pitcher
+frame and the psa_10 12m hitter frame (the gate runner's full cell list, so
+Task 4's delta-fit can run every gate cell). Each cell carries its own grade.
 
 Output shape (chosen, documented): ONE stacked frame at
 data/processed/class_hold_odds.parquet (gitignored). One adapter build per
@@ -27,8 +28,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from cardprice.class_hold_frame import build_class_hold_frame
 from cardprice.odds import attach_odds_features
 
-CELLS = [("hitter", h) for h in (6, 12, 24, 36)] + [("pitcher", 12)]
-GRADE = "ungraded"
+CELLS = [("ungraded", "hitter", h) for h in (6, 12, 24, 36)]
+CELLS += [("psa_10", "hitter", 12), ("ungraded", "pitcher", 12)]
 OUT = "data/processed/class_hold_odds.parquet"
 ODDS_COLS = ["has_market", "odds_level", "odds_delta_7d", "odds_delta_30d"]
 
@@ -40,16 +41,16 @@ def main() -> None:
     snapshots = pd.read_parquet("data/processed/odds_snapshots.parquet")
 
     parts = []
-    for group, horizon in CELLS:
+    for grade, group, horizon in CELLS:
         frame = build_class_hold_frame(panel, events, info, horizon=horizon, group=group)
-        frame = frame[frame["grade"] == GRADE]
+        frame = frame[frame["grade"] == grade]
         out = attach_odds_features(frame, snapshots)
         out["horizon"] = horizon
         out["group"] = group
         parts.append(out)
         cov = out["has_market"].mean()
         nan = {c: round(float(out[c].isna().mean()), 4) for c in ODDS_COLS}
-        print(f"{GRADE} {group} {horizon}m: rows={len(out)} "
+        print(f"{grade} {group} {horizon}m: rows={len(out)} "
               f"has_market={cov:.4f} nan_rates={nan}")
 
     stacked = pd.concat(parts, ignore_index=True)
