@@ -116,6 +116,12 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
     # league tables truncated at each entry month, computed once per month and
     # reused across players (never recomputed per player-row)
     means_by_month = {m: league_means(mlb_logs, m) for m in df["entry_month"].unique()}
+    # per-player frames, grouped once: the row loop would otherwise full-frame
+    # scan by mlb_id several times per row (~94k rows x ~700k log rows)
+    mlb_by_id = {int(k): g for k, g in mlb_logs.groupby("mlb_id")}
+    minors_by_id = {int(k): g for k, g in minor_logs.groupby("mlb_id")}
+    empty_mlb = mlb_logs.iloc[0:0]
+    empty_minors = minor_logs.iloc[0:0]
     info_ix = info.set_index("mlb_id")
     births = info_ix["birth_date"].to_dict()
     positions = info_ix["position"].to_dict()
@@ -123,16 +129,20 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
     rows = []
     for r in df.itertuples(index=False):
         mid = int(r.mlb_id)
+        player_mlb = mlb_by_id.get(mid, empty_mlb)
+        player_minors = minors_by_id.get(mid, empty_minors)
         group = group_of.get(mid, "hitting")
         season = season_year(r.entry_month)
         lag = (r.entry_month - pd.Timedelta(days=1)).date()
         row = r._asdict()
         row["month"] = r.entry_month
         del row["entry_month"]
-        row.update(career_to_date(mlb_logs, mid, lag))
-        row.update(minors_pedigree(minor_logs, mid, lag))
+        # career helpers re-filter by mlb_id internally — a no-op on these
+        # per-player frames, so results are identical to full-frame calls
+        row.update(career_to_date(player_mlb, mid, lag))
+        row.update(minors_pedigree(player_minors, mid, lag))
         row.update(
-            career_stage=career_stage(mlb_logs, mid, r.entry_month),
+            career_stage=career_stage(player_mlb, mid, r.entry_month),
             awards_to_date=awards_to_date(events, mid, lag),
             price_visible_breakout=first_pro.get(mid, 9999) >= 2020,
         )
@@ -170,7 +180,7 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
         # Marcel projection for `season` from the 3 prior MLB seasons (<= Y-1)
         prior = []
         for y in range(season - 1, season - 4, -1):
-            sub = mlb_logs[(mlb_logs["mlb_id"] == mid) & (mlb_logs["season"] == y)]
+            sub = player_mlb[player_mlb["season"] == y]
             if len(sub):
                 rate, pt = season_line(sub, group)
                 if not np.isnan(rate) and pt > 0:
@@ -180,7 +190,7 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
         league_rate = lg["league_rate"].iloc[0] if len(lg) else np.nan
         marcel = marcel_projection(prior, league_rate) if not np.isnan(league_rate) else None
         pace = pace_line(
-            mlb_logs[(mlb_logs["mlb_id"] == mid) & (mlb_logs["season"] == season)],
+            player_mlb[player_mlb["season"] == season],
             group,
             season,
             r.entry_month,
