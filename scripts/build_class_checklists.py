@@ -1,8 +1,9 @@
 # scripts/build_class_checklists.py
 """Build 1st Bowman auto checklists (Chrome + Draft, 2015-2025) from SCP set pages.
 
-Slugs discovered from the brand page (no-guess rule); raw snapshots saved under
-data/raw/scp_setpages/<slug>/<date>.json; cross-audit vs Cardboard Connection
+Slugs discovered from the brand page (no-guess rule); only the brand page and
+the CC audit pages are snapshotted under data/raw/scp_setpages/ (the auto set
+pages themselves are not snapshotted); cross-audit vs Cardboard Connection
 for 2015 Chrome (spike-verified CC subset of SCP) and a completeness audit for
 2019 Draft (spec amendment ed7a7db — SCP draft checklists may be incomplete;
 STOP below 85% CDA coverage). Task 2 extension: also fetches each year/family's

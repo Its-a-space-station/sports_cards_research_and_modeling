@@ -2,7 +2,7 @@
 """Collect draft-year expectations from MLB Stats API /draft/prospects/{year}.
 
 V1 draft leg of Task 6 (spec amendment 2): years 2015-2025, official JSON,
-direct statsapi ids (no name matching). Unranked years (2015-2017) keep their
+direct statsapi ids (no name matching). Unranked years (2015-2016) keep their
 players with rank=NA. One retry per year, then the year is recorded as a gap
 (never fabricated).
 

@@ -205,6 +205,8 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
         )
         row["marcel_rate"] = marcel
         row["pace_rate"] = pace[0] if pace else np.nan
+        # surprise = pace - marcel for BOTH groups; for ERA a positive value is
+        # a HIGHER-than-projected ERA, i.e. WORSE (opposite sign to surprise_ops)
         surprise = (pace[0] - marcel) if pace and marcel is not None else np.nan
         row["surprise_ops"] = surprise if group == "hitting" else np.nan
         row["surprise_era"] = surprise if group == "pitching" else np.nan
