@@ -72,6 +72,8 @@ def build_class_hold_frame(
     debut_dates = df["mlb_id"].map(debut_of)
     birth_dates = df["mlb_id"].map(birth)
     df["age_at_debut"] = (debut_dates - birth_dates).dt.days / 365.25
+    # look-ahead guard: a debut after the entry stamp hadn't happened yet
+    df.loc[debut_dates > df["entry_month"], "age_at_debut"] = np.nan
 
     df["surprise_ops"] = pd.to_numeric(df["surprise_ops"], errors="coerce")
     df["surprise_era"] = pd.to_numeric(df["surprise_era"], errors="coerce")

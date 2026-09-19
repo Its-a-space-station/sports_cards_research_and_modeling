@@ -115,6 +115,19 @@ def test_target_filter_only():
     assert len(out) == 1 and out.iloc[0]["mlb_id"] == 1
 
 
+def test_age_at_debut_masked_when_debut_after_entry():
+    # mlb_id 3 debuts 2023-06-20: after the default entry month 2023-06-01
+    out = build_class_hold_frame(pd.DataFrame([_panel_row(mlb_id=3)]), _events(), _info())
+    assert pd.isna(out.iloc[0]["age_at_debut"])
+    # a later entry (after the debut) keeps the computed value
+    out = build_class_hold_frame(
+        pd.DataFrame([_panel_row(mlb_id=3, month="2023-07-01")]), _events(), _info()
+    )
+    assert out.iloc[0]["age_at_debut"] == pytest.approx(
+        (pd.Timestamp("2023-06-20") - pd.Timestamp("2001-03-01")).days / 365.25
+    )
+
+
 def test_stage_dummies_reference_is_rookie_year():
     rows = []
     for stage in ("prospect", "rookie_year", "sophomore", "established"):
