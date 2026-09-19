@@ -7,9 +7,12 @@ vig-normalized source covering both collected seasons (2025 closed + 2026
 live). Kalshi rows are excluded by design: they are raw single-outcome binary
 closes (no vig normalization), exist only for 2026 (settled 2025 markets are
 unretrievable unauthenticated), and mixing both sources in one daily-diff
-series injects cross-source artifacts (31 of 130 mixed-source spike events
-have a source switch vs the previous daily observation; mean same-day
-|pm - kalshi| divergence is 4.6pp against the 0.10 spike floor). Kalshi
+series injects cross-source artifacts: per player-day, the max |pm - kalshi|
+across that day's same-player market pairs averages 4.9pp (max 0.97; 5,007
+paired player-days) against the 0.10 spike floor, and in a mixed-source probe
+(reviewed spike detection over the two-source frame, higher-implied_prob row
+kept per player-day) 37 of 132 events switch source vs the previous day
+(tie-break-sensitive: 15-37 of 123-136 across stated tie-breaks). Kalshi
 remains the documented 2026 cross-source check (findings doc, Data section).
 
 Sales: class_sales.parquet U universe_sales.parquet, deduped on (card_slug,

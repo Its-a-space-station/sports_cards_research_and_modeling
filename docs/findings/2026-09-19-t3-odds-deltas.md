@@ -43,8 +43,9 @@ Kalshi), UTC-daily, 2025-03-25 → 2026-09-19, `implied_prob` ∈ [0.0002, 0.999
 **Price semantics per source.** Polymarket rows are vig-normalized: per (event, date) the
 implied probs sum to exactly 1.0000 (min = max, reverified). Kalshi rows are raw single-outcome
 binary closes — `implied_prob == raw_price` on every Kalshi row (reverified), no vig removal —
-flagged by `source`. The two are **not interchangeable**: over 5,007 same-player same-day pairs
-the mean |pm − kalshi| divergence is 4.6pp (max 0.97) against a 0.10 spike floor.
+flagged by `source`. The two are **not interchangeable**: per player-day, taking the max
+|pm − kalshi| across that day's same-player market pairs (5,007 player-days carry both
+sources), the divergence averages **4.9pp with max 0.97** — against a 0.10 spike floor.
 
 **Mapping (exact normalized-name only, never fuzzy).** 32,472 mapped rows over **178 distinct
 players** (107 Polymarket, 156 Kalshi, 85 both); 17,071 rows carry no mlb_id. Audit:
@@ -127,9 +128,11 @@ max(0.10, 3 × rolling-30d σ of daily deltas), largest |delta| kept per 7-day s
 cluster. **111 events over 40 players** (61 in 2025, 50 in 2026; 2025-05-03 → 2026-09-08;
 strata: 76 established / 35 prospect) → `odds_spike_events.parquet`. Kalshi rows are excluded
 from event detection by design: raw unnormalized closes, 2026-only, and mixing sources in one
-daily-diff series injects cross-source artifacts — in a mixed-source probe, 31 of 130 events
-had a source switch vs the previous daily observation (see Data). A Kalshi-only run would add
-40 events / 23 players (2026 only); not used.
+daily-diff series injects cross-source artifacts — in a mixed-source probe (reviewed spike
+detection over the two-source frame, keeping the higher-implied_prob row per player-day), 37 of
+132 events have a different source than the previous daily observation, and the count is
+tie-break-sensitive (15–37 of 123–136 events across stated per-day tie-breaks; see Data). A
+Kalshi-only run would add 40 events / 23 players (2026 only); not used.
 
 **Sales & config.** Union frame = class_sales ∪ universe_sales deduped on (card_slug,
 sale_date, title, price): **54,425 rows** (47,892 + 7,243 − 710 duplicate rows; the frames
@@ -201,7 +204,9 @@ timing-edge-plausible is established.
 - **Strata fallback:** `assign_strata` uses class game logs (level == "mlb"); players absent
   from those logs fall to `career_stage`'s "prospect" — acceptable, noted.
 - **Kalshi cross-source role only:** raw closes, 2026-only, excluded from spike detection
-  (mean same-day |pm − kalshi| 4.6pp; 31/130 mixed events would be source switches).
+  (player-day max |pm − kalshi| averages 4.9pp, max 0.97, over 5,007 paired player-days;
+  mixed-source spike events switch source vs the previous day at 15–37 of 123–136 events
+  depending on the per-day source tie-break).
 
 ## Reproduce
 

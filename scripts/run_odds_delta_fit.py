@@ -22,9 +22,10 @@ Degenerate cells: 24m/36m hitters have zero has_market=1 rows (odds
 snapshots cover only the 2025-2026 seasons; those cells' non-null targets
 predate the odds era), so the with_odds features are identically zero and
 the deltas are zero by construction — computed and reported as measured,
-not suppressed. The 446 has_market=1 rows without a pre-entry snapshot keep
-NaN odds features by design; the harness's per-fold train-median imputation
-handles them as ordinary NaNs (never zero-filled here).
+not suppressed. The 541 has_market=1 rows without a pre-entry snapshot keep
+NaN odds features by design (541 is the post-psa_10-widening count; it was
+446 before the psa_10 cell was added); the harness's per-fold train-median
+imputation handles them as ordinary NaNs (never zero-filled here).
 """
 
 import json
