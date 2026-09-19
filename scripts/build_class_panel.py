@@ -173,9 +173,16 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
         )
         fg = e[e["source"] == "fg_draft_board"]
         row["fg_draft_fv"] = fg["fv"].max() if len(fg) else pd.NA
-        # draft_rank: the player's own draft-year rank (mlb_draft source); a
-        # separate feature from the Pipeline pre-debut expectations term
-        draft = e[e["source"] == "mlb_draft"]
+        # draft_rank: the player's own draft-year rank (mlb_draft source), keyed
+        # to the player's CLASS year (rookie_year), not the entry's season — a
+        # class-2019 draftee keeps the rank on 2023+ entries. Separate feature
+        # from the Pipeline pre-debut expectations term (that join is season-correct)
+        draft = exp[
+            (exp["mlb_id"] == mid)
+            & (exp["season"] == r.rookie_year)
+            & (exp["source"] == "mlb_draft")
+            & (exp["as_of"] < r.entry_month)
+        ]
         row["draft_rank"] = draft["rank"].min() if len(draft) else pd.NA
         # Marcel projection for `season` from the 3 prior MLB seasons (<= Y-1)
         prior = []

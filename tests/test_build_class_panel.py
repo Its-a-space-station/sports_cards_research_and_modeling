@@ -94,9 +94,13 @@ def _mini_panel_inputs():
     )
     expectations = pd.DataFrame(
         {
-            "player_name": ["P One"] * 2, "mlb_id": [1] * 2, "season": [2023] * 2,
+            "player_name": ["P One"] * 2, "mlb_id": [1] * 2,
+            # the mlb_draft row is keyed to the player's CLASS year (rookie_year
+            # 2019), not the 2023 entry season — the shape that keyed-on-entry-
+            # season coverage bugs hide behind; as_of mirrors the v1 convention
+            "season": [2023, 2019],
             "source": ["pipeline", "mlb_draft"], "rank": [7, 5], "fv": [pd.NA] * 2,
-            "as_of": [pd.Timestamp("2023-04-01")] * 2,
+            "as_of": [pd.Timestamp("2023-04-01"), pd.Timestamp("2019-07-01")],
         }
     )
     info = pd.DataFrame({"mlb_id": [1], "name": ["P One"],
@@ -138,7 +142,11 @@ def test_build_panel_surprise_rank_era_and_no_lookahead():
 
 
 def test_build_panel_draft_rank_from_mlb_draft():
-    # fixture carries one mlb_draft row (rank 5, as_of 2023-04-01 < both entries)
+    # fixture carries one mlb_draft row: rank 5, season = rookie_year (2019),
+    # as_of 2019-07-01, entries in 2023. Keying the join on the ENTRY season
+    # (2023) instead of the class year yields NA here — the shape that exposed
+    # the real-data coverage-0 bug; the old fixture (season == entry season)
+    # masked it.
     me, outcomes, trailing, logs, expectations, info, events = _mini_panel_inputs()
     panel = build_panel(me, outcomes, trailing, logs, expectations, info, events)
     assert (panel["draft_rank"] == 5).all()
@@ -146,6 +154,12 @@ def test_build_panel_draft_rank_from_mlb_draft():
     late = expectations.assign(as_of=pd.Timestamp("2023-08-01"))
     panel2 = build_panel(me, outcomes, trailing, logs, late, info, events)
     assert panel2["draft_rank"].isna().all()
+    # a draft row keyed to a season that is NOT the player's class year must
+    # not leak into draft_rank
+    wrong = expectations.copy()
+    wrong.loc[wrong["source"] == "mlb_draft", "season"] = 2020
+    panel3 = build_panel(me, outcomes, trailing, logs, wrong, info, events)
+    assert panel3["draft_rank"].isna().all()
 
 
 def test_build_panel_league_games_after_entry_do_not_leak_into_marcel():
