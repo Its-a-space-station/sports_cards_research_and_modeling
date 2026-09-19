@@ -142,24 +142,37 @@ def test_build_panel_surprise_rank_era_and_no_lookahead():
 
 
 def test_build_panel_draft_rank_from_mlb_draft():
-    # fixture carries one mlb_draft row: rank 5, season = rookie_year (2019),
-    # as_of 2019-07-01, entries in 2023. Keying the join on the ENTRY season
-    # (2023) instead of the class year yields NA here — the shape that exposed
-    # the real-data coverage-0 bug; the old fixture (season == entry season)
-    # masked it.
+    # fixture mlb_draft row: rank 5, season = rookie_year (2019), as_of 2019-07-01,
+    # entries in 2023 — the Skenes shape. Keying the join on the ENTRY season
+    # (2023) yields NA here — the shape that exposed the coverage-0 bug.
     me, outcomes, trailing, logs, expectations, info, events = _mini_panel_inputs()
     panel = build_panel(me, outcomes, trailing, logs, expectations, info, events)
     assert (panel["draft_rank"] == 5).all()
-    # a draft rank dated AFTER the entry month must not appear
-    late = expectations.assign(as_of=pd.Timestamp("2023-08-01"))
-    panel2 = build_panel(me, outcomes, trailing, logs, late, info, events)
-    assert panel2["draft_rank"].isna().all()
-    # a draft row keyed to a season that is NOT the player's class year must
-    # not leak into draft_rank
+    # the Witt shape: draft row keyed to rookie_year - 1 (fall draft, 1st Bowman
+    # auto the following spring) also resolves on post-July entries
+    fall = expectations.copy()
+    fall.loc[fall["source"] == "mlb_draft", "season"] = 2018
+    fall.loc[fall["source"] == "mlb_draft", "as_of"] = pd.Timestamp("2018-07-01")
+    panel_fall = build_panel(me, outcomes, trailing, logs, fall, info, events)
+    assert (panel_fall["draft_rank"] == 5).all()
+    # rows at BOTH seasons of the two-year window: min rank wins
+    both = expectations.copy()
+    extra = both[both["source"] == "mlb_draft"].copy()
+    extra["season"] = 2018
+    extra["rank"] = 3  # rookie_year-1 row outranks the rookie_year row (5)
+    both = pd.concat([both, extra], ignore_index=True)
+    panel_both = build_panel(me, outcomes, trailing, logs, both, info, events)
+    assert (panel_both["draft_rank"] == 3).all()
+    # a draft row outside the two-year window (not rookie_year or rookie_year-1)
+    # must not leak into draft_rank
     wrong = expectations.copy()
     wrong.loc[wrong["source"] == "mlb_draft", "season"] = 2020
     panel3 = build_panel(me, outcomes, trailing, logs, wrong, info, events)
     assert panel3["draft_rank"].isna().all()
+    # a draft rank dated AFTER the entry month must not appear
+    late = expectations.assign(as_of=pd.Timestamp("2023-08-01"))
+    panel2 = build_panel(me, outcomes, trailing, logs, late, info, events)
+    assert panel2["draft_rank"].isna().all()
 
 
 def test_build_panel_league_games_after_entry_do_not_leak_into_marcel():

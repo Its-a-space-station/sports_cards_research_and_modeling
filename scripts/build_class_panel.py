@@ -174,12 +174,13 @@ def build_panel(me, outcomes, trailing, game_logs, expectations, info, events) -
         fg = e[e["source"] == "fg_draft_board"]
         row["fg_draft_fv"] = fg["fv"].max() if len(fg) else pd.NA
         # draft_rank: the player's own draft-year rank (mlb_draft source), keyed
-        # to the player's CLASS year (rookie_year), not the entry's season — a
-        # class-2019 draftee keeps the rank on 2023+ entries. Separate feature
-        # from the Pipeline pre-debut expectations term (that join is season-correct)
+        # to the player's CLASS year (rookie_year) or the year before — fall-draft
+        # players whose 1st Bowman auto appears the next spring live in the
+        # class_year-1 board (Witt shape: class 2020, drafted 2019). Separate
+        # feature from the Pipeline pre-debut term (that join is season-correct)
         draft = exp[
             (exp["mlb_id"] == mid)
-            & (exp["season"] == r.rookie_year)
+            & (exp["season"].isin([r.rookie_year, r.rookie_year - 1]))
             & (exp["source"] == "mlb_draft")
             & (exp["as_of"] < r.entry_month)
         ]
