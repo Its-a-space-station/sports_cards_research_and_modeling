@@ -17,6 +17,7 @@ def walk_forward_years(
     top_k: int = 5,
     min_train_years: int = 2,
     seed: int = 42,
+    all_scores: bool = False,
 ) -> pd.DataFrame:
     target = f"ret_{horizon}m"
     years = sorted(frame["entry_year"].unique())
@@ -35,7 +36,8 @@ def walk_forward_years(
         model = LassoCV(cv=5, random_state=seed, max_iter=10000).fit(X_train, train[target])
         preds = model.predict(X_test)
         bench = test[target].median()
-        ranked = test.assign(predicted=preds).nlargest(top_k, "predicted")
+        scored = test.assign(predicted=preds)
+        ranked = scored if all_scores else scored.nlargest(top_k, "predicted")
         for r in ranked.itertuples():
             rows.append(
                 {
