@@ -5,8 +5,20 @@ Sources: HTML pages saved by the user under "MLB stats info/" (mlb.com is
 bot-blocked for our fetches but public for a human browser). Per-year parsers
 for the three server-rendered formats found in the captures; unmatched names
 are kept with mlb_id = <NA> and reported (never fuzzy-matched).
+
+Years 2021+ use the React year-page format: the saved HTML embeds an Apollo
+GraphQL cache that holds the full Top-100 list (the server-rendered table
+shows only 5 rows, but the cache payload has all 100). Rank and mlb_id come
+straight from RankedPlayerEntity entries and their Person refs, so no name
+resolution is needed for those years.
+
+Provenance: snapshots captured 2026-09-24. Archived 2021-2025 year pages were
+verified to show preseason list state (no same-year draftees among list
+members), so as_of = <season>-04-01 is defensible; the 2026 page state could
+not be independently verified and is treated the same way.
 """
 
+import html
 import re
 import sys
 from pathlib import Path
@@ -27,7 +39,9 @@ FILES = {
     2015: "2015 Top 100 MLB Prospects list.html",
     2016: "2016 Top 100 MLB Prospects list.html",
     2018: "2018 Top 100 MLB Prospects list.html",
+    **{y: f"{y} Top 100 Baseball Prospects _ MiLB.com_2.html" for y in range(2021, 2027)},
 }
+APOLLO_YEARS = set(range(2021, 2027))
 TEAM_FIX = {"PHi": "PHI", "MN": "MIN", "PH": "PHI"}
 
 
@@ -78,6 +92,38 @@ def parse_2018(text: str) -> pd.DataFrame:
     return df
 
 
+def parse_apollo(path: Path) -> pd.DataFrame:
+    """React year-page (2021+): parse the embedded Apollo cache payload.
+
+    RankedPlayerEntity entries carry rank + a Person ref; normalized Person
+    entries carry useName/useLastName/primaryPosition. Returns rows with
+    mlb_id already resolved."""
+    dec = html.unescape(open(path, encoding="utf-8", errors="replace").read())
+    persons = {}
+    for m in re.finditer(r'"Person:(\d+)":\{"__typename":"Person",', dec):
+        win = dec[m.start():m.start() + 1500]
+        first = re.search(r'"useName":"([^"]*)"', win)
+        last = re.search(r'"useLastName":"([^"]*)"', win)
+        pos = re.search(r'"primaryPosition":\{"__typename":"Position","abbreviation":"([^"]*)"', win)
+        persons[int(m.group(1))] = (
+            f"{first.group(1)} {last.group(1)}".strip() if first and last else None,
+            pos.group(1) if pos else None,
+        )
+    rows = []
+    for m in re.finditer(r'"__typename":"RankedPlayerEntity","rank":(\d+),"playerEntity":\{', dec):
+        win = dec[m.end():m.end() + 3000]
+        ref = re.search(r'"player":\{"__ref":"Person:(\d+)"\}', win)
+        pos = re.search(r'"position":"([^"]*)"', win)
+        if not ref:
+            continue
+        pid = int(ref.group(1))
+        name, ppos = persons.get(pid, (None, None))
+        rows.append((int(m.group(1)), name, pos.group(1) if pos else ppos, pid))
+    df = pd.DataFrame(rows, columns=["rank", "player_name", "position", "mlb_id"])
+    df["team"] = pd.NA
+    return df
+
+
 PARSERS = {
     2015: parse_2015,
     2016: lambda t: parse_linewalk(t, "Core\ny\nSeager"),
@@ -90,12 +136,21 @@ def _clean(df: pd.DataFrame, season: int) -> pd.DataFrame:
     df["season"] = season
     df["team"] = df["team"].map(lambda t: TEAM_FIX.get(t, t))
     df["player_name"] = df["player_name"].str.replace(r"\s+", " ", regex=True).str.strip(" .")
-    return df[["season", "rank", "player_name", "position", "team"]]
+    cols = ["season", "rank", "player_name", "position", "team"]
+    if "mlb_id" in df.columns:
+        cols.append("mlb_id")
+    return df[cols]
 
 
 def _map_ids(df: pd.DataFrame, id_of: dict) -> pd.DataFrame:
     df = df.copy()
-    df["mlb_id"] = df["player_name"].map(lambda n: id_of.get(norm_name(n), pd.NA))
+    if "mlb_id" not in df.columns:
+        df["mlb_id"] = pd.NA
+    df["mlb_id"] = df["mlb_id"].astype("Int64")
+    missing = df["mlb_id"].isna()
+    df.loc[missing, "mlb_id"] = df.loc[missing, "player_name"].map(
+        lambda n: id_of.get(norm_name(n), pd.NA)
+    )
     df["mlb_id"] = df["mlb_id"].astype("Int64")
     return df
 
@@ -103,10 +158,14 @@ def _map_ids(df: pd.DataFrame, id_of: dict) -> pd.DataFrame:
 def main() -> None:
     frames = []
     for season, fname in FILES.items():
-        text = _load(SOURCE_DIR / fname)
-        df = _clean(PARSERS[season](text), season)
+        if season in APOLLO_YEARS:
+            df = _clean(parse_apollo(SOURCE_DIR / fname), season)
+        else:
+            text = _load(SOURCE_DIR / fname)
+            df = _clean(PARSERS[season](text), season)
         frames.append(df)
-        print(f"{season}: {len(df)} rows (ranks {df['rank'].min()}-{df['rank'].max()})")
+        warn = "  <-- WARN: incomplete capture" if len(df) < 95 else ""
+        print(f"{season}: {len(df)} rows (ranks {df['rank'].min()}-{df['rank'].max()}){warn}")
     parsed = pd.concat(frames, ignore_index=True)
 
     info = pd.read_csv("data/reference/player_info_class.csv")
@@ -121,6 +180,12 @@ def main() -> None:
     if len(unmatched):
         unmatched.to_csv(AUDIT, index=False)
         print("audit:", AUDIT)
+
+    universe_ids = set(id_of.values())
+    apollo = parsed[parsed["season"].isin(APOLLO_YEARS)]
+    in_universe = apollo["mlb_id"].isin(universe_ids)
+    print("apollo rows with mlb_id in card universe:",
+          in_universe.groupby(apollo["season"]).sum().to_dict())
 
     out = parsed.assign(
         source="pipeline", fv=pd.Series(pd.NA, dtype="Float64"),
